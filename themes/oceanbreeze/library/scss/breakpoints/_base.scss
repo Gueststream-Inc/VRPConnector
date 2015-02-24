@@ -1,0 +1,148 @@
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Base Mobile Stylesheet
+
+Be light and don't over style since everything here will be
+loaded by mobile devices. You want to keep it as minimal as
+possible. This is called at the top of the main stylsheet
+and will be used across all viewports.
+
+******************************************************************/
+
+/*********************
+GENERAL STYLES
+*********************/
+.vrpsidebar {
+	padding: 5%;
+}	
+	.vrpsidebar form>ul {
+		margin-bottom: 0;
+	}
+	.vrpsidebar ul>li, .vrpsidebar ul>li>ul, .vrpsidebar ul>li>ul {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+
+ 	.vrpsidebar h2, .vrpsidebar .h2 {
+		font-size: 1.5em;
+		line-height: 1.3em;
+		margin-bottom: 0.375em;
+		margin-top: 0.25em;
+	}
+
+.vrpsidebar .input-group {
+	select{
+		width: 100%
+	}
+	.hasDatepicker {
+		width: 92%;
+	}
+}
+
+  .vrpsidebar #submit {
+    margin-top: 1em;
+  }
+
+
+  /* Calendars */
+
+.calendar {
+    margin: 0;
+    padding: 0;
+    font-size: .5em;
+    border:1px solid #c0c0c0;
+    float:left;
+    margin-left:3px;
+    margin-right:3px;
+    height:200px;
+    z-index:1000;
+}
+
+.calendar caption {
+    margin: 0;
+    padding: .3em 0;
+    font-size: 1em;
+}
+
+
+.calendar th {
+    border-bottom: 1px solid #ccc;
+    font-weight: normal;
+    background: #fff;
+    }
+
+.calendar td {
+    border: 1px solid #fff;
+    text-align: center;
+    //background:#F9F5E5;
+}
+
+.calendar a {
+    color: #000;
+    text-decoration: none;
+}
+
+.calendar td.today {
+    background: #ffc;
+    color:#000000;
+}
+
+.calendar td.selected {
+    border: 1px dotted #ff7800;
+}
+
+.calendar td.highlighted {
+    background: #BDBDBD;
+    color: #fff;
+}
+.calendar td.passed, table.calendar td.pad {
+    background: #ECECEC;
+    color:#ffffff;
+}
+    
+// .calendar td:hover, .calendar td.today:hover, 
+// .calendar td.selected:hover, .calendar td.highlighted:hover {
+//     background: #cff;
+//     border: 1px solid #09f;
+// }
+
+
+// table.calendar td.pad:hover {
+//     background: none;
+//     border: 0;
+// }
+    
+.sunday, .saturday {
+    background: #f0f0f0;
+}
+    
+#year {
+    padding: 0;
+    width: 500px;
+    list-style: none;
+}
+
+#year:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+#year li {
+    float: left;
+    padding: 0 .5em .5em 0;
+    height: 150px;
+}
+        
+//         #booklink{
+//             -moz-border-radius:7px;
+//             padding:5px;
+//             text-align:center; 
+//             margin-left:auto;
+//             margin-right:auto;
+//         }

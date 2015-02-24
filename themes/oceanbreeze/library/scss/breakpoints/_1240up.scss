@@ -1,0 +1,28 @@
+/******************************************************************
+Site Name: 
+Author: 
+
+Stylesheet: Super Large Monitor Stylesheet
+
+You can add some advanced styles here if you like. This kicks in
+on larger screens.
+
+******************************************************************/
+
+
+.vrpsidebar {
+	@include span(19%);
+}
+
+.vrpsidebar h2, .vrpsidebar .h2 {
+		font-size: 1.5em;
+		line-height: 1.3em;
+		margin-bottom: 0.375em;
+		margin-top: 0.25em;
+	}
+
+
+  .vrpsidebar #submit {
+    margin-top: 0em;
+  }
+
