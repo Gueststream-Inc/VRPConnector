@@ -1,0 +1,17 @@
+@import "susy";
+
+$susy: (
+  columns: 12,
+  gutters: 1/4,
+  math: fluid,
+  output: float,
+  gutter-position: inside,
+);
+
+
+// using a mixin since we can't use placeholder selectors
+@mixin grid-col {
+  float: left;
+  padding-right: 0.75em;
+
+}

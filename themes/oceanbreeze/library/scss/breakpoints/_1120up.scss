@@ -1,0 +1,28 @@
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Desktop Stylsheet
+
+This is an extra size, to keep the search bar from breaking. 
+
+******************************************************************/
+
+.vrpsidebar {
+	@include span(21%);
+	padding: 1em;
+}
+
+
+	  .vrpsidebar ul>li {
+		margin-top: 0.5em;
+		margin-bottom: 0.5em;
+	}
+
+	.vrpsidebar ul>li>ul {
+		margin-top: 0em;
+	}
+
+  .vrpsidebar form.form-sidebar>ul>li:last-of-type {
+  	margin-bottom: 0.5em;
+  } 

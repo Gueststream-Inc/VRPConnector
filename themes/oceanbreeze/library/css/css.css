@@ -1,0 +1,805 @@
+/*********************
+IMPORTING PARTIALS
+These files are needed at the beginning so that we establish all
+our mixins, functions, and variables that we'll be using across
+the whole project.
+*********************/
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Variables
+
+Here is where we declare all our variables like colors, fonts,
+base values, and defaults. We want to make sure this file ONLY
+contains variables that way our files don't get all messy.
+No one likes a mess.
+
+******************************************************************/
+/*********************
+COLORS
+Need help w/ choosing your colors? Try this site out:
+http://0to255.com/
+*********************/
+/*
+Here's a great tutorial on how to
+use color variables properly:
+http://sachagreif.com/sass-color-variables/
+*/
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Typography
+
+Need to import a font or set of icons for your site? Drop them in
+here or just use this to establish your typographical grid. Or not.
+Do whatever you want to...GOSH!
+
+Helpful Articles:
+http://trentwalton.com/2012/06/19/fluid-type/
+http://ia.net/blog/responsive-typography-the-basics/
+http://alistapart.com/column/responsive-typography-is-a-physical-discipline
+
+******************************************************************/
+/*********************
+FONT FACE (IN YOUR FACE)
+*********************/
+/*  To embed your own fonts, use this syntax
+  and place your fonts inside the
+  library/fonts folder. For more information
+  on embedding fonts, go to:
+  http://www.fontsquirrel.com/
+  Be sure to remove the comment brackets.
+*/
+/*  @font-face {
+      font-family: 'Font Name';
+      src: url('library/fonts/font-name.eot');
+      src: url('library/fonts/font-name.eot?#iefix') format('embedded-opentype'),
+             url('library/fonts/font-name.woff') format('woff'),
+             url('library/fonts/font-name.ttf') format('truetype'),
+             url('library/fonts/font-name.svg#font-name') format('svg');
+      font-weight: normal;
+      font-style: normal;
+  }
+*/
+@font-face {
+  font-family: 'icomoon';
+  src: url("../fonts/icons/icomoon.eot?61bwdg");
+  src: url("../fonts/icons/icomoon.eot?#iefix61bwdg") format("embedded-opentype"), url("../fonts/icons/icomoon.woff?61bwdg") format("woff"), url("../fonts/icons/icomoon.ttf?61bwdg") format("truetype"), url("../fonts/icons/icomoon.svg?61bwdg#icomoon") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* line 54, ../scss/partials/_typography.scss */
+[class^="icon-"], [class*=" icon-"] {
+  font-family: 'icomoon';
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* line 68, ../scss/partials/_typography.scss */
+.icon-home3:before {
+  content: "\e902";
+}
+
+/* line 72, ../scss/partials/_typography.scss */
+.icon-calendar:before {
+  content: "\e953";
+}
+
+/*
+The following is based of Typebase:
+https://github.com/devinhunt/typebase.css
+I've edited it a bit, but it's a nice starting point.
+*/
+/*
+ i imported this one in the functions file so bones would look sweet.
+ don't forget to remove it for your site.
+*/
+/*
+some nice typographical defaults
+more here: http://www.newnet-soft.com/blog/csstypography
+*/
+/* line 97, ../scss/partials/_typography.scss */
+p {
+  -ms-word-wrap: break-word;
+  word-break: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
+  -webkit-hyphenate-before: 2;
+  -webkit-hyphenate-after: 3;
+  hyphenate-lines: 3;
+  -webkit-font-feature-settings: "liga", "dlig";
+  -moz-font-feature-settings: "liga=1, dlig=1";
+  -ms-font-feature-settings: "liga", "dlig";
+  -o-font-feature-settings: "liga", "dlig";
+  font-feature-settings: "liga", "dlig";
+}
+
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Sass Functions
+
+You can do a lot of really cool things in Sass. Functions help you
+make repeated actions a lot easier. They are really similar to mixins,
+but can be used for so much more.
+
+Anyway, keep them all in here so it's easier to find when you're
+looking for one.
+
+For more info on functions, go here:
+http://sass-lang.com/documentation/Sass/Script/Functions.html
+
+******************************************************************/
+/*********************
+COLOR FUNCTIONS
+These are helpful when you're working
+with shadows and such things. It's essentially
+a quicker way to write RGBA.
+
+Example:
+box-shadow: 0 0 4px black(0.3);
+compiles to:
+box-shadow: 0 0 4px rgba(0,0,0,0.3);
+*********************/
+/*********************
+RESPONSIVE HELPER FUNCTION
+If you're creating a responsive site, then
+you've probably already read
+Responsive Web Design: http://www.abookapart.com/products/responsive-web-design
+
+Here's a nice little helper function for calculating
+target / context
+as mentioned in that book.
+
+Example:
+width: cp(650px, 1000px);
+or
+width: calc-percent(650px, 1000px);
+both compile to:
+width: 65%;
+*********************/
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Mixins Stylesheet
+
+This is where you can take advantage of Sass' great features: Mixins.
+I won't go in-depth on how they work exactly,
+there are a few articles below that will help do that. What I will
+tell you is that this will help speed up simple changes like
+changing a color or adding CSS3 techniques gradients.
+
+A WORD OF WARNING: It's very easy to overdo it here. Be careful and
+remember less is more.
+
+Helpful:
+http://sachagreif.com/useful-sass-mixins/
+http://thesassway.com/intermediate/leveraging-sass-mixins-for-cleaner-code
+http://web-design-weekly.com/blog/2013/05/12/handy-sass-mixins/
+
+******************************************************************/
+/*********************
+TRANSITION
+*********************/
+/*
+I totally rewrote this to be cleaner and easier to use.
+You'll need to be using Sass 3.2+ for these to work.
+Thanks to @anthonyshort for the inspiration on these.
+USAGE: @include transition(all 0.2s ease-in-out);
+*/
+/*********************
+CSS3 GRADIENTS
+Be careful with these since they can
+really slow down your CSS. Don't overdo it.
+*********************/
+/* @include css-gradient(#dfdfdf,#f8f8f8); */
+/*********************
+BOX SIZING
+*********************/
+/* @include box-sizing(border-box); */
+/* NOTE: value of "padding-box" is only supported in Gecko. So
+probably best not to use it. I mean, were you going to anyway? */
+/*********************
+IMPORTING MODULES
+Modules are reusable blocks or elements we use throughout the project.
+We can break them up as much as we want or just keep them all in one.
+I mean, you can do whatever you want. The world is your oyster. Unless
+you hate oysters, then the world is your peanut butter & jelly sandwich.
+*********************/
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Alert Styles
+
+If you want to use these alerts in your design, you can. If not,
+you can just remove this stylesheet.
+
+******************************************************************/
+/* line 15, ../scss/modules/_alerts.scss */
+.alert-help, .alert-info, .alert-error, .alert-success {
+  margin: 10px;
+  padding: 5px 18px;
+  border: 1px solid;
+}
+
+/* line 21, ../scss/modules/_alerts.scss */
+.alert-help {
+  border-color: #e8dc59;
+  background: #ebe16f;
+}
+
+/* line 27, ../scss/modules/_alerts.scss */
+.alert-info {
+  border-color: #bfe4f4;
+  background: #d5edf8;
+}
+
+/* line 33, ../scss/modules/_alerts.scss */
+.alert-error {
+  border-color: #f8cdce;
+  background: #fbe3e4;
+}
+
+/* line 39, ../scss/modules/_alerts.scss */
+.alert-success {
+  border-color: #deeaae;
+  background: #e6efc2;
+}
+
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Button Styles
+
+Buttons are a pretty important part of your site's style, so it's
+important to have a consistent baseline for them. Use this stylesheet
+to create all kinds of buttons.
+
+Helpful Links:
+http://galp.in/blog/2011/08/02/the-ui-guide-part-1-buttons/
+
+******************************************************************/
+/*********************
+BUTTON DEFAULTS
+We're gonna use a placeholder selector here
+so we can use common styles. We then use this
+to load up the defaults in all our buttons.
+
+Here's a quick video to show how it works:
+http://www.youtube.com/watch?v=hwdVpKiJzac
+
+*********************/
+/* line 27, ../scss/modules/_buttons.scss */
+.blue-btn {
+  display: inline-block;
+  position: relative;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  text-decoration: none;
+  color: #fff;
+  font-size: 0.9em;
+  font-size: 34px;
+  line-height: 34px;
+  font-weight: normal;
+  padding: 0 24px;
+  border-radius: 4px;
+  border: 0;
+  cursor: pointer;
+  -webkit-transition: background-color 0.14s ease-in-out;
+  transition: background-color 0.14s ease-in-out;
+}
+/* line 44, ../scss/modules/_buttons.scss */
+.blue-btn:hover, .blue-btn:focus {
+  color: #fff;
+  text-decoration: none;
+}
+/* line 50, ../scss/modules/_buttons.scss */
+.blue-btn:active {
+  top: 1px;
+}
+
+/*
+An example button.
+You can use this example if you want. Just replace all the variables
+and it will create a button dependant on those variables.
+*/
+/* line 61, ../scss/modules/_buttons.scss */
+.blue-btn {
+  background-color: #2980b9;
+}
+/* line 65, ../scss/modules/_buttons.scss */
+.blue-btn:hover, .blue-btn:focus {
+  background-color: #2574a8;
+}
+/* line 70, ../scss/modules/_buttons.scss */
+.blue-btn:active {
+  background-color: #2472a4;
+}
+
+/* line 19, ../scss/modules/_forms.scss */
+input[type="text"],
+input[type="password"],
+input[type="datetime"],
+input[type="datetime-local"],
+input[type="date"],
+input[type="month"],
+input[type="time"],
+input[type="week"],
+input[type="number"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+input[type="tel"],
+input[type="color"],
+select,
+textarea,
+.field {
+  height: 32px;
+  line-height: 32px;
+  background: #f8f9fa;
+  color: #5c6b80;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* line 44, ../scss/modules/_forms.scss */
+label {
+  height: 32px;
+  line-height: 32px;
+  display: block;
+  color: #5c6b80;
+}
+/* line 49, ../scss/modules/_forms.scss */
+label.input-group-addon {
+  display: inline-block;
+  background: #eaedf2;
+}
+
+/* line 56, ../scss/modules/_forms.scss */
+.vrpsidebar .hasDatepicker {
+  margin-right: -5px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* line 61, ../scss/modules/_forms.scss */
+.vrpsidebar .input-group-addon {
+  margin-left: 0px;
+  padding: 0 0.25em;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+/* line 68, ../scss/modules/_forms.scss */
+.vrpsidebar #submit {
+  float: none;
+  margin-top: 1em;
+}
+
+/*********************
+BASE (MOBILE) SIZE
+This are the mobile styles. It's what people see on their phones. If
+you set a great foundation, you won't need to add too many styles in
+the other stylesheets. Remember, keep it light: Speed is Important.
+*********************/
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Base Mobile Stylesheet
+
+Be light and don't over style since everything here will be
+loaded by mobile devices. You want to keep it as minimal as
+possible. This is called at the top of the main stylsheet
+and will be used across all viewports.
+
+******************************************************************/
+/*********************
+GENERAL STYLES
+*********************/
+/* line 17, ../scss/breakpoints/_base.scss */
+.vrpsidebar {
+  padding: 5%;
+}
+
+/* line 20, ../scss/breakpoints/_base.scss */
+.vrpsidebar form > ul {
+  margin-bottom: 0;
+}
+
+/* line 23, ../scss/breakpoints/_base.scss */
+.vrpsidebar ul > li, .vrpsidebar ul > li > ul, .vrpsidebar ul > li > ul {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+/* line 29, ../scss/breakpoints/_base.scss */
+.vrpsidebar h2, .vrpsidebar .h2 {
+  font-size: 1.5em;
+  line-height: 1.3em;
+  margin-bottom: 0.375em;
+  margin-top: 0.25em;
+}
+
+/* line 37, ../scss/breakpoints/_base.scss */
+.vrpsidebar .input-group select {
+  width: 100%;
+}
+/* line 40, ../scss/breakpoints/_base.scss */
+.vrpsidebar .input-group .hasDatepicker {
+  width: 92%;
+}
+
+/* line 45, ../scss/breakpoints/_base.scss */
+.vrpsidebar #submit {
+  margin-top: 1em;
+}
+
+/* Calendars */
+/* line 52, ../scss/breakpoints/_base.scss */
+.calendar {
+  margin: 0;
+  padding: 0;
+  font-size: .5em;
+  border: 1px solid #c0c0c0;
+  float: left;
+  margin-left: 3px;
+  margin-right: 3px;
+  height: 200px;
+  z-index: 1000;
+}
+
+/* line 64, ../scss/breakpoints/_base.scss */
+.calendar caption {
+  margin: 0;
+  padding: .3em 0;
+  font-size: 1em;
+}
+
+/* line 71, ../scss/breakpoints/_base.scss */
+.calendar th {
+  border-bottom: 1px solid #ccc;
+  font-weight: normal;
+  background: #fff;
+}
+
+/* line 77, ../scss/breakpoints/_base.scss */
+.calendar td {
+  border: 1px solid #fff;
+  text-align: center;
+}
+
+/* line 83, ../scss/breakpoints/_base.scss */
+.calendar a {
+  color: #000;
+  text-decoration: none;
+}
+
+/* line 88, ../scss/breakpoints/_base.scss */
+.calendar td.today {
+  background: #ffc;
+  color: #000000;
+}
+
+/* line 93, ../scss/breakpoints/_base.scss */
+.calendar td.selected {
+  border: 1px dotted #ff7800;
+}
+
+/* line 97, ../scss/breakpoints/_base.scss */
+.calendar td.highlighted {
+  background: #BDBDBD;
+  color: #fff;
+}
+
+/* line 101, ../scss/breakpoints/_base.scss */
+.calendar td.passed, table.calendar td.pad {
+  background: #ECECEC;
+  color: #ffffff;
+}
+
+/* line 118, ../scss/breakpoints/_base.scss */
+.sunday, .saturday {
+  background: #f0f0f0;
+}
+
+/* line 122, ../scss/breakpoints/_base.scss */
+#year {
+  padding: 0;
+  width: 500px;
+  list-style: none;
+}
+
+/* line 128, ../scss/breakpoints/_base.scss */
+#year:after {
+  content: "";
+  display: block;
+  height: 0;
+  clear: both;
+  visibility: hidden;
+}
+
+/* line 136, ../scss/breakpoints/_base.scss */
+#year li {
+  float: left;
+  padding: 0 .5em .5em 0;
+  height: 150px;
+}
+
+/*********************
+LARGER MOBILE DEVICES
+This is for devices like the Galaxy Note or something that's
+larger than an iPhone but smaller than a tablet. Let's call them
+tweeners.
+*********************/
+/*********************
+TABLET & SMALLER LAPTOPS
+This is the average viewing window. So Desktops, Laptops, and
+in general anyone not viewing on a mobile device. Here's where
+you can add resource intensive styles.
+*********************/
+@media only screen and (min-width: 768px) {
+  /******************************************************************
+  Site Name:
+  Author:
+  
+  Stylesheet: Tablet & Small Desktop Stylesheet
+  
+  Here's where you can start getting into the good stuff.
+  This size will work on iPads, other tablets, and desktops.
+  So you can start working with more styles, background images,
+  and other resources. You'll also notice the grid starts to
+  come into play. Have fun!
+  
+  ******************************************************************/
+  /*********************
+  GENERAL STYLES
+  *********************/
+  /* line 21, ../scss/breakpoints/_768up.scss */
+  .entry-content table.calendar {
+    width: initial;
+  }
+}
+/*********************
+DESKTOP
+This is the average viewing window. So Desktops, Laptops, and
+in general anyone not viewing on a mobile device. Here's where
+you can add resource intensive styles.
+*********************/
+@media only screen and (min-width: 1030px) {
+  /******************************************************************
+  Site Name:
+  Author:
+  
+  Stylesheet: Desktop Stylsheet
+  
+  This is the desktop size. It's larger than an iPad so it will only
+  be seen on the Desktop.
+  
+  ******************************************************************/
+  /* line 12, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar {
+    padding: 3%;
+  }
+
+  /* line 16, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar ul > li, .vrpsidebar ul > li > ul {
+    margin-top: 0.25em;
+    margin-bottom: 0.25em;
+  }
+
+  /* line 21, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar form.form-sidebar {
+    margin-top: -0.5em;
+  }
+
+  /* line 26, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 23%;
+    float: left;
+    padding-left: 0.83333%;
+    padding-right: 0.83333%;
+    padding: 0.8em 1em;
+    max-width: 230px;
+  }
+
+  /* line 32, ../scss/breakpoints/_1030up.scss */
+  .sidebar .vrpsidebar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 100%;
+    float: left;
+    max-width: none;
+  }
+
+  /* line 37, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar ul > li > ul > li {
+    margin: 0;
+  }
+
+  /* line 42, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar .input-group.arrival input, .vrpsidebar .input-group.depart input {
+    width: initial;
+  }
+  /* line 45, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar .input-group.beds, .vrpsidebar .input-group.sleeps {
+    float: left;
+  }
+  /* line 48, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar .input-group.beds {
+    margin-right: 1.35em;
+  }
+  /* line 52, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar .input-group.type select, .vrpsidebar .input-group.location select {
+    width: 195px;
+  }
+  /* line 56, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar .input-group.beds select, .vrpsidebar .input-group.sleeps select {
+    width: 85px;
+  }
+
+  /* line 62, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar h2, .vrpsidebar .h2 {
+    font-size: 1.4em;
+    line-height: 1.1em;
+    margin-bottom: 0em;
+    margin-top: 0.15em;
+  }
+
+  /* line 69, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar #submit {
+    margin-top: 0.1em;
+  }
+
+  /* line 73, ../scss/breakpoints/_1030up.scss */
+  .vrpsidebar form.form-sidebar > ul > li:last-of-type {
+    margin-bottom: 0;
+  }
+}
+@media only screen and (min-width: 1120px) {
+  /******************************************************************
+  Site Name:
+  Author:
+  
+  Stylesheet: Desktop Stylsheet
+  
+  This is an extra size, to keep the search bar from breaking. 
+  
+  ******************************************************************/
+  /* line 11, ../scss/breakpoints/_1120up.scss */
+  .vrpsidebar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 21%;
+    float: left;
+    padding-left: 0.83333%;
+    padding-right: 0.83333%;
+    padding: 1em;
+  }
+
+  /* line 17, ../scss/breakpoints/_1120up.scss */
+  .vrpsidebar ul > li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+  }
+
+  /* line 22, ../scss/breakpoints/_1120up.scss */
+  .vrpsidebar ul > li > ul {
+    margin-top: 0em;
+  }
+
+  /* line 26, ../scss/breakpoints/_1120up.scss */
+  .vrpsidebar form.form-sidebar > ul > li:last-of-type {
+    margin-bottom: 0.5em;
+  }
+}
+/*********************
+LARGE VIEWING SIZE
+This is for the larger monitors and possibly full screen viewers.
+*********************/
+@media only screen and (min-width: 1240px) {
+  /******************************************************************
+  Site Name: 
+  Author: 
+  
+  Stylesheet: Super Large Monitor Stylesheet
+  
+  You can add some advanced styles here if you like. This kicks in
+  on larger screens.
+  
+  ******************************************************************/
+  /* line 13, ../scss/breakpoints/_1240up.scss */
+  .vrpsidebar {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -ms-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 19%;
+    float: left;
+    padding-left: 0.83333%;
+    padding-right: 0.83333%;
+  }
+
+  /* line 17, ../scss/breakpoints/_1240up.scss */
+  .vrpsidebar h2, .vrpsidebar .h2 {
+    font-size: 1.5em;
+    line-height: 1.3em;
+    margin-bottom: 0.375em;
+    margin-top: 0.25em;
+  }
+
+  /* line 25, ../scss/breakpoints/_1240up.scss */
+  .vrpsidebar #submit {
+    margin-top: 0em;
+  }
+}
+/*********************
+RETINA (2x RESOLUTION DEVICES)
+This applies to the retina iPhone (4s) and iPad (2,3) along with
+other displays with a 2x resolution. You can also create a media
+query for retina AND a certain size if you want. Go Nuts.
+*********************/
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5), only screen and (min--moz-device-pixel-ratio: 1.5), only screen and (min-device-pixel-ratio: 1.5) {
+  /******************************************************************
+  Site Name: 
+  Author: 
+  
+  Stylesheet: Retina Screens & Devices Stylesheet
+  
+  When handling retina screens you need to make adjustments, especially
+  if you're not using font icons. Here you can add them in one neat
+  place.
+  
+  ******************************************************************/
+  /* 
+  
+  EXAMPLE 
+  Let's say you have an image and you need to make sure it looks ok
+  on retina screens. Let's say we have an icon which dimension are
+  24px x 24px. In your regular stylesheets, it would look something
+  like this:
+  
+  .icon {
+  	width: 24px;
+  	height: 24px;
+  	background: url(img/test.png) no-repeat;
+  }
+  
+  For retina screens, we have to make some adjustments, so that image
+  doesn't look blurry. So, taking into account the image above and the
+  dimensions, this is what we would put in our retina stylesheet:
+  
+  .icon {
+  	background: url(img/test@2x.png) no-repeat;
+  	background-size: 24px 24px;
+  }
+  
+  So, you would create the same icon, but at double the resolution, meaning 
+  it would be 48px x 48px. You'd name it the same, but with a @2x at the end
+  (this is pretty standard practice). Set the background image so it matches
+  the original dimensions and you are good to go. 
+  
+  */
+}

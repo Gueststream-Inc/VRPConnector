@@ -14,7 +14,10 @@ class VRPConnector
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
     public $default_theme_name = "mountainsunset"; // Default plugin theme name.
-    public $available_themes = ['mountainsunset' => 'Mountain Sunset'];
+    public $available_themes = [
+                                'mountainsunset' => 'Mountain Sunset',
+                                 'oceanbreeze' => 'Ocean Breeze'
+                                ];
     public $otheractions = array();                //
     public $time;                                  // Time (in seconds?) spent making calls to the API
     public $debug = array();                       // Container for debug data
@@ -103,7 +106,7 @@ class VRPConnector
         add_shortcode("vrpComplexes", array($this, "vrpComplexes"));
         add_shortcode("vrpComplexSearch", array($this, "vrpComplexSearch"));
         //add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
-        //add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
+        add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpCompare", array($this, "vrpCompare"));
         add_shortcode("vrpshort", array($this, "vrpShort"));

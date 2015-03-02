@@ -1,0 +1,76 @@
+/******************************************************************
+Site Name:
+Author:
+
+Stylesheet: Desktop Stylsheet
+
+This is the desktop size. It's larger than an iPad so it will only
+be seen on the Desktop.
+
+******************************************************************/
+
+.vrpsidebar {
+	padding: 3%;
+}	
+
+	.vrpsidebar ul>li, .vrpsidebar ul>li>ul {
+		margin-top: 0.25em;
+		margin-bottom: 0.25em;
+	}
+
+	.vrpsidebar form.form-sidebar {
+		margin-top: -0.5em;
+	}
+
+
+.vrpsidebar {
+	@include span(23%);
+	padding: 0.8em 1em;
+	max-width: 230px;
+}
+
+.sidebar .vrpsidebar {
+	@include span(12 of 12 no-gutters);
+	max-width: none;
+}
+
+.vrpsidebar ul>li>ul>li {
+		margin: 0;
+	}
+
+	.vrpsidebar .input-group {
+		&.arrival input, &.depart input {
+			width: initial;
+		}
+		&.beds, &.sleeps {
+			float: left;
+		}
+		&.beds {
+			margin-right: 1.35em;
+		}
+
+		&.type select, &.location select {
+			width: 195px;
+		}
+		
+		&.beds select, &.sleeps select {
+			width: 85px;
+		}
+		 
+	}
+
+	.vrpsidebar h2, .vrpsidebar .h2 {
+		font-size: 1.4em;
+		line-height: 1.1em;
+		margin-bottom: 0em;
+		margin-top: 0.15em;
+	}
+
+  .vrpsidebar #submit {
+    margin-top: 0.1em;
+  }
+
+  .vrpsidebar form.form-sidebar>ul>li:last-of-type {
+  	margin-bottom: 0;
+  } 
+	
