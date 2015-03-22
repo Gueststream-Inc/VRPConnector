@@ -29,11 +29,17 @@ class mountainsunset
         }
 		global $wp_query;
 
-		if (isset($wp_query->query_vars['action'])) {
-			if ('unit' == $wp_query->query_vars['action']){
-				wp_enqueue_script('googlemaps','http://maps.googleapis.com/maps/api/js?sensor=true');
-			}
-		}
+        wp_register_script('vrpMapModule', plugins_url('/mountainsunset/js/vrp.map.js', dirname(__FILE__)));
+        wp_enqueue_script('vrpMapModule');
+        wp_register_script('vrpMRespondModule', plugins_url('/mountainsunset/js/vrp.mRespond.js', dirname(__FILE__)));
+        wp_enqueue_script('vrpMRespondModule');
+
+        wp_register_script('googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp');
+        wp_enqueue_script('googleMap');
+//		if (isset($wp_query->query_vars['action'])) {
+//			if ('unit' == $wp_query->query_vars['action']){
+//			}
+//		}
 
         $script_vars = [
             'site_url' => site_url(),
@@ -46,6 +52,10 @@ class mountainsunset
 
     function add_my_stylesheet()
     {
+
+
+        wp_enqueue_style('FontAwesome',
+            plugins_url('/mountainsunset/css/font-awesome.css', dirname(__FILE__)));
 
         if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css')) {
             wp_enqueue_style('VRPjQueryUISmoothness', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css');
@@ -67,69 +77,104 @@ class mountainsunset
     }
 }
 
-function vrp_pagination($totalpages, $page = 1)
+function generateList($list, $options = [])
 {
-    $fields_string = "";
+
+    $configuredOptions = ['attr' => '', 'child' => 'children'];
+
+    if(!empty($options['child'])) {
+        $configuredOptions['child'] = $options['child'];
+    }
+    if(!empty($options['attr'])) {
+        $configuredOptions['attr'] = $options['attr'];
+    }
+
+    $options = (object) $configuredOptions;
+
+    $recursive = function ($dataset, $child = FALSE, $options) use ( &$recursive ) {
+
+        $html = "<ul $options->attr>"; // Open the menu container
+
+        foreach($dataset as $title => $properties) {
+
+            $subMenu = '';
+
+            $children = (!empty($properties[$options->child]) ? true : false);
+
+            if($children)
+                $subMenu = $recursive($properties[$options->children], TRUE, $options);
+
+            $html .= '<li class="' . (!empty($properties['class']) ? $properties['class'] : '') . '"><a class="'
+                . (!empty($properties['disabled']) && $properties['disabled'] === true ? ' disabled ' : '')
+                . (!empty($properties['selected']) ? ' current ' : '') . '" href="?'
+                . $properties['pageurl']
+                . 'show=' . $properties['show']
+                . '&page=' . $properties['page']
+                . '">' . $title . '</a>'
+                . $subMenu . '</li>';
+
+            unset($children, $subMenu);
+
+        }
+        return $html . "</ul>";
+    };
+
+    return $recursive($list, FALSE, $options);
+
+}
+
+function generateSearchQueryString() {
+
+    $fieldString = '';
+
     foreach ($_GET['search'] as $key => $value) {
         if (is_array($value)) {
             foreach ($value as $v):
-                $fields_string .= 'search[' . $key . '][]=' . $v . '&';
+                $fieldString .= 'search[' . $key . '][]=' . $v . '&';
             endforeach;
         } else {
-            $fields_string .= 'search[' . $key . ']=' . $value . '&';
+            $fieldString .= 'search[' . $key . ']=' . $value . '&';
         }
     }
-    rtrim($fields_string, '&');
-    $pageurl = $fields_string;
-    $_SESSION['pageurl'] = $pageurl;
 
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
-    } else {
-        $show = 10;
-    }
+    return rtrim($fieldString, '&');
+}
 
-    if ($totalpages == 1) {
-        return;
-    }
+function vrp_pagination($totalPages, $curPage = 1)
+{
 
-    echo "<ul>";
-    if ($page > 1) {
-        $p = $page - 1;
-        echo '<li><a href="?' . esc_attr($pageurl)  . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Prev</a></li>';
-    }
+    $_SESSION['pageurl'] = $pageurl = generateSearchQueryString();
+    $curPage = (int) esc_attr($curPage);
+    $pageurl = esc_attr($pageurl);
+    $show = ( !empty($_GET['show']) ? esc_attr($_GET['show']) : 10 );
 
-    if ($totalpages > 5) {
-        $totalrange = $page + 4;
-        $startrange = 1;
-        if ($page > 5) {
-            $startrange = $page - 4;
+    $totalRange = (int) ( $totalPages > 5 ? $curPage + 4 : $totalPages );
+    $startRange = (int) ( $curPage > 5 ? $curPage - 4 : 1 );
+
+    $list = [];
+
+    $list['Prev'] = ['pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage - 1), 'class' => 'button', 'disabled' => ($curPage !== 1 ? false : true)];
+
+    $list[$curPage] = ['pageurl' => $pageurl, 'show' => $show, 'page' => $curPage];
+
+
+    foreach (range($startRange, $totalRange) as $incPage) {
+
+        $incPage = (int) esc_attr($incPage);
+
+        if($curPage === $incPage) {
+            $list[$incPage]['selected'] = ($curPage === $incPage ? true : false);
+            continue;
         }
-    } else {
-        $totalrange = $totalpages;
-        $startrange = 1;
-    }
-    if ($startrange > 1) {
-        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=1">1</a></li>';
+
+        $list[$incPage] = ['pageurl' => $pageurl, 'show' => $show, 'page' => $incPage];
 
     }
 
-    foreach (range($startrange, $totalrange) as $p) {
-        if ($page == $p) {
-            echo '<li class="active"><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
-        } else {
-            echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">$p</a></li>';
-        }
-    }
-    if ($totalpages > 5) {
-        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($totalpages) . '">Last</a></li>';
-    }
+    $list['Last'] = ['active' => false, 'pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage - 1), 'class' => 'button', 'disabled' => ($totalPages > 5 ? false : true)];
+    $list['Next'] = ['active' => false, 'pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage + 1), 'class' => 'button', 'disabled' => ($curPage < $totalPages ? false : true)];
 
-    if ($page < $totalpages) {
-        $p = $page + 1;
-        echo '<li><a href="?' . esc_attr($pageurl) . 'show=' . esc_attr($show) . '&page=' . esc_attr($p) . '">Next</a></li>';
-    }
-    echo "</ul>";
+    return generateList($list, ['attr' => 'class="vrp-cd-pagination"']);
 }
 
 function vrp_paginationmobile($totalpages, $page = 1)
@@ -234,18 +279,21 @@ function vrpsortlinks($unit)
     if (isset($unit->Rate)) {
         $sortoptions[] = "Rate";
     }
-    // echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'><option></option>";
+
+    echo "<select class='vrpsorter'>";
+    echo "<option value=''>Sort By</option>";
+
     if (isset($_GET['search']['sort'])) {
         $sort = $_GET['search']['sort'];
     } else {
         $sort = "";
     }
-    if (isset($_GET['show'])) {
-        $show = $_GET['show'];
-    } else {
-        $show = 10;
-    }
+    $show = ( !empty($_GET['show']) ? esc_attr($_GET['show']) : 10 );
     foreach ($sortoptions as $s) {
+
+        $s = $show;
+        $pageurl = esc_attr($pageurl);
+        $order = esc_attr($order);
 
         if ($sort == $s) {
             if ($order == "low") {
@@ -256,15 +304,15 @@ function vrpsortlinks($unit)
                 $other = "high";
             }
 
-            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) . '" selected="selected">' . esc_attr($s) . '(' . esc_attr($other) . ' to ' . esc_attr($order) . ')</a></li>';
-            echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=' . esc_attr($order) .'">' . esc_attr($s) . '(' . esc_attr($order) . 'to' . esc_attr($other) . ')</a></li>';
+            echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=' . $order . '">' . $s . '(' . $other . ' to ' . $order . ')</option>';
+            echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=' . $order .'">' . $s . '(' . $order . 'to' . $other . ')</option>';
             continue;
         }
 
-        echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=low">' . esc_attr($s) . '(low to high)</a></li>';
-        echo '<li><a href="?' . esc_attr($pageurl) . 'search[sort]=' . esc_attr($s) . '&show=' . esc_attr($show) . '&search[order]=high">' . esc_attr($s) . '(high to low)</a></li>';
+        echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=low">' . $s . '(low to high)</option>';
+        echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=high">' . $s . '(high to low)</option>';
     }
-    // echo "</select>";
+     echo "</select>";
 }
 
 function vrpsortlinks2($unit)
@@ -348,15 +396,12 @@ function vrp_resultsperpage()
     } else {
         $show = 10;
     }
-    echo "<ul class='vrpshowing'>";
+    echo "<select name='resultCount' class='vrpshowing'>";
+    echo "<option value=''>Show</option>";
     foreach (array(10, 20, 30) as $v) {
-        if ($show == $v) {
-            echo '<li><a href="?' . esc_attr($pageurl) . '&show=10"><b>' . esc_attr($v) . '</b></a></li>';
-        } else {
-            echo '<li><a href="?' . esc_attr($pageurl) . '&show=' . esc_attr($v) . '">' . esc_attr($v) . '</a></li>';
-        }
+        echo '<option ' . (!empty($_GET['show']) && (int) $_GET['show'] == $v ? 'selected="selected"' : '') . ' value="?' . esc_attr($pageurl) . '&show=' . esc_attr($v) . '">' . esc_attr($v) . '</option>';
     }
-    echo "</ul>";
+    echo "</select>";
 }
 
 function dateSeries($start_date, $num)
@@ -417,7 +462,7 @@ function vrpCalendar($r, $totalMonths = 3)
       $nextmonth = date("m", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
       $nextyear2 = date("Y", mktime(0, 0, 0, date("m") + 2, date("d"), date("Y")));
       $nextmonth2 = date("m", mktime(0, 0, 0, date("m") + 2, date("d"), date("Y")));
-     * 
+     *
      */
     $theKey = "<br style=\"clear:both;\" /><br/><div id=\"calKey\"><div style=\"float:left;\"><span style=\"float:left;display:block;width:15px;height:15px;background:#ffffff;border:1px solid #404040;\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Available</span> <span style=\"float:left;display:block;width:15px;height:15px;background:#BDBDBD;margin-left:10px;border:1px solid #404040;\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Unavailable</span><br style=\"clear:both;\" /></div><br style=\"clear:both;\" /></div>";
     $ret = "";

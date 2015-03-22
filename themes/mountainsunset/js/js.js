@@ -1,4 +1,12 @@
 jQuery(document).ready(function(){
+    jQuery('#vpr-list').click(function(e) {
+        e.preventDefault();
+        jQuery('.list-grid-layout').attr('class', 'col-xs-12 list-grid-layout vpr-list-style');
+    });
+    jQuery('#vpr-grid').click(function(e){
+        e.preventDefault();
+        jQuery('.list-grid-layout').attr('class', 'col-md-4 col-xs-6 col-sm-12 vpr-list-grid-layout vpr-grid-style');
+    });
 
     // Unit Page Tabs
     unitTabs = jQuery("#tabs").tabs();
@@ -400,22 +408,21 @@ function checkavailability(){
         }
     });
 }
-
-function ratebreakdown(obj){
-    var tbl=jQuery("#ratebreakdown");
+function ratebreakdown(obj) {
+    var tbl = jQuery("#ratebreakdown");
     console.log(obj);
     tbl.empty();
-    for (var i in obj.Charges){
-        var row="<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
+    for (var i in obj.Charges) {
+        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
         tbl.append(row);
     }
     if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row="<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
+        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
         tbl.append(row);
     }
-    var tax="<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
-    var total="<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
-    var totaldue="<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
+    var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
+    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
+    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
 
     tbl.append(tax);
     tbl.append(total);
