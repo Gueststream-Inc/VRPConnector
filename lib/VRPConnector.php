@@ -20,7 +20,9 @@ class VRPConnector
     public $debug = array();                       // Container for debug data
     public $action = false; // VRP Action
     public $favorites;
-    private $pageTitle;
+    private $pagetitle;
+    private $pagedescription;
+    
 
     /**
      * Class Construct
@@ -248,6 +250,7 @@ class VRPConnector
 
         $content = "";
         $pagetitle = "";
+        $pagedescription = "";
         $action = $query->query_vars['action'];
         $slug = $query->query_vars['slug'];
 
@@ -255,6 +258,14 @@ class VRPConnector
             case "unit":
                 $data2 = $this->call("getunit/" . $slug);
                 $data = json_decode($data2);
+
+                if (isset( $data->SEOTitle )) {
+                  $pagetitle  = $data->SEOTitle;
+                } else {
+                    $pagetitle = $data->Name;
+                }
+
+                $pagedescription = $data->SEODescription;
 
                 if (!isset($data->id)) {
                     global $wp_query;
@@ -267,7 +278,7 @@ class VRPConnector
                     $content = $this->loadTheme("unit", $data);
                 }
 
-                $pagetitle = $data->Name;
+
                 break;
 
             case "complex": // If Complex Page.
@@ -279,6 +290,7 @@ class VRPConnector
                     $content = $this->loadTheme("complex", $data);
                 }
                 $pagetitle = $data->name;
+
                 break;
 
             case "favorites":
@@ -303,7 +315,7 @@ class VRPConnector
 
             case "specials": // If Special Page.
                 $content = $this->specialPage($slug);
-                $pagetitle = $this->pageTitle; //
+                $pagetitle = $this->pagetitle; //
                 break;
 
             case "search": // If Search Page.
@@ -407,7 +419,7 @@ class VRPConnector
                 break;
         }
 
-        return [new DummyResult(0, $pagetitle, $content)];
+        return [new DummyResult(0, $pagetitle, $content, $pagedescription)];
     }
 
     private function specialPage($slug)
@@ -415,21 +427,21 @@ class VRPConnector
         if ($slug == "list") {
             // Special by Category
             $data = json_decode($this->call("getspecialsbycat/1"));
-            $this->pageTitle = "Specials";
+            $this->pagetitle = "Specials";
             return $this->loadTheme("specials", $data);
         }
 
         if (is_numeric($slug)) {
             // Special by ID
             $data = json_decode($this->call("getspecialbyid/" . $slug));
-            $this->pageTitle = $data->title;
+            $this->pagetitle = $data->title;
             return $this->loadTheme("special", $data);
         }
 
         if (is_string($slug)) {
             // Special by slug
             $data = json_decode($this->call("getspecial/" . $slug));
-            $this->pageTitle = $data->title;
+            $this->pagetitle = $data->title;
             return $this->loadTheme("special", $data);
         }
     }
