@@ -785,6 +785,14 @@ class VRPConnector
     {
         return json_decode($this->call("searchoptions"));
     }
+    
+    /**
+     * List out property names. Useful in listing names for propery select box.
+     */
+    function proplist() {
+            $data = $this->call("namelist");
+        return json_decode($data);
+    }
 
     /**
      * Get a featured unit
