@@ -325,6 +325,11 @@ class VRPConnector
                     $data = $this->prepareSearchResults($data);
                 }
 
+                if(isset($_GET['json'])) {
+                    echo json_encode($data,JSON_PRETTY_PRINT);
+                    exit;
+                }
+
                 if (isset($data->type)) {
                     $content = $this->loadTheme($data->type, $data);
                 } else {
