@@ -3,7 +3,7 @@
     <div id="vrp-map">
         <div class="vrp-map-canvas"></div>
     </div>
-    <div id="vrpresults" class="vrp-container-fluid hide">
+    <div id="vrpresults" class="vrp-container-fluid">
         <?php if ($data->count === 0) : ?>
 
             <div class="vrp-row">
@@ -66,7 +66,7 @@
 
                         </div>
                     </div>
-                    <div class="vrp-thumbnail text-center" style="background-image:url(<?php echo esc_url($unit->Thumb); ?>);">
+                    <div class="vrp-thumbnail text-center" style="background-image:url(<?php echo $unit->Thumb; ?>);">
                         <div class="vrp-actions">
                             <a href="#" data-unit="<?php echo $unit->id; ?>" class="vrp-favorite-button vrp-btn purple text-center">
                                 <i class="fa fa-fw fa-lg fa-heart"></i>
