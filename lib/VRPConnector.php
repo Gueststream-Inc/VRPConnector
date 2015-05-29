@@ -113,6 +113,8 @@ class VRPConnector
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpshort", array($this, "vrpShort"));
         add_shortcode("vrpFeaturedUnit", array($this, "vrpFeaturedUnit"));
+
+        add_filter('widget_text', 'do_shortcode');
     }
 
     /**
