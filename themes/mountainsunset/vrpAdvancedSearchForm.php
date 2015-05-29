@@ -79,7 +79,7 @@ $searchoptions=$vrp->searchoptions();
 ?>
 <h2>Advanced Search</h2>
 <br><br>
-<form action="/vrp/complexsearch/results/" method="get">
+<form action="/vrp/search/results/" method="get">
     <div class="large-3 columns">
         <div class="ui-widget-header ui-corner-all">
             <h4>Search Options</h4>

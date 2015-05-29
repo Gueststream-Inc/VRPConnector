@@ -55,7 +55,7 @@ if (!isset($_SESSION['depart'])) {
                                 }
                                 ?>
                                 <img id="full<?php echo esc_attr($v->id); ?>" alt="<?php echo esc_attr($v->caption); ?>"
-                                     src="<?php echo esc_url($v->url); ?>"
+                                     src="<?php echo $v->url; ?>"
                                      style="width:100%; <?php echo esc_attr($style); ?>"/>
                                 <?php
                                 $count ++;

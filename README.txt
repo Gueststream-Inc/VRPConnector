@@ -39,6 +39,11 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.0.3 =
+* ShortCodes can be used in Widget Text
+* Advanced Search Form posts to regular search instead of complex search by default.
+* Unit Thumbnail photos with URL's containing spaces %20 in them now display correctly.
+
 = 1.0.2 =
 * Fixed var decleration inside of a hash map.
 
