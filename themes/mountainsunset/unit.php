@@ -8,9 +8,6 @@ if (!isset($_SESSION['depart'])) {
 ?>
 <div class="" id="vrpcontainer">
     <div class="row">
-        <div class="col-md-2">
-            <img src="<?php echo esc_url($data->photos[0]->thumb_url); ?>" style="width:100%">
-        </div>
         <div class="col-md-8">
             <div class="row">
                 <?php echo esc_html($data->Name); ?>
@@ -54,7 +51,8 @@ if (!isset($_SESSION['depart'])) {
                                     $style = "display:none;";
                                 }
                                 ?>
-                                <img id="full<?php echo esc_attr($v->id); ?>" alt="<?php echo esc_attr($v->caption); ?>"
+                                <img id="full<?php echo esc_attr($v->id); ?>"
+                                     alt="<?php echo esc_attr($v->caption); ?>"
                                      src="<?php echo $v->url; ?>"
                                      style="width:100%; <?php echo esc_attr($style); ?>"/>
                                 <?php
@@ -64,13 +62,14 @@ if (!isset($_SESSION['depart'])) {
                         </div>
 
                         <div id="gallery">
-                            <?php foreach ($data->photos as $k => $v) { ?>
+                            <?php foreach ($data->photos as $k => $v) : ?>
+                                <?php $v->thumb_url = $v->url; ?>
                                 <img class="thumb"
                                      id="<?php echo esc_attr($v->id); ?>"
                                      alt="<?php echo esc_attr($v->caption); ?>"
-                                     src="<?php echo esc_url($v->thumb_url); ?>"
+                                     src="<?php echo $v->thumb_url; ?>"
                                      style="height:60px; float:left; margin: 3px;"/>
-                            <?php } ?>
+                            <?php endforeach; ?>
                         </div>
                         <br style="clear:both;" class="clearfix">
                     </div>
