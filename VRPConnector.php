@@ -17,7 +17,7 @@ define( 'VRP_PATH', dirname( __FILE__ ) . '/' );
 
 require __DIR__ . "/vendor/autoload.php";
 
-if(version_compare(phpversion(), '5.6.0', '<'))
+if(version_compare(phpversion(), '5.4.0', '<'))
 {
     function vrp_phpold()
     {
