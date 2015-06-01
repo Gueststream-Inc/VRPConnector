@@ -8,8 +8,8 @@ if (isset($data->Error)) {
 global $wp_query;
 $query=$wp_query;
     ?>
-
-    <div id="myModal2" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+<div id="vrp">
+    <div id="myModal2" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-header">
             <h3>Reservation Details</h3>

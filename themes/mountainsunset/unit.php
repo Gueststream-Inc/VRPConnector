@@ -130,7 +130,7 @@ if (!isset($_SESSION['depart'])) {
                             <div id="datespicked">
                                 Select your arrival and departure dates below to reserve this unit.<br><br>
 
-                                <form action="<?php echo esc_url(site_url('/vrp/book/step1/', 'https')); ?>"
+                                <form action="<?php echo esc_url(site_url('/vrp/book/step3/', 'https')); ?>"
                                       method="get" id="bookingform">
 
                                     <table align="center" width="96%">

@@ -1,55 +1,49 @@
+<?php
+/**
+ *
+ */
+
+global $vrp;
+?>
 <form
     action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET['obj']['PropID']); ?>"
     id="vrpbookform" method="post">
     <div class="userbox" id="guestinfodiv">
-<pre><?php print_r($data->obj); ?></pre>
         <h3>Guest Information</h3>
 
-        <div class="padit">
-            <div style="float:left;width:50%">
+        <div class="vrp-row">
+            <div style="" class="vrp-col-md-6">
                 <table class="booktable">
                     <tr id="fnametr">
-                        <td><b>First Name*:</b></td>
-                        <td>
-                            <input type="text" name="booking[fname]" id="fname"
-                                   value="">
-                        </td>
+                        <th>First Name*:</th>
+                        <td><input type="text" name="booking[fname]" id="fname" value=""></td>
                     </tr>
 
                     <tr id="lnametr">
-                        <td><b>Last Name*:</b></td>
-                        <td>
-                            <input type="text" name="booking[lname]" id="lname">
-                        </td>
+                        <th>Last Name*:</th>
+                        <td><input type="text" name="booking[lname]" id="lname"></td>
                     </tr>
 
                     <tr id="addresstr">
-                        <td><b>Address*:</b></td>
-                        <td>
-                            <input type="text" name="booking[address]">
-                        </td>
+                        <th>Address*:</th>
+                        <td><input type="text" name="booking[address]"></td>
                     </tr>
                     <tr id="address2tr">
-                        <td><b>Address 2:</b></td>
-                        <td>
-                            <input type="text" name="booking[address2]">
-                        </td>
+                        <th>Address 2:</th>
+                        <td><input type="text" name="booking[address2]"></td>
                     </tr>
                     <tr id="citytr">
-                        <td><b>City*:</b></td>
-                        <td>
-                            <input type="text" name="booking[city]">
-                        </td>
+                        <th>City*:</th>
+                        <td><input type="text" name="booking[city]"></td>
                     </tr>
 
                     <tr id="regiontr" style="display:none">
-                        <td><b>Region*:</b></td>
-                        <td><input type="text" name="booking[region]" id="region">
-                        </td>
+                        <th>Region*:</th>
+                        <td><input type="text" name="booking[region]" id="region"></td>
                     </tr>
 
                     <tr id="statetr">
-                        <td><b>State*:</b></td>
+                        <th>State*:</th>
                         <td><select name="booking[state]" id="states">
                                 <option value="">-- Select State --</option>
                                 <?php foreach ($data->form->states as $k => $v): ?>
@@ -61,7 +55,7 @@
                         </td>
                     </tr>
                     <tr id="provincetr" style="display:none">
-                        <td><b>Province*:</b></td>
+                        <th>Province*:</th>
                         <td>
                             <select name="booking[province]" id="provinces">
                                 <option value="">-- Select Province --</option>
@@ -76,101 +70,67 @@
                 </table>
             </div>
 
-            <table class="booktable">
-                <tr id="countrytr">
-                    <td><b>Country*:</b></td>
-                    <td>
-                        <select name="booking[country]" id="country">
-                            <?php foreach ($data->form->main_countries as $k => $v): ?>
-                                <option value="<?php echo esc_attr($k); ?>">
-                                    <?php echo esc_attr($v); ?>
-                                </option>
-                            <?php endforeach; ?>
-                            <option value="other">Other</option>
-                        </select>
-                    </td>
-                </tr>
-                <tr id="othertr" style="display:none;">
-                    <td><b>Other*:</b></td>
-                    <td>
-                        <select name="booking[othercountry]" id="othercountry">
-                            <option value="">-- Select Country --</option>
-                            <?php foreach ($data->form->countries as $k => $v): ?>
-                                <option value="<?php echo esc_attr($k); ?>">
-                                    <?php echo esc_attr($v); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
-                    </td>
-                </tr>
-                <tr id="ziptr">
-                    <td><b>Postal Code*:</b></td>
-                    <td><input type="text" name="booking[zip]"></td>
-                </tr>
-                <tr id="phonetr">
-                    <td><b>Phone*:</b></td>
-                    <td><input type="text" name="booking[phone]"></td>
-                </tr>
-                <tr id="wphonetr">
-                    <td><b>Work Phone:</b></td>
-                    <td><input type="text" name="booking[wphone]"></td>
-                </tr>
-                <tr id="emailtr">
-                    <td><b>Email*:</b></td>
-                    <td><input type="text" name="booking[email]"></td>
-                </tr>
-                <tr>
-                    <td><b>Occupants:</b></td>
-                    <td>
-                        <?php
-                        if (isset($_GET['obj']['Adults'])) {
-                            $adults = (int)$_GET['obj']['Adults'];
-                        } else {
-                            $adults = $_SESSION['adults'];
-                        }
-                        ?>
-                        <input type="hidden" name="booking[adults]"
-                               value="<?php echo esc_attr($adults); ?>"/>
-                        <?php echo esc_html($adults); ?>
-                        <?php
-                        if (isset($_GET['obj']['Children'])) {
-                            $children_count = (int)$_GET['obj']['Children'];
-                        } else {
-                            if (!isset($_SESSION['children'])) {
-                                $_SESSION['children'] = 0;
-                            }
-                            $children_count = $_SESSION['children'];
-                        }
-                        ?>
-                        <input type="hidden"
-                               name="booking['children']"
-                               value="<?php echo esc_attr($children_count); ?>"/>
-                    </td>
-                </tr>
-            </table>
-
+            <div class="vrp-col-md-6">
+                <table class="booktable">
+                    <tr id="countrytr">
+                        <th>Country*:</th>
+                        <td>
+                            <select name="booking[country]" id="country">
+                                <?php foreach ($data->form->main_countries as $k => $v): ?>
+                                    <option value="<?php echo esc_attr($k); ?>">
+                                        <?php echo esc_attr($v); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                                <option value="other">Other</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="othertr" style="display:none;">
+                        <th>Other*:</th>
+                        <td>
+                            <select name="booking[othercountry]" id="othercountry">
+                                <option value="">-- Select Country --</option>
+                                <?php foreach ($data->form->countries as $k => $v): ?>
+                                    <option value="<?php echo esc_attr($k); ?>">
+                                        <?php echo esc_attr($v); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr id="ziptr">
+                        <th>Postal Code*:</th>
+                        <td><input type="text" name="booking[zip]"></td>
+                    </tr>
+                    <tr id="phonetr">
+                        <th>Phone*:</th>
+                        <td><input type="text" name="booking[phone]"></td>
+                    </tr>
+                    <tr id="wphonetr">
+                        <th>Work Phone:</th>
+                        <td><input type="text" name="booking[wphone]"></td>
+                    </tr>
+                    <tr id="emailtr">
+                        <th>Email*:</th>
+                        <td><input type="text" name="booking[email]"></td>
+                    </tr>
+                    <tr>
+                        <th>Adults:</th>
+                        <td>
+                            <input type="hidden" name="booking[adults]"
+                                   value="<?php echo esc_attr($adults); ?>"/>
+                            <?php echo esc_html($vrp->search->adults); ?>
+                            <input type="hidden"
+                                   name="booking['children']"
+                                   value="<?php echo esc_attr($children_count); ?>"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </div>
         <br style="clear:both;"></div>
-    <div class="vrpgrid_12 alpha omega userbox" style="margin-top:20px; <?php echo "display: none"; ?>"
-         id="passwordbox">
-        <h3>Password (optional)</h3>
 
-        <div class="padit">
-            You have the option to set a password for the next time you visit our site.<br><br>
-            <table style="width:70%;margin-left:20%">
-                <tr id="passwordtr">
-                    <td><b>Password:</b></td>
-                    <td><input type="password" name="booking[password]" value=" "></td>
-                </tr>
-                <tr id="password2tr">
-                    <td><b>Password (Again):</b></td>
-                    <td><input type="password" name="booking[password2]" value=" "></td>
-                </tr>
-            </table>
-        </div>
-
-    </div>
-    <?php if ($data->HasInsurance) { ?>
+    <?php if (isset($data->HasInsurance) && $data->HasInsurance) : ?>
         <div class="vrpgrid_12 alpha omega userbox" style="margin-top:20px;">
             <h3>Optional Travel Insurance</h3>
 
@@ -186,9 +146,9 @@
                        value="<?php echo esc_attr($data->InsuranceAmount); ?>">
             </div>
         </div>
-    <?php } else { ?>
+    <?php else : ?>
         <input type="hidden" name="booking[acceptinsurance]" value="0">
-    <?php } ?>
+    <?php endif; ?>
     <div class="userbox" style="margin-top:20px;">
         <h3>Payment Information</h3>
 
@@ -287,6 +247,8 @@
             <?php } ?>
 
 
+            <input type="hidden" name="booking[password]" value=" ">
+            <input type="hidden" name="booking[password2]" value=" ">
             <input type="hidden" name="booking[PropID]" value="<?php echo esc_attr($data->PropID); ?>">
             <input type="hidden" name="booking[arrival]" value="<?php echo esc_attr($data->Arrival); ?>">
             <input type="hidden" name="booking[depart]" value="<?php echo esc_attr($data->Departure); ?>">
@@ -296,11 +258,11 @@
             <input type="hidden" name="booking[TotalBefore]"
                    value="<?php echo esc_attr($data->TotalCost - $data->TotalTax); ?>">
             <input type="hidden" name="booking[TotalTax]" value="<?php echo esc_attr($data->TotalTax); ?>">
-            <?php
-            if (isset($data->InsuranceAmount)) {
-                $data->TotalCost = $data->TotalCost - $data->InsuranceAmount;
-            }
-            ?>
+
+            <?php if (isset($data->InsuranceAmount)) : ?>
+                <?php $data->TotalCost = $data->TotalCost - $data->InsuranceAmount; ?>
+            <?php endif; ?>
+
             <input type="hidden" name="booking[TotalCost]" value="<?php echo esc_attr($data->DueToday); ?>">
             <?php if (isset($data->booksettings->HasPackages)
                 && (isset($data->package->items) && count($data->package->items) != 0)
@@ -308,18 +270,15 @@
                 <input type="hidden" name="booking[packages]"
                        value="<?php echo esc_attr(base64_encode(serialize($data->package))); ?>">
             <?php } ?>
-            <?php
-            if (isset($data->promocode)) {
-                ?>
+
+            <?php if (isset($data->promocode)) : ?>
                 <input type="hidden" name="booking[strPromotionCode]" value="<?php echo esc_attr($data->promocode); ?>">
-            <?php
-            }
-            ?>
+            <?php endif; ?>
+
             <div id="vrploadinggif" style="display:none"><b>Processing Your Booking...</b></div>
-            <input type="submit" value="Book This Property Now" class="btn btn-success " id="bookingbuttonvrp">
+            <input type="submit" value="Book This Property Now" class="vrp-btn vrp-btn-success " id="bookingbuttonvrp">
             <br><br>
             Only click the "Book This Property Now" button once or you may be charged twice.
-
         </div>
     </div>
 </form>
@@ -334,10 +293,13 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
-
     </div>
-
+</div>
 
 </div>
 
-<br><br><br><br><br>
+<style>
+    .booktable th {
+        text-align: right;
+    }
+</style>

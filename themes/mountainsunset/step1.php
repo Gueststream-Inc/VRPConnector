@@ -1,17 +1,11 @@
+
 <div class="vrpgrid_12 userbox">
     <h3>Reservation Rental Agreement</h3>
     <div class="padit" style="height:250px;overflow-y:auto;" id="rabox">
         <?php echo wp_kses_post(nl2br($data->booksettings->Contract)); ?>
     </div>
 </div>
-<div class="clear"></div>
-<p style="text-align:right;">
-    <a href="/vrp/book/step1/?obj[Arrival]=<?php echo esc_attr($data->Arrival); ?>&obj[Departure]=<?php echo esc_attr($data->Departure); ?>&obj[PropID]=<?php echo esc_attr($_GET[ 'obj' ][ 'PropID' ]); ?>&obj[Adults]=<?php echo esc_attr($_GET[ 'obj' ][ 'Adults' ]); ?>&obj[Children]=<?php echo esc_attr($_GET[ 'obj' ][ 'Children' ]); ?>&printme=1"
-        id="printpage">
-        Print Agreement
-    </a>
-</p>
-<br><br>
+
 <?php
 $step = "step3";
 if (isset($data->booksettings->HasPackages)) {
