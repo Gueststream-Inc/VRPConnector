@@ -17,6 +17,20 @@ define( 'VRP_PATH', dirname( __FILE__ ) . '/' );
 
 require __DIR__ . "/vendor/autoload.php";
 
+if(version_compare(phpversion(), '5.6.0', '<'))
+{
+    function vrp_phpold()
+    {
+        printf('<div class="error"><p>' . __('Your PHP version is too old, please upgrade to a newer version. Your version is %1$s, VRPConnector requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.4.0');
+    }
+
+    if(is_admin())
+    {
+        add_action('admin_notices', 'vrp_phpold');
+    }
+    return;
+}
+
 $vrp = new \Gueststream\VRPConnector;
 
 //Activation:
