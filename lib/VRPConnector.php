@@ -24,7 +24,6 @@ class VRPConnector
     private $pagetitle;
     private $pagedescription;
 
-
     /**
      * Class Construct
      */
@@ -1462,12 +1461,9 @@ class VRPConnector
     {
         $this->search = new \stdClass();
 
+        // Arrival
         if (isset($_GET['search']['arrival'])) {
             $_SESSION['arrival'] = $_GET['search']['arrival'];
-        }
-
-        if (isset($_GET['search']['departure'])) {
-            $_SESSION['depart'] = $_GET['search']['departure'];
         }
 
         if (isset($_SESSION['arrival'])) {
@@ -1476,19 +1472,26 @@ class VRPConnector
             $this->search->arrival = date('m/d/Y', strtotime("+1 Days"));
         }
 
+        // Departure
+        if (isset($_GET['search']['departure'])) {
+            $_SESSION['depart'] = $_GET['search']['departure'];
+        }
+
         if (isset($_SESSION['depart'])) {
             $this->search->depart = date('m/d/Y', strtotime($_SESSION['depart']));
         } else {
             $this->search->depart = date('m/d/Y', strtotime("+4 Days"));
         }
 
-        $this->search->nights = (strtotime($this->search->depart) - strtotime($this->search->arrival)) / 60 / 60 / 24;
+        // Nights
         if (isset($_GET['search']['nights'])) {
             $_SESSION['nights'] = $_GET['search']['nights'];
         }
 
         if (isset($_SESSION['nights'])) {
-            $this->search->bedrooms = $_SESSION['nights'];
+            $this->search->nights = $_SESSION['nights'];
+        } else {
+            $this->search->nights = (strtotime($this->search->depart) - strtotime($this->search->arrival)) / 60 / 60 / 24;
         }
 
         $this->search->type = "";
@@ -1501,6 +1504,7 @@ class VRPConnector
             $this->search->complex = $_SESSION['type'];
         }
 
+        // Sleeps
         $this->search->sleeps = "";
         if (isset($_GET['search']['sleeps'])) {
             $_SESSION['sleeps'] = $_GET['search']['sleeps'];
@@ -1508,8 +1512,11 @@ class VRPConnector
 
         if (isset($_SESSION['sleeps'])) {
             $this->search->sleeps = $_SESSION['sleeps'];
+        } else {
+            $this->search->sleeps = false;
         }
 
+        // Location
         $this->search->location = "";
         if (isset($_GET['search']['location'])) {
             $_SESSION['location'] = $_GET['search']['location'];
@@ -1517,8 +1524,11 @@ class VRPConnector
 
         if (isset($_SESSION['location'])) {
             $this->search->location = $_SESSION['location'];
+        } else {
+            $this->search->location = false;
         }
 
+        // Bedrooms
         $this->search->bedrooms = "";
         if (isset($_GET['search']['bedrooms'])) {
             $_SESSION['bedrooms'] = $_GET['search']['bedrooms'];
@@ -1526,11 +1536,17 @@ class VRPConnector
 
         if (isset($_SESSION['bedrooms'])) {
             $this->search->bedrooms = $_SESSION['bedrooms'];
+        } else {
+            $this->search->bedrooms = false;
         }
 
         // Adults
         if (isset($_GET['search']['adults'])) {
-            $_SESSION['adults'] = $_GET['search']['adults'];
+            $_SESSION['adults'] = (int) $_GET['search']['adults'];
+        }
+
+        if (isset($_GET['obj']['Adults'])) {
+            $_SESSION['adults'] = (int) $_GET['obj']['Adults'];
         }
 
         if (isset($_SESSION['adults'])) {
