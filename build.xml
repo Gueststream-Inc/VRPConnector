@@ -10,7 +10,7 @@
     <exec executable="git" outputProperty="git.commitmessage">
         <arg value="log"/>
         <arg value="-1"/>
-        <arg value="--pretty=format:%H"/>
+        <arg value="--pretty=oneline"/>
         <arg value="--abbrev-commit"/>
     </exec>
 
