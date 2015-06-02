@@ -170,6 +170,7 @@
             <arg value="ci"/>
             <arg value="-m"/>
             <arg value="${git.commitmessage}"/>
+            <arg value="--username=Houghtelin"/>
         </exec>
     </target>
 
