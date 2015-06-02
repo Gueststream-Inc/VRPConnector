@@ -142,25 +142,25 @@
     </target>
 
     <target name="updatesvn">
-        <copy todir="${basedir}/build/svn/trunk/lib">
+        <copy todir="${basedir}/build/svn/trunk/lib" overwrite="true">
             <fileset dir="${basedir}/lib"/>
         </copy>
 
-        <copy todir="${basedir}/build/svn/trunk/themes">
+        <copy todir="${basedir}/build/svn/trunk/themes" overwrite="true">
             <fileset dir="${basedir}/themes"/>
         </copy>
 
-        <copy todir="${basedir}/build/svn/trunk/vendor">
+        <copy todir="${basedir}/build/svn/trunk/vendor" overwrite="true">
             <fileset dir="${basedir}/vendor"/>
         </copy>
 
-        <copy todir="${basedir}/build/svn/trunk/views">
+        <copy todir="${basedir}/build/svn/trunk/views" overwrite="true">
             <fileset dir="${basedir}/views"/>
         </copy>
 
-        <copy file="${basedir}/VRPConnector.php" tofile="${basedir}/build/svn/trunk/VRPConnector.php"/>
+        <copy file="${basedir}/VRPConnector.php" tofile="${basedir}/build/svn/trunk/VRPConnector.php" overwrite="true" />
 
-        <copy file="${basedir}/README.txt" tofile="${basedir}/build/svn/trunk/README.txt"/>
+        <copy file="${basedir}/README.txt" tofile="${basedir}/build/svn/trunk/README.txt" overwrite="true"/>
     </target>
 
     <target name="deploysvn">
