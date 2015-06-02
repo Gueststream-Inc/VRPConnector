@@ -14,6 +14,8 @@ error_log
 /build/logs
 /build/pdepend
 /build/phpdox
+/build/svn
+
 cache.properties
 
 /vendor
