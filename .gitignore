@@ -5,7 +5,15 @@
 error_log
 
 # IDE
-.idea/
+/.idea/
 
 # Test results
-tests/report/
+/tests/report/
+
+/build/coverage
+/build/logs
+/build/pdepend
+/build/phpdox
+cache.properties
+
+/vendor

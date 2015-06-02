@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('UTC');
 /**
  * @file CalendarTest.php
  * @project VRPConnector
