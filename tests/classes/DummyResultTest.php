@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('UTC');
 /**
  * @file DummyResultTest.php
  * @project VRPConnector
@@ -14,7 +14,8 @@ class DummyResultTest extends \PHPUnit_Framework_TestCase
         $id = 1;
         $title = "Dummy Result";
         $content = "All the worlds content is here!";
-        $dummyresult = new \Gueststream\DummyResult($id,$title,$content);
+        $description = "some description";
+        $dummyresult = new \Gueststream\DummyResult($id,$title,$content,$description);
 
         //ID should be what we set it to
         $this->assertSame($id,$dummyresult->ID);
@@ -28,7 +29,7 @@ class DummyResultTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultPropertyValues()
     {
-        $dummyresult = new \Gueststream\DummyResult(0,'some title','some content');
+        $dummyresult = new \Gueststream\DummyResult(0,'some title','some content','some description');
 
         // Comment Status should be 'closed'
         $this->assertSame('closed',$dummyresult->comment_status);

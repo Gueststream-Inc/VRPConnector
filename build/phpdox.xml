@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpdox xmlns="http://phpdox.net/config" silent="false">
+    <bootstrap/>
+    <project name="VRPConnector" source="${basedir}/../lib" workdir="${basedir}/phpdox/xml">
+        <collector publiconly="false" backend="parser">
+            <include mask="*.php"/>
+            <exclude mask="log-*"/>
+            <inheritance resolve="true">
+            </inheritance>
+        </collector>
+        <generator output="${basedir}/phpdox">
+            <enrich base="${basedir}">
+                <source type="build"/>
+                <source type="phploc">
+                    <file name="${basedir}/logs/phploc.xml"/>
+                </source>
+                <source type="phpunit">
+                    <file name="${basedir}/logs/phpunit.xml"/>
+                </source>
+                <source type="checkstyle">
+                    <file name="${basedir}/logs/checkstyle.xml"/>
+                </source>
+                <source type="pmd">
+                    <file name="${basedir}/logs/pmd.xml"/>
+                </source>
+            </enrich>
+            <build engine="html" output="html" />
+        </generator>
+    </project>
+</phpdox>
