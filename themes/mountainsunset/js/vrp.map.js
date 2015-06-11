@@ -12,7 +12,7 @@
 
         var map, mapOptions, mapContainer = el.find('.vrp-overlay-map-container');
 
-        console.log(geometryLocation.lat(),geometryLocation.lng());
+        //console.log(geometryLocation.lat(),geometryLocation.lng());
         mapOptions = Object.create({
             zoom: 6,
             center: new global.google.maps.LatLng(geometryLocation.lat(), geometryLocation.lng())
