@@ -167,14 +167,12 @@
     height: auto;
 }
 #vrp input[type="search"] {
-    -webkit-appearance: textfield;
-    -moz-box-sizing: content-box;
-    -webkit-box-sizing: content-box;
-    box-sizing: content-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 #vrp input[type="search"]::-webkit-search-cancel-button,
 #vrp input[type="search"]::-webkit-search-decoration {
-    -webkit-appearance: none;
 }
 #vrp fieldset {
     border: 1px solid #c0c0c0;
@@ -1185,6 +1183,15 @@
     }
 }
 
+.vrp_unit_intro .results_meta {
+    display: inline;
+}
+
+.vrp_unit_intro .results_meta li {
+    float: left;
+    margin-left: 2em;
+}
+
 
 
 /*
@@ -1620,6 +1627,8 @@ animated buttons - animate the text inside prev and next buttons
 .vrp-item:hover {
     background-color:#eaeaea;
 }
+
+ 
 .vrp-item {
     min-height:230px;
     width:95%;
@@ -1646,10 +1655,13 @@ animated buttons - animate the text inside prev and next buttons
 .vrp-item .vrp-caption {
     padding:5px;
 }
-.vrp-item .vrp-caption h4 { color:#383838; margin:0 0 10px 15px!important; padding:0 !important; font-weight:bold !important;}
-.vrp-item .vrp-thumbnail:hover .vrp-actions {
+.vrp-item .vrp-caption h4 { font-weight:bold !important;}
+.vrp-item .vrp-caption h4, .vrp-item .vrp-caption p { color:#383838; margin:0 0 10px 15px!important; padding:0 !important;}
+.vrp-item .vrp-thumbnail:hover .vrp-actions, .vrp-list-style .vrp-item:hover .vrp-actions {
     top:0;
 }
+
+.vrp-list-style .vrp-caption-meta {float: right!important;margin-right: 0;}
 .vrp-actions {
     -webkit-transition: all 0.3s ease-out;  /* Android 2.1+, Chrome 1-25, iOS 3.2-6.1, Safari 3.2-6  */
     transition: all 0.3s ease-out;  /* Chrome 26, Firefox 16+, iOS 7+, IE 10+, Opera, Safari 6.1+  */
@@ -1665,7 +1677,7 @@ animated buttons - animate the text inside prev and next buttons
 .vrp-actions a { margin:0!important; display:block !important;}
 .vrp-actions a:first-child { margin-top:2.7em!important; margin-bottom:1em!important;}
 .vrp-meta-wrapper {
-    margin-right:1em;
+    margin-right:2em;
 }
 .vrp-layout-action { margin-top:0.75em; }
 /**********************************
@@ -1690,11 +1702,140 @@ animated buttons - animate the text inside prev and next buttons
     display: none;
 }
 
+#unit_image_slider {
+  clear: both;
+  float: none;
+  margin: 0 auto;
+  text-align: center;
+  display: block;
+}
+
+#unique-pager { clear:both;}
+
+/* Calendars */
+.calendar {
+    margin: 0;
+    padding: 0;
+    font-family: verdana;
+    font-size: 10px;
+    border:1px solid #c0c0c0;
+    float:left;
+    margin-left:3px;
+    margin-right:3px;
+    height:170px;
+    z-index:1000;
+    margin-bottom: 2em;
+    }
+.calendar caption {
+    margin: 0;
+    padding: .3em 0;
+    background: #35a380;
+        color:#ffffff;
+    }
+.calendar th {
+    border-bottom: 1px solid #ccc;
+    font-weight: normal;
+    background: #fff;
+    }
+.calendar td {
+    border: 1px solid #fff;
+    padding: .1em .3em ;
+    width: 1em;
+    text-align: center;
+    background:#EDEBDE;
+    color:#000000;
+    }
+.calendar a {
+    color: #000;
+    text-decoration: none;
+    }
+
+.calendar td.today {
+    background: #ffc;
+    color:#000000;
+    }
+.calendar td.selected {
+    border: 1px dotted #ff7800;
+    
+    }
+.calendar td.highlighted {
+    background: #652321;
+        color:#ffffff;
+    }
+    .calendar td.passed {
+    background: #808080;
+    color:#ffffff;
+        }
+    /*
+.calendar td:hover, .calendar td.today:hover, 
+.calendar td.selected:hover, .calendar td.highlighted:hover {
+    background: #cff;
+    border: 1px solid #09f;
+    }
+*/
+table.calendar td.pad {
+    color: #999;
+    background: #fff;
+    }
+table.calendar td.pad:hover {
+    background: none;
+    border: 0;
+    }
+    
+.sunday, .saturday {
+    background: #f0f0f0;
+    }
+    
+#year {
+    padding: 0;
+    width: 500px;
+    list-style: none;
+    }
+#year:after {
+    content: "";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+    }
+#year li {
+    float: left;
+    padding: 0 .5em .5em 0;
+    height: 150px;
+    }
+        
+        #booklink{
+            -moz-border-radius:7px;
+            padding:5px;
+            text-align:center; 
+            margin-left:auto;
+            margin-right:auto;
+        }
+           .listContainer1 ul{float:left;margin-right:20px;}
+           
+           #ui-datepicker-div {
+    z-index:1000 !important;
+}
+
 /**********************************
  CALENDAR STYLING
  **********************************/
+table.calendar {
+    font-size: 10px;
+    border: 1px solid #c0c0c0;
+    height: 210px;
+    z-index: 1000;
+    margin-bottom: 2em;
+}
+
+.calkey { clear:both;}
+
+.calendar td.highlighted {
+    color:#888888;
+}
+
 .calendar tbody, .calkey .isavailable {
-  background: #7FFFD4;
+  background: #EDEBDE;
 }
 
 .calendar tbody, .calkey .isavailable, .calendar .highlighted.aDate, .calendar .highlighted.dDate {
@@ -1705,35 +1846,35 @@ animated buttons - animate the text inside prev and next buttons
     }
 
     .calendar .dDate, .calendar .highlighted.dDate, .calkey .isavailable.dDate {
-        background: rgb(255,240,245);
-        background: -moz-linear-gradient(45deg,  rgba(255,240,245,1) 0%, rgba(255,240,245,1) 51%, rgba(255,240,245,1) 51%, rgba(127,255,212,1) 51%, rgba(127,255,212,1) 100%);
-        background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(255,240,245,1)), color-stop(51%,rgba(255,240,245,1)), color-stop(51%,rgba(255,240,245,1)), color-stop(51%,rgba(127,255,212,1)), color-stop(100%,rgba(127,255,212,1)));
-        background: -webkit-linear-gradient(45deg,  rgba(255,240,245,1) 0%,rgba(255,240,245,1) 51%,rgba(255,240,245,1) 51%,rgba(127,255,212,1) 51%,rgba(127,255,212,1) 100%);
-        background: -o-linear-gradient(45deg,  rgba(255,240,245,1) 0%,rgba(255,240,245,1) 51%,rgba(255,240,245,1) 51%,rgba(127,255,212,1) 51%,rgba(127,255,212,1) 100%);
-        background: -ms-linear-gradient(45deg,  rgba(255,240,245,1) 0%,rgba(255,240,245,1) 51%,rgba(255,240,245,1) 51%,rgba(127,255,212,1) 51%,rgba(127,255,212,1) 100%);
-        background: linear-gradient(45deg,  rgba(255,240,245,1) 0%,rgba(255,240,245,1) 51%,rgba(255,240,245,1) 51%,rgba(127,255,212,1) 51%,rgba(127,255,212,1) 100%);
+        background: rgb(101, 35, 33);
+        background: -moz-linear-gradient(45deg,  rgba(101, 35, 33,1) 0%, rgba(101, 35, 33,1) 51%, rgba(101, 35, 33,1) 51%, rgba(237, 235, 222,1) 51%, rgba(237, 235, 222,1) 100%);
+        background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(101, 35, 33,1)), color-stop(51%,rgba(101, 35, 33,1)), color-stop(51%,rgba(101, 35, 33,1)), color-stop(51%,rgba(237, 235, 222,1)), color-stop(100%,rgba(237, 235, 222,1)));
+        background: -webkit-linear-gradient(45deg,  rgba(101, 35, 33,1) 0%,rgba(101, 35, 33,1) 51%,rgba(101, 35, 33,1) 51%,rgba(237, 235, 222,1) 51%,rgba(237, 235, 222,1) 100%);
+        background: -o-linear-gradient(45deg,  rgba(101, 35, 33,1) 0%,rgba(101, 35, 33,1) 51%,rgba(101, 35, 33,1) 51%,rgba(237, 235, 222,1) 51%,rgba(237, 235, 222,1) 100%);
+        background: -ms-linear-gradient(45deg,  rgba(101, 35, 33,1) 0%,rgba(101, 35, 33,1) 51%,rgba(101, 35, 33,1) 51%,rgba(237, 235, 222,1) 51%,rgba(237, 235, 222,1) 100%);
+        background: linear-gradient(45deg,  rgba(101, 35, 33,1) 0%,rgba(101, 35, 33,1) 51%,rgba(101, 35, 33,1) 51%,rgba(237, 235, 222,1) 51%,rgba(237, 235, 222,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fff0f5', endColorstr='#7fffd4',GradientType=1 );
     }
 
     .calendar .aDate, .calendar .highlighted.aDate, .calkey .isavailable.aDate {
-        background: rgb(127,255,212);
-        background: -moz-linear-gradient(45deg,  rgba(127,255,212,1) 0%, rgba(127,255,212,1) 49%, rgba(255,240,245,1) 49%, rgba(255,240,245,1) 49%, rgba(255,240,245,1) 100%);
-        background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(127,255,212,1)), color-stop(49%,rgba(127,255,212,1)), color-stop(49%,rgba(255,240,245,1)), color-stop(49%,rgba(255,240,245,1)), color-stop(100%,rgba(255,240,245,1)));
-        background: -webkit-linear-gradient(45deg,  rgba(127,255,212,1) 0%,rgba(127,255,212,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 100%);
-        background: -o-linear-gradient(45deg,  rgba(127,255,212,1) 0%,rgba(127,255,212,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 100%);
-        background: -ms-linear-gradient(45deg,  rgba(127,255,212,1) 0%,rgba(127,255,212,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 100%);
-        background: linear-gradient(45deg,  rgba(127,255,212,1) 0%,rgba(127,255,212,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 49%,rgba(255,240,245,1) 100%);
+        background: rgb(237, 235, 222);
+        background: -moz-linear-gradient(45deg,  rgba(237, 235, 222,1) 0%, rgba(237, 235, 222,1) 49%, rgba(101, 35, 33,1) 49%, rgba(101, 35, 33,1) 49%, rgba(101, 35, 33,1) 100%);
+        background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(237, 235, 222,1)), color-stop(49%,rgba(237, 235, 222,1)), color-stop(49%,rgba(101, 35, 33,1)), color-stop(49%,rgba(101, 35, 33,1)), color-stop(100%,rgba(101, 35, 33,1)));
+        background: -webkit-linear-gradient(45deg,  rgba(237, 235, 222,1) 0%,rgba(237, 235, 222,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 100%);
+        background: -o-linear-gradient(45deg,  rgba(237, 235, 222,1) 0%,rgba(237, 235, 222,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 100%);
+        background: -ms-linear-gradient(45deg,  rgba(237, 235, 222,1) 0%,rgba(237, 235, 222,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 100%);
+        background: linear-gradient(45deg,  rgba(237, 235, 222,1) 0%,rgba(237, 235, 222,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 49%,rgba(101, 35, 33,1) 100%);
         filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7fffd4', endColorstr='#fff0f5',GradientType=1 );
     }
 
     .calendar .highlighted, .calendar .aDate.dDate, .calkey .highlighted {
-      background: rgb(255, 240, 245);
-      color: rgb(204, 204, 204);
+        background: rgb(101, 35, 33);
+        color: #888888;
     }
 
     td.passed, td.today.highlighted.aDate {
-        background: #DADADA;
-        color: #ABABAB;
+        background: #DADADA !important;
+        color: #ABABAB !important;
     }
 
     td.today {
@@ -1743,7 +1884,54 @@ animated buttons - animate the text inside prev and next buttons
     }
 
 
+/*booking */
 
+ .detailsbox table tr td{
+        text-align:right;
+    }
+    #progressbar {
+
+        background:#35a380;
+        -moz-border-radius:7px;
+        color:#ffffff;
+    }
+    #progressbar div{
+
+        text-align: center;
+    }
+    .passed{
+        background:#14D094;
+        color:#333333;
+
+    }
+    .userbox{
+        border:1px solid #000000;
+        background:#e1e2c2;
+        font-family: Verdana;
+    }
+    .userbox h3{
+        background:#6698C3;
+        margin:0;
+        padding:0;
+        color:#ffffff;
+        text-align:center;
+    }
+    .padit {
+
+        padding:10px;
+    }
+
+.vrpstepuserbox  {
+    border:1px #35a380 solid;
+    margin-top:20px;
+}  
+
+    .vrpstepuserbox h3 {
+        font-size: 12px !important;
+        color: #ffffff !important;
+        background-color: #35a380;
+        padding: 10px;
+    }
 
 
 /**********************************
@@ -1778,6 +1966,11 @@ animated buttons - animate the text inside prev and next buttons
     width:100%;
     height:13em;
     margin-bottom:1em;
+}
+
+
+#tabs > div {
+    min-height: 400px;
 }
 
 /**********************************

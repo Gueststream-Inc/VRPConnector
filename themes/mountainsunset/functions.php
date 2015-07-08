@@ -1,4 +1,9 @@
 <?php
+if (isset($wp_query->query_vars['action'])) {
+    if ('unit' == $wp_query->query_vars['action']){
+        $isItUnit = true;
+    }
+}
 
 class mountainsunset
 {
@@ -10,8 +15,8 @@ class mountainsunset
 
     function my_scripts_method()
     {
-        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js')) {
-            wp_register_script('VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js', array( 'jquery' ) );
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.4.custom/jquery-ui.js')) {
+            wp_register_script('VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.4.custom/jquery-ui.js', array( 'jquery' ) );
         } else {
             wp_register_script( 'VRPjQueryUI', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)), array('jquery') );
         }
@@ -24,15 +29,15 @@ class mountainsunset
         }
         wp_enqueue_script('vrpNamespace');
 
-
-        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.map.js')) {
-            wp_register_script('vrpMapModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.map.js', array( 'jquery' ) );
-        } else {
-            wp_register_script('vrpMapModule', plugins_url('/mountainsunset/js/vrp.map.js', dirname(__FILE__)), array( 'jquery' ) );
+        if ( !$isItUnit ) {
+            if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.map.js')) {
+                wp_register_script('vrpMapModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.map.js', array( 'jquery' ) );
+            } else {
+                wp_register_script('vrpMapModule', plugins_url('/mountainsunset/js/vrp.map.js', dirname(__FILE__)), array( 'jquery' ) );
+            }
+            wp_enqueue_script('vrpMapModule');
         }
-        wp_enqueue_script('vrpMapModule');
-
-
+       
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.mRespond.js')) {
             wp_register_script('vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js', array( 'jquery' ) );
         } else {
@@ -56,9 +61,17 @@ class mountainsunset
         }
         wp_enqueue_script('vrpQueryStringModule');
 
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/FlexSlider/jquery.flexslider.js')) {
+            wp_register_script('FlexSlider', get_stylesheet_directory_uri() . '/vrp/js/FlexSlider/jquery.flexslider.js', array('jquery'), '2.5.0', false );
+        } else {
+            wp_register_script('FlexSlider', plugins_url('/mountainsunset/js/FlexSlider/jquery.flexslider.js', dirname(__FILE__)), array('jquery'), '2.5.0', false );
+        }
+        wp_enqueue_script('FlexSlider');
 
-        wp_register_script('googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp');
-        wp_enqueue_script('googleMap');
+        if ( !$isItUnit ) {
+            wp_register_script('googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp', array('jquery'), null, true);
+            wp_enqueue_script('googleMap');
+        }
 
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/js.js')) {
@@ -67,15 +80,19 @@ class mountainsunset
             wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)), array( 'jquery' ) );
         }
 
+        // if (file_exists(get_stylesheet_directory() . '/vrp/js/jquery.selectbox/js/jquery.selectbox-0.2.min.js')) {
+        //     wp_enqueue_script('selectboxJS', get_stylesheet_directory_uri() . '/vrp/js/jquery.selectbox/js/jquery.selectbox-0.2.min.js', array( 'jquery' ) );
+        //     wp_enqueue_style('selectboxCSS', get_stylesheet_directory_uri() . '/vrp/js/jquery.selectbox/css/jquery.selectbox.css');
+        // } else {
+        //     wp_enqueue_script('selectboxJS', plugins_url('/mountainsunset/js/jquery.selectbox/js/jquery.selectbox-0.2.min.js', dirname(__FILE__)), array( 'jquery' ) );
+        //     wp_enqueue_style('selectboxCSS', plugins_url('/mountainsunset/js/jquery.selectbox/css/jquery.selectbox.css', dirname(__FILE__)));
+        // }
+
+
+
 
         global $wp_query;
 
-
-
-//      if (isset($wp_query->query_vars['action'])) {
-//          if ('unit' == $wp_query->query_vars['action']){
-//          }
-//      }
 
         $script_vars = [
             'site_url' => site_url(),
@@ -91,15 +108,21 @@ class mountainsunset
 
 
 
-         if (file_exists(get_stylesheet_directory() . '/vrp/css/font-awesome.css')) {
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/font-awesome.css')) {
             wp_enqueue_style('FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css');
         } else {
             wp_enqueue_style('FontAwesome', plugins_url('/mountainsunset/css/font-awesome.css', dirname(__FILE__)));
         }
 
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/FlexSlider/flexslider.css')) {
+            wp_enqueue_style('flexsliderCSS', get_stylesheet_directory_uri() . '/vrp/js/FlexSlider/flexslider.css');
+        } else {
+            wp_enqueue_style('flexsliderCSS', plugins_url('/mountainsunset/js/FlexSlider/flexslider.css', dirname(__FILE__)));
+        }
 
-        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css')) {
-            wp_enqueue_style('VRPjQueryUISmoothness', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css');
+
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.4.custom/jquery-ui.css')) {
+            wp_enqueue_style('VRPjQueryUISmoothness', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.4.custom/jquery-ui.css');
         } else {
             wp_enqueue_style('VRPjQueryUISmoothness',
                 plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname(__FILE__)));
@@ -467,7 +490,7 @@ function daysTo($from, $to, $round = true)
     return $round == true ? floor($days) : round($days, 2);
 }
 
-function vrpCalendar($r, $totalMonths = 3) {
+function vrpCalendar($r, $totalMonths = 11) {
 
  $datelist = array();
     $arrivals = array();
@@ -521,4 +544,26 @@ function vrpCalendar($r, $totalMonths = 3) {
 
 
     return "" . $ret . $theKey;
+}
+
+
+/**
+ * Get excerpt from string
+ * 
+ * @param String $str String to get an excerpt from
+ * @param Integer $startPos Position int string to start excerpt from
+ * @param Integer $maxLength Maximum length the excerpt may be
+ * @return String excerpt
+ */
+function vrpGetExcerpt($str, $startPos=0, $maxLength=100) {
+    if(strlen($str) > $maxLength) {
+        $excerpt   = substr($str, $startPos, $maxLength-3);
+        $lastSpace = strrpos($excerpt, ' ');
+        $excerpt   = substr($excerpt, 0, $lastSpace);
+        $excerpt  .= '...';
+    } else {
+        $excerpt = $str;
+    }
+    
+    return $excerpt;
 }

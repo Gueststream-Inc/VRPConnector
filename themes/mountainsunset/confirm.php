@@ -1,15 +1,15 @@
-<div class="userbox" >
-    <h3>Congratulations!</h3>
+<div class="userbox vrpstepuserbox">
+    <h3 style="margin: -10px -1px 1em !important;">Congratulations!</h3>
     <div class="padit">
-        <b>Reservation Confirmation Number:</b> <?php echo esc_html($data->thebooking->BookingNumber);?><br><br>
-        You have successfully booked <b><?php echo esc_html($data->Name);?></b> from <b><?php echo esc_html($data->Arrival); ?></b> for <b><?php echo esc_html(floor($data->Nights)); ?></b> nights.
+        <b>Reservation Confirmation Number:</b> <?=$data->thebooking->BookingNumber;?><br><br>
+        You have successfully booked <b><?=$data->Name;?></b> from <b><?= $data->Arrival; ?></b> for <b><?= floor($data->Nights); ?></b> nights.
         <br /><br />
         You will receive an email confirmation shortly with additional information.
     </div>
 
 </div>
-<?php echo '
-<script type="text/javascript">
+<?php 
+echo '<script type="text/javascript">
 
 var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 
@@ -28,11 +28,11 @@ try {
 
   pageTracker._addTrans(
 
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
+    "' . $data->thebooking->BookingNumber . '",                                     // Order ID
 
     "",                            // Affiliation
 
-    "' . esc_js($data->TotalCost) . '",                                    // Total
+    "' . $data->TotalCost . '",                                    // Total
 
     "",                                     // Tax
 
@@ -48,15 +48,15 @@ try {
 
  pageTracker._addItem(
 
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
+    "' . $data->thebooking->BookingNumber . '",                                     // Order ID
 
     "",                                     // SKU
 
-    "' . esc_js($data->Name) . '",                                  // Product Name
+    "' . $data->Name . '",                                  // Product Name
 
     "",                             // Category
 
-    "' . esc_js($data->TotalCost) . '",                                    // Price
+    "' . $data->TotalCost . '",                                    // Price
 
     "1"                                         // Quantity
 
@@ -67,3 +67,4 @@ try {
   pageTracker._trackTrans();
 
 } catch(err) {}</script>';
+?>

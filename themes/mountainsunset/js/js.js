@@ -1,10 +1,10 @@
-(function($, global, undefined){
+(function(jQuery, global, undefined){
     /* Handles */
-    $(function(){
+    jQuery(function(){
 
-        $('.vrpshowing').change(function() {
+        jQuery('.vrpshowing').change(function() {
 
-            var that = $(this);
+            var that = jQuery(this);
 
             if(that.val() == '') {
                 return;
@@ -14,21 +14,9 @@
 
         });
 
-        $('.vrpsorter').change(function() {
+        jQuery('.vrpsorter').change(function() {
 
-            var that = $(this);
-
-            if(that.val() == '') {
-                return;
-            }
-
-            location.search = VRP.queryString.formatQueryString(that.val());
-        });
-
-
-        $('.vrpsorter').change(function() {
-
-            var that = $(this);
+            var that = jQuery(this);
 
             if(that.val() == '') {
                 return;
@@ -37,11 +25,23 @@
             location.search = VRP.queryString.formatQueryString(that.val());
         });
 
-        $('.vrp-cd-pagination a').click(function(e){
+
+        jQuery('.vrpsorter').change(function() {
+
+            var that = jQuery(this);
+
+            if(that.val() == '') {
+                return;
+            }
+
+            location.search = VRP.queryString.formatQueryString(that.val());
+        });
+
+        jQuery('.vrp-cd-pagination a').click(function(e){
 
             e.preventDefault();
 
-            var that = $(this),
+            var that = jQuery(this),
                 parameters = that.attr('href');
 
             if(that.hasClass('current') || that.hasClass('disabled')) {
@@ -52,30 +52,42 @@
 
         });
 
-        $('.vrp-thumbnail').hover(function(e){
+        jQuery('.vrp-thumbnail').hover(function(e){
 
-            var that = $(this).parent(),
-                index = $('.vrp-item').index(that);
+            var that = jQuery(this).parent(),
+                index = jQuery('.vrp-item').index(that);
 
             VRP.ui.overlay(that, index, e);
 
         }, function(e) {
 
-            var that = $(this).parent(),
-                index = $('.vrp-item').index(that);
+            var that = jQuery(this).parent(),
+                index = jQuery('.vrp-item').index(that);
 
             VRP.ui.overlay(that, index, e);
 
         });
 
-        $('#vrp-list').click(function(e) {
+        jQuery('#vrp-list').click(function(e) {
             e.preventDefault();
-            $('.list-grid-layout').attr('class', 'col-xs-12 list-grid-layout vpr-list-style');
+            jQuery('.vrp-list-grid-layout').attr('class', 'vrp-list-grid-layout vrp-col-xs-12 vrp-list-style');
+            jQuery('.vrp-thumbnail').attr('class', 'vrp-thumbnail text-center vrp-col-md-4');
+            jQuery('.vrp-caption-description').attr('class', 'vrp-caption-description vrp-col-sm-6');
+            jQuery('.vrp-caption-title').attr('class', 'vrp-caption-title vrp-col-xs-8 vrp-col-sm-4');
+            jQuery('.vrp-caption-meta').attr('class', 'vrp-caption-meta vrp-col-xs-4 vrp-col-sm-2 pull-right');
+            jQuery('.vrp-meta-data').attr('class', 'vrp-meta-data');
+            jQuery('.vrp-overlay').attr('class', 'vrp-overlay-gone hide');
         });
 
-        $('#vrp-grid').click(function(e){
+        jQuery('#vrp-grid').click(function(e){
             e.preventDefault();
-            $('.list-grid-layout').attr('class', 'col-md-4 col-xs-6 col-sm-12 vpr-list-grid-layout vpr-grid-style');
+            jQuery('.vrp-list-grid-layout').attr('class', 'vrp-list-grid-layout vrp-col-md-4 vrp-col-xs-6 vrp-col-sm-12 vrp-grid-style vrp-grid');
+            jQuery('.vrp-thumbnail').attr('class', 'vrp-thumbnail text-center');
+            jQuery('.vrp-caption-description').attr('class', 'vrp-caption-description vrp-col-sm-6 hide');
+            jQuery('.vrp-caption-title').attr('class', 'vrp-caption-title vrp-col-xs-8 vrp-col-sm-7');
+            jQuery('.vrp-caption-meta').attr('class', 'vrp-caption-meta vrp-col-xs-4 vrp-col-sm-5');
+            jQuery('.vrp-meta-data').attr('class', 'vrp-col-xs-6 vrp-meta-data');
+            jQuery('.vrp-overlay-gone').attr('class', 'vrp-overlay');
         });
 
     });
@@ -102,43 +114,42 @@ jQuery(document).ready(function(){
 
     var inquireopen=false;
 
-    jQuery("#inline").click(function(){
-        if (inquireopen == false){
-            jQuery("#pinquire").slideDown();
-            inquireopen=true;
-        }else{
-            jQuery("#pinquire").slideUp();
-            inquireopen=false;
-        }
-    });
+  jQuery("#inline").click(function(){
+    if (inquireopen == false){
+      jQuery("#pinquire").slideDown();
+      inquireopen=true;
+    }else{
+      jQuery("#pinquire").slideUp();
+      inquireopen=false;
+    }
+  });
 
-    jQuery("#vrpinquire").submit(function(){
-        jQuery("#iqbtn").attr("disabled","disabled");
-        jQuery.post("/?vrpjax=1&act=custompost&par=addinquiry",jQuery(this).serialize(),function(data){
-            var obj=jQuery.parseJSON(data);
-            if (obj.success){
-                jQuery("#vrpinquire").replaceWith("Thank you for your inquiry!");
-            }else{
-                var item;
-                var thetotal=obj.err.length - 1;
-                for(i=0;i<=thetotal;i++){
-                    item=obj.err[i];
-                    /// alert(item.name);
-                    jQuery("#i" + item.name).append("<span class='errormsg'>" + item.msg + "</span>");
-                }
-                jQuery("#iqbtn").removeAttr("disabled");
-            }
-        });
-        return false;
+  jQuery("#vrpinquire").submit(function(){
+    jQuery("#iqbtn").attr("disabled","disabled");
+    jQuery.post("/?vrpjax=1&act=custompost&par=addinquiry",jQuery(this).serialize(),function(data){
+      var obj=jQuery.parseJSON(data);
+      if (obj.success){
+        jQuery("#vrpinquire").replaceWith("Thank you for your inquiry!");
+      }else{
+        var item;
+        var thetotal=obj.err.length - 1;
+        for(i=0;i<=thetotal;i++){
+          item=obj.err[i];
+          /// alert(item.name);
+          jQuery("#i" + item.name).append("<span class='errormsg'>" + item.msg + "</span>");
+        }
+        jQuery("#iqbtn").removeAttr("disabled");
+      }
     });
+    return false;
+  });
 
     var oldcolor="";
 
     var dates = jQuery( "#arrival, #depart" ).datepicker({
         minDate: 2,
-        //showOn: "both",
-        //buttonImage: "/wp-content/plugins/VRPAPI/themes/mountainsunset/images/cal.jpg",
-        //buttonImageOnly: true,
+        showOn: "both",
+        buttonText: "<i class='fa fa-calendar'></i>",
 
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival" ? "minDate" : "30",
@@ -166,8 +177,8 @@ jQuery(document).ready(function(){
     var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
         minDate: 2,
         showOn: "both",
-        buttonImage: url_paths.plugin_url + "/themes/mountainsunset/images/cal.jpg",
-        buttonImageOnly: true,
+        buttonText: "<i class='fa fa-calendar'></i>",
+        
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival2" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
@@ -369,9 +380,27 @@ jQuery(document).ready(function(){
         return false;
     });
 
-    jQuery(".dpinquiry").datepicker();
+    jQuery(".dpinquiry").datepicker({
+        showOn: "both",
+        buttonText: "<i class='fa fa-calendar'></i>",
+    });
+
+    //jQuery("#searchresort, #nights, #searchadults").selectmenu();
 
     jQuery(".vrp-pagination li a,.dobutton").button();
+
+    jQuery(".ui-accordion").accordion({
+        active: 2,
+        collapsible: true
+    });
+
+    jQuery(".ui-accordion.closed").accordion({
+        collapsible: true
+    });
+
+    jQuery('#show-res-policies').click(function(){
+      jQuery("#res-policies").accordion({active:0});
+    });
 
     // Unit Compare
 
@@ -406,7 +435,7 @@ jQuery(document).ready(function(){
 
     if(jQuery('.vrp-favorite-button').length) {
         jQuery.getJSON('/vrp/favorites/json').done(function (data) {
-            //console.log(data);
+            console.log(data);
             jQuery('.vrp-favorite-button').each(function () {
                 var fav_button = jQuery(this);
                 var unit_id = fav_button.data('unit');
@@ -424,7 +453,8 @@ jQuery(document).ready(function(){
             });
         });
 
-        jQuery('.vrp-favorite-button').on('click',function () {
+        jQuery('.vrp-favorite-button').on('click',function (e) {
+            e.preventDefault();
             var fav_button = jQuery(this);
             var unit_id = fav_button.data('unit');
             if(fav_button.data('isFavorite') == true) {
@@ -482,6 +512,8 @@ function ratebreakdown(obj) {
     var tbl = jQuery("#ratebreakdown");
     //console.log(obj);
     tbl.empty();
+    var message = "<h3>This Property is Available!</h3>";
+    tbl.append(message);
     for (var i in obj.Charges) {
         var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
         tbl.append(row);

@@ -14,13 +14,16 @@
         <?php else: ?>
         <!-- Total number of results found -->
         <div class="vrp-row">
-            <!-- vrp-wrapper-presentation-actions-->
+                <!-- vrp-wrapper-presentation-actions-->
             <div class="vrp-col-md-10">
-                <div class="vrp-form-filter-action">
-                    <?php vrp_resultsperpage(); ?>
-                    <?php vrpsortlinks($data->results[0]); ?>
-                </div>
+                <?php if ($data->totalpages > 1) { ?>
+                    <div class="vrp-form-filter-action">
+                        <?php vrp_resultsperpage(); ?>
+                        <?php vrpsortlinks($data->results[0]); ?>
+                    </div>
+                <?php } ?>
             </div>
+
             <div class="vrp-col-md-2 vrp-layout-action">
                 <div class="vrp-pull-right">
                     <a href="#" id="vrp-list" class="vrp-btn">
@@ -29,9 +32,10 @@
                     <a href="#" id="vrp-grid" class="vrp-btn">
                         <i class="fa fa-fw fa-lg fa-th"></i>
                     </a>
-                    <a href="<?php echo site_url() . "/vrp/favorites/show";?>" id="vrp-favorites" class="vrp-btn turquoise">
-                        <i class="fa fa-fw fa-lg fa-heart"></i>
-                    </a>
+                        <a href="<?php echo site_url() . "/vrp/favorites/show";?>" id="vrp-favorites" class="vrp-btn turquoise">
+                            <i class="fa fa-fw fa-lg fa-heart"></i>
+                        </a>
+                    
                 </div>
             </div>
 
@@ -42,7 +46,7 @@
         </div>
         <div class="vrp-row">
         <?php foreach($data->results as $index => $unit) : ?>
-            <div class="vrp-col-md-4 vrp-col-xs-12 vrp-col-sm-6 vrp-item-wrap vrp-grid">
+            <div class="vrp-list-grid-layout vrp-col-md-4 vrp-col-xs-12 vrp-col-sm-6 vrp-item-wrap vrp-grid">
                 <div class="vrp-item"
                      data-vrp-processed="false"
                      data-vrp-address="<?php echo $unit->Address1;?> <?php echo $unit->City;?>, <?php echo $unit->State;?>">
@@ -59,21 +63,25 @@
                                 </div>
                                 <div class="vrp-row">
                                     <div class="vrp-col-xs-12">
-                                        <p><?php echo esc_html($unit->Description);?></p>
+                                        <?php if ($unit->ShortDescription != "") { ?>
+                                            <p><?php echo esc_html($unit->ShortDescription);?></p>
+                                        <?php } else { ?>
+                                            <p><?php echo esc_html( vrpGetExcerpt($unit->Description, 0, 150) );?></p>
+                                        <?php } ?>
                                     </div>
                                 </div>
                             </div>
 
                         </div>
                     </div>
-                    <div class="vrp-thumbnail text-center" style="background-image:url(<?php echo $unit->Thumb; ?>);">
+                    <div class="vrp-thumbnail text-center" style="background-image:url(<?php echo $unit->Photo; ?>);">
                         <div class="vrp-actions">
-                            <a href="#" data-unit="<?php echo $unit->id; ?>" class="vrp-favorite-button vrp-btn purple text-center">
-                                <i class="fa fa-fw fa-lg fa-heart"></i>
-                                Add to favorites
-                            </a>
+                                <a href="#" data-unit="<?php echo $unit->id; ?>" class="vrp-favorite-button vrp-btn purple text-center">
+                                    <i class="fa fa-fw fa-lg fa-heart"></i>
+                                    Add to favorites
+                                </a>
 
-                            <a href="<?php echo site_url() . "/vrp/unit/" . $unit->page_slug;?>" data-unit="<?php echo $unit->id; ?>" class="vrp-btn orange">
+                            <a href="<?php echo site_url() . "/vrp/unit/" . $unit->page_slug;?>" data-unit="<?php echo $unit->id; ?>" class="vrp-btn">
                                 <i class="fa fa-fw fa-lg fa-calendar"></i>
                                 Reserve now
                             </a>
@@ -81,20 +89,20 @@
                     </div>
                     <div class="vrp-caption">
                         <div class="vrp-row">
-                            <div class="vrp-col-xs-8 vrp-col-sm-7">
+                            <div class="vrp-caption-title vrp-col-xs-8 vrp-col-sm-7">
                                 <h4><?php echo esc_html($unit->Name); ?></h4>
                             </div>
-                            <div class="vrp-col-xs-4 vrp-col-sm-5">
+                            <div class="vrp-caption-meta vrp-col-xs-4 vrp-col-sm-5">
                                 <div class="vrp-meta-wrapper">
                                     <div class="vrp-row">
-                                        <div class="col-xs-6">
+                                        <div class="vrp-meta-data vrp-col-xs-6">
 
                                             <span class="vrp-epink pull-right">
                                                 <strong><?php echo esc_html($unit->Bedrooms); ?> Beds</strong>
                                             </span>
 
                                         </div>
-                                        <div class="col-xs-6">
+                                        <div class="vrp-meta-data vrp-col-xs-6">
 
                                             <span class="vrp-kiwi pull-right">
                                                 <strong><?php echo esc_html($unit->Bathrooms); ?> Baths</strong>
@@ -103,6 +111,13 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="vrp-caption-description hide vrp-col-sm-6">
+                                <?php if ($unit->ShortDescription != "") { ?>
+                                    <p><?php echo esc_html($unit->ShortDescription);?></p>
+                                <?php } else { ?>
+                                    <p><?php echo esc_html( vrpGetExcerpt($unit->Description, 0, 150) );?></p>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -113,7 +128,9 @@
         <?php endif ?>
         <div class="vrp-row">
             <div class="vrp-col-md-12">
-                <?php echo vrp_pagination($data->totalpages, $data->page); ?>
+                <?php if ($data->totalpages > 1) { ?>
+                    <?php echo vrp_pagination($data->totalpages, $data->page); ?>
+                <?php } ?>
             </div>
         </div>
     </div>
