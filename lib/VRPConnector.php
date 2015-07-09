@@ -1102,7 +1102,11 @@ class VRPConnector
         $_GET['search']['showall'] = 1;
         $data = $this->search();
         $data = json_decode($data);
-
+        
+        if ($data->count > 0) {
+            $data = $this->prepareSearchResults($data);
+        }
+        
         if (isset($data->type)) {
             $content = $this->loadTheme($data->type, $data);
         } else {
