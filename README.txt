@@ -50,6 +50,7 @@ you to seamlessly connect your website to your property management software data
 == Changelog ==
 = 1.0.4 =
 * Plugin settings link (visable after VRPConnector plugin is activated) added to plugins list.
+* Shortcode examples added to installation documentation.
 
 = 1.0.3 =
 * ShortCodes can be used in Widget Text
