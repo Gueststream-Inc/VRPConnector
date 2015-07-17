@@ -1,8 +1,8 @@
 === Plugin Name ===
 Contributors: Houghtelin
-Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia
+Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.1
+Tested up to: 4.2.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -25,6 +25,15 @@ allowing potential guests to search, sort, compare and book your rental properti
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. Navigate to Wordpress Admin > Settings > VRP and enter your Gueststream.net API key
 1. Begin adding the available shortcodes to your posts and pages as desired.
+The following shortcodes are available for use throughout your website.
+To use them simply add them to the page/post content.
+
+* [vrpSearchForm] - Will display an advanced search for users to search your properties.
+* [vrpUnits] - Displays a list of all enabled units
+* [vrpSearch] - Requires additional attributes to display units according to the values set. This short code effectively produces the results of performing an availability search.
+
+More detailed instructions for using shortcodes, theming the VRP pages and using the plugin can be found
+ at the VRPConnector's Wiki page here: https://github.com/Gueststream-Inc/VRPConnector/wiki
 
 == Frequently Asked Questions ==
 = What property management software(s) does the VRP Connector support? =
@@ -39,13 +48,16 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.0.4 =
+* Plugin settings link (visable after VRPConnector plugin is activated) added to plugins list.
+
 = 1.0.3 =
 * ShortCodes can be used in Widget Text
 * Advanced Search Form posts to regular search instead of complex search by default.
 * Unit Thumbnail photos with URL's containing spaces %20 in them now display correctly.
 
 = 1.0.2 =
-* Fixed var decleration inside of a hash map.
+* Fixed var declaration inside of a hash map.
 
 = 1.0.1 =
 * Fixed bug in unit page mapping JS.
@@ -79,14 +91,3 @@ you to seamlessly connect your website to your property management software data
 
 = 0.07 =
 * Added [vrpFeaturedUnit] shortcode support.
-
-== Shortcodes ==
-The following shortcodes are available for use throughout your website.
-To use them simply add them to the page/post content.
-
-* [vrpSearchForm] - Will display an advanced search for users to search your properties.
-* [vrpUnits] - Displays a list of all enabled units
-* [vrpSearch] - Requires additional attributes to display units according to the values set. This short code effectively produces the results of performing an availability search.
-
-More detailed instructions for using shortcodes, theming the VRP pages and using the plugin can be found
- at the VRPConnector's Wiki page here: https://github.com/Gueststream-Inc/VRPConnector/wiki
