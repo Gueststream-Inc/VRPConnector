@@ -1337,7 +1337,7 @@ class VRPConnector
     {
         add_options_page(
             "Settings Admin",
-            'VRP',
+            'VRPConnector',
             'activate_plugins',
             "VRPConnector",
             [$this, 'settingsPage']
