@@ -11,7 +11,7 @@ Vacation Rental Platform Connector allows you to display and book your vacation 
 
 == Description ==
 The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to sync all of your vacation rental
-properties from HomeAway, Escapia, ISILink, Barefoot, RNS, VRMGR, RTR and other property management software to your website 
+properties from HomeAway, Escapia, ISILink (First Resort, Property Plus, V12) , Barefoot, RNS, VRMGR, RTR and other property management software to your website
 allowing potential guests to search, sort, compare and book your rental properties right from your website.
 
 = Example Sites =
