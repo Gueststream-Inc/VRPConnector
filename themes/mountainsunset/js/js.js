@@ -483,16 +483,16 @@ function ratebreakdown(obj) {
     //console.log(obj);
     tbl.empty();
     for (var i in obj.Charges) {
-        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
+        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount.toFixed(2) + "</td></tr>";
         tbl.append(row);
     }
     if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
+        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount.toFixed(2) + "</td></tr>";
         tbl.append(row);
     }
     var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
-    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
-    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
+    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost.toFixed(2) + "</b></td></tr>";
+    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday.toFixed(2) + "</b></td></tr>";
 
     tbl.append(tax);
     tbl.append(total);
