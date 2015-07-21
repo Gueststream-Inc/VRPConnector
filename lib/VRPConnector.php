@@ -82,6 +82,7 @@ class VRPConnector
         if (is_admin()) {
             add_action('admin_menu', [$this, 'setupPage']);
             add_action('admin_init', [$this, 'registerSettings']);
+            add_filter('plugin_action_links',[$this, 'add_action_links'], 10, 2);
         }
 
         // Actions
@@ -100,6 +101,7 @@ class VRPConnector
         // Filters
         add_filter('robots_txt', [$this, 'robots_mod'], 10, 2);
         remove_filter('template_redirect', 'redirect_canonical');
+
 
         // Shortcodes
         add_shortcode("vrpUnits", [$this, "vrpUnits"]);
@@ -503,7 +505,7 @@ class VRPConnector
         }
 
         if (isset($_GET['page'])) {
-            $obj->page = (int)$_GET['page'];
+            $obj->page = (int) $_GET['page'];
         } else {
             $obj->page = 1;
         }
@@ -511,7 +513,7 @@ class VRPConnector
         if (!isset($obj->limit)) {
             $obj->limit = 10;
             if (isset($_GET['show'])) {
-                $obj->limit = (int)$_GET['show'];
+                $obj->limit = (int) $_GET['show'];
             }
         }
 
@@ -544,12 +546,12 @@ class VRPConnector
             $obj->$k = $v;
         }
         if (isset($_GET['page'])) {
-            $obj->page = (int)$_GET['page'];
+            $obj->page = (int) $_GET['page'];
         } else {
             $obj->page = 1;
         }
         if (isset($_GET['show'])) {
-            $obj->limit = (int)$_GET['show'];
+            $obj->limit = (int) $_GET['show'];
         } else {
             $obj->limit = 10;
         }
@@ -732,12 +734,25 @@ class VRPConnector
         exit;
     }
 
+    //
+    // Wordpress Filters
+    //
+
     public function robots_mod($output, $public)
     {
         $siteurl = get_option("siteurl");
         $output .= "Sitemap: " . $siteurl . "/?vrpsitemap=1 \n";
 
         return $output;
+    }
+
+    public function add_action_links($links, $file)
+    {
+        if( $file == 'vrpconnector/VRPConnector.php' && function_exists( "admin_url" ) ) {
+            $settings_link = '<a href="' . admin_url( 'options-general.php?page=VRPConnector' ) . '">' . __('Settings') . '</a>';
+            array_unshift( $links, $settings_link ); // before other links
+        }
+        return $links;
     }
 
     //
@@ -907,7 +922,7 @@ class VRPConnector
     {
         if (isset($_GET['shared'])) {
             $_SESSION['cp'] = 1;
-            $id = (int)$_GET['shared'];
+            $id = (int) $_GET['shared'];
             $source = "";
             if (isset($_GET['source'])) {
                 $source = $_GET['source'];
@@ -964,7 +979,7 @@ class VRPConnector
     {
         if (isset($_SESSION['favorites'])) {
             foreach ($_SESSION['favorites'] as $unit_id) {
-                $this->favorites[] = (int)$unit_id;
+                $this->favorites[] = (int) $unit_id;
             }
 
             return;
@@ -991,15 +1006,15 @@ class VRPConnector
         $items['page'] = 1;
 
         if (isset($_GET['page'])) {
-            $items['page'] = (int)$_GET['page'];
+            $items['page'] = (int) $_GET['page'];
         }
 
         if (isset($_GET['beds'])) {
-            $items['beds'] = (int)$_GET['beds'];
+            $items['beds'] = (int) $_GET['beds'];
         }
         if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int)$_GET['minbed'];
-            $items['maxbed'] = (int)$_GET['maxbed'];
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
         }
 
         $obj = new \stdClass();
@@ -1029,11 +1044,11 @@ class VRPConnector
     {
         $items['showall'] = 1;
         if (isset($_GET['page'])) {
-            $items['page'] = (int)$_GET['page'];
+            $items['page'] = (int) $_GET['page'];
         }
 
         if (isset($_GET['beds'])) {
-            $items['beds'] = (int)$_GET['beds'];
+            $items['beds'] = (int) $_GET['beds'];
         }
 
         if (isset($_GET['search'])) {
@@ -1043,8 +1058,8 @@ class VRPConnector
         }
 
         if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int)$_GET['minbed'];
-            $items['maxbed'] = (int)$_GET['maxbed'];
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
         }
 
         $obj = new \stdClass();
@@ -1102,11 +1117,11 @@ class VRPConnector
         $_GET['search']['showall'] = 1;
         $data = $this->search();
         $data = json_decode($data);
-        
+
         if ($data->count > 0) {
             $data = $this->prepareSearchResults($data);
         }
-        
+
         if (isset($data->type)) {
             $content = $this->loadTheme($data->type, $data);
         } else {
