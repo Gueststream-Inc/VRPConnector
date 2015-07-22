@@ -159,7 +159,7 @@
         </copy>
 
         <copy file="${basedir}/VRPConnector.php" tofile="${basedir}/build/svn/trunk/VRPConnector.php" overwrite="true" />
-
+        <copy file="${basedir}/loader.php" tofile="${basedir}/build/svn/trunk/loader.php" overwrite="true" />
         <copy file="${basedir}/README.txt" tofile="${basedir}/build/svn/trunk/README.txt" overwrite="true"/>
     </target>
 
