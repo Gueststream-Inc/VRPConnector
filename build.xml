@@ -165,6 +165,13 @@
 
     <target name="deploysvn">
         <exec executable="svn"
+              failonerror="false"
+              dir="${basedir}/build/svn">
+            <arg value="add"/>
+            <arg value="--force"/>
+            <arg value="."/>
+        </exec>
+        <exec executable="svn"
               failonerror="true"
               dir="${basedir}/build/svn">
             <arg value="ci"/>
