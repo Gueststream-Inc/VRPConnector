@@ -1,0 +1,19 @@
+{
+  "name": "vrpconnector",
+  "version": "1.0.5",
+  "homepage": "https://github.com/Gueststream-Inc/VRPConnector",
+  "description": "The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to sync all of your vacation rental properties from HomeAway, Escapia, ISILink (First Resort, Property Plus, V12) , Barefoot, RNS (Resort Network), VRMGR, RTR and other property management software to your website allowing potential guests to search, sort, compare and book your rental properties right from your website.",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "resources/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "less": "~2.5.1"
+  }
+}

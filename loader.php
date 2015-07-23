@@ -18,6 +18,9 @@ define('VRP_PATH', dirname(__FILE__) . '/');
 
 $vrp = new \Gueststream\VRPConnector;
 
+wp_enqueue_script('admin_js_bootstrap', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, '1.0.0', false);
+wp_enqueue_script('admin_js_bootstrap_hack', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, '1.0.0', false);
+
 register_activation_hook(__FILE__, 'vrp_flush_rewrites');
 register_deactivation_hook(__FILE__, 'flush_rewrite_rules');
 

@@ -26,4 +26,11 @@ switch ($data->Status) {
         break;
 }
 ?>
+<div class="bootstrap-wrapper">
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-primary">Help!</a>
+        </div>
+    </div>
+<a class="btn btn-primary">test</a>
 </div>
