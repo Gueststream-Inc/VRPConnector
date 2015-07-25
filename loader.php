@@ -18,8 +18,18 @@ define('VRP_PATH', dirname(__FILE__) . '/');
 
 $vrp = new \Gueststream\VRPConnector;
 
-wp_enqueue_script('admin_js_bootstrap', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, '1.0.0', false);
-wp_enqueue_script('admin_js_bootstrap_hack', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, '1.0.0', false);
+
+// back end
+function custom_admin_scripts() {
+
+    wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
+    wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
+
+
+//    wp_enqueue_style( 'admin-css', plugins_url('/lib/css/admin.css', __FILE__), array(), null, 'all' );
+//    wp_enqueue_script( 'admin-init', plugins_url('/lib/js/admin.init.js', __FILE__) , array('jquery'), null, true );
+}
+add_action('admin_enqueue_scripts',	'custom_admin_scripts' );
 
 register_activation_hook(__FILE__, 'vrp_flush_rewrites');
 register_deactivation_hook(__FILE__, 'flush_rewrite_rules');

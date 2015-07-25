@@ -1348,32 +1348,31 @@ class VRPConnector
     {
         register_setting('VRPConnector', 'vrpAPI');
         register_setting('VRPConnector', 'vrpTheme');
-        add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
-        add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
-        add_settings_section('vrpTheme', 'VRP Theme Selection', [$this, 'vrpThemeSettingTitleCallback'],
-            'VRPConnector');
-        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'vrpThemeSettingCallback'], 'VRPConnector',
+//        add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
+//        add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
+        add_settings_section('vrpTheme', 'VRP Theme Selection', false, 'VRPConnector');
+        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'settingThemeFieldCallback'], 'VRPConnector',
             'vrpTheme');
     }
 
-    public function apiKeySettingTitleCallback()
-    {
-        echo "<p>Your API Key can be found in the settings section after logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
-        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='http://www.gueststream.net'>Gueststream.net</a> account.</p>
-        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
-    }
+//    public function apiKeySettingTitleCallback()
+//    {
+//        echo "<p>Your API Key can be found in the settings section after logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
+//        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='http://www.gueststream.net'>Gueststream.net</a> account.</p>
+//        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
+//    }
+//
+//    public function apiKeyCallback()
+//    {
+//        echo '<input type="text" name="vrpAPI" value="' . esc_attr(get_option('vrpAPI')) . '" style="width:400px;"/>';
+//    }
+//
+//    public function vrpThemeSettingTitleCallback()
+//    {
+//
+//    }
 
-    public function apiKeyCallback()
-    {
-        echo '<input type="text" name="vrpAPI" value="' . esc_attr(get_option('vrpAPI')) . '" style="width:400px;"/>';
-    }
-
-    public function vrpThemeSettingTitleCallback()
-    {
-
-    }
-
-    public function vrpThemeSettingCallback()
+    public function settingThemeFieldCallback()
     {
         echo '<select name="vrpTheme">';
         foreach ($this->available_themes as $name => $displayname) {
