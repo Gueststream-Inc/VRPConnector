@@ -2,7 +2,9 @@
 <style>
     .tab-content {
         display:block;
-
+        background:#fff;
+        border:0px !important;
+        padding:7px 10px;
     }
 </style>
 
@@ -18,8 +20,8 @@
             <div class="col-sm-12">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
-                    <li class="active"><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
-                    <li><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
+                    <li><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
+                    <li class="active"><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
                     <li><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
                     <li><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
                     <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a></li>
@@ -44,14 +46,33 @@
 
         <div class="row">
             <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="overview">1</div>
-                <div role="tabpanel" class="tab-pane" id="theme">2</div>
+                <div role="tabpanel" class="tab-pane" id="overview">1</div>
+                <div role="tabpanel" class="tab-pane active" id="theme">
+                    <!-- @TODO: right align active theme, to the left show theme options (e.g: featured properties, perhaps certain display items in the products, etc. -->
+                    <div class="row">
+                        <?php foreach ($this->available_themes as $name => $displayname):?>
+                            <div class="col-sm-3">
+                                <div class="text-center block"><?=$displayname;?> [<strong><?=($this->themename === $name) ? '<span class="text-success">Active</span>':'<a href="#">Activate</a>';?></strong>]</div>
+                                <img src="<?=VRP_URL;?>themes/<?=$this->themename;?>/preview.png" class="theme-preview img-responsive img-thumbnail "/>
+                            </div>
+                        <?php endforeach;?>
+                        <?php foreach ($this->available_themes as $name => $displayname):?>
+                            <div class="col-sm-3">
+                                <div class="text-center block"><?=$displayname;?> [<strong><a href="#">Activate</a></strong>]</div>
+                                <img src="<?=VRP_URL;?>themes/<?=$this->themename;?>/preview.png" class="theme-preview img-responsive img-thumbnail "/>
+                            </div>
+                        <?php endforeach;?>
+                        <?php foreach ($this->available_themes as $name => $displayname):?>
+                            <div class="col-sm-3">
+                                <div class="text-center block"><?=$displayname;?> [<strong><a href="#">Activate</a></strong>]</div>
+                                <img src="<?=VRP_URL;?>themes/<?=$this->themename;?>/preview.png" class="theme-preview img-responsive img-thumbnail "/>
+                            </div>
+                        <?php endforeach;?>
+                    </div>
+                </div>
                 <div role="tabpanel" class="tab-pane" id="api">
-                    <form method="post" action="options.php">
-                        <?php settings_fields('VRPConnector'); ?>
-                        <?php do_settings_sections('VRPConnector'); ?>
-                        <?php submit_button(); ?>
-                    </form>
+                    <input type="text" name="vrpAPI" value="<?=esc_attr(get_option('vrpAPI'));?>" />
+                    <?=esc_attr(get_option('vrpAPI'));?>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="support">4</div>
                 <div role="tabpanel" class="tab-pane" id="documentation">5</div>

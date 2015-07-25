@@ -1350,7 +1350,7 @@ class VRPConnector
         register_setting('VRPConnector', 'vrpTheme');
 //        add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
 //        add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
-        add_settings_section('vrpTheme', 'VRP Theme Selection', false, 'VRPConnector');
+//        add_settings_section('vrpTheme', 'VRP Theme Selection', false, 'VRPConnector');
         add_settings_field('vrpTheme', 'VRP Theme', [$this, 'settingThemeFieldCallback'], 'VRPConnector',
             'vrpTheme');
     }
