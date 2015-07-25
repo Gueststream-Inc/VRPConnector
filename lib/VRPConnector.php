@@ -1395,6 +1395,7 @@ class VRPConnector
         if(!empty($_POST)) {
             $this->processUpdate('updateVRPAPISettings');
         }
+        wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
         include VRP_PATH . 'views/settings.php';
     }
 
