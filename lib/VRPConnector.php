@@ -1374,16 +1374,30 @@ class VRPConnector
             return false;
         }
 
-        if(!empty($_POST['vrpAPI']) && trim($_POST['vrpAPI']) !== "") {
+        $this->processVRPAPIUpdates();
+
+        return false;
+    }
+
+    private function processVRPAPIUpdates()
+    {
+
+        if(
+            !empty($_POST['vrpAPI']) && trim($_POST['vrpAPI']) !== ""
+            && !empty($_POST['vrpPluginMode'])
+        ) {
+
+            update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
             update_option('vrpAPI', trim($_POST['vrpAPI']));
+
             $this->pluginNotification = [
                 'type' => 'success',
                 'prettyType' => 'Success',
                 'message' => 'Your settings have been updated!'
             ];
+
             return true;
         }
-
         return false;
     }
 

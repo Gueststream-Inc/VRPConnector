@@ -1,4 +1,7 @@
-<?php global $vrp; ?>
+<?php
+global $vrp;
+$data = (object) ['api' => $vrp->testAPI()];
+?>
 <style>
     .tab-content {
         display: block;
@@ -33,21 +36,20 @@
             <ul class="nav nav-tabs">
                 <li><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
                 <li><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
-                <li><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
+                <li class="active"><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
                 <li><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
-                <li class="active"><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a>
+                <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a>
                 </li>
                 <li class="pull-right">
                     <a href="#">
                         <?php
                         $badge = 'badge progress-bar-success';
-                        $data = $vrp->testAPI();
-                        if (!isset($data->Status)) :
+                        if (!isset($data->api->Status)) :
                             $badge = 'badge progress-bar-warning';
-                            $data->Status = false;
+                            $data->api->Status = false;
                         endif;
                         ?>
-                        <div title="Status: <?= $data->Status; ?>">
+                        <div title="Status: <?= $data->api->Status; ?>">
                             <span class="<?= $badge; ?>">&nbsp;</span>
                         </div>
                     </a>
@@ -64,13 +66,13 @@
     <div role="tabpanel" class="tab-pane" id="theme">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/theme.php');?>
     </div>
-    <div role="tabpanel" class="tab-pane" id="api">
+    <div role="tabpanel" class="tab-pane active" id="api">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/api.php');?>
     </div>
     <div role="tabpanel" class="tab-pane" id="support">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/support.php');?>
     </div>
-    <div role="tabpanel" class="tab-pane active" id="documentation">
+    <div role="tabpanel" class="tab-pane" id="documentation">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/documentation.php');?>
     </div>
     </div>

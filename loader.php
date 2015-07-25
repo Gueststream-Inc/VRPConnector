@@ -18,7 +18,6 @@ define('VRP_PATH', dirname(__FILE__) . '/');
 
 $vrp = new \Gueststream\VRPConnector;
 
-
 // back end
 function custom_admin_scripts()
 {
