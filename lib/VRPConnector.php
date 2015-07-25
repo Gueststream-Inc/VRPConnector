@@ -23,6 +23,7 @@ class VRPConnector
     public $search;
     private $pagetitle;
     private $pagedescription;
+    private $pluginNotification = ['type' => 'default', 'prettyType' => "",'message' => ""];
 
     /**
      * Class Construct
@@ -1348,42 +1349,8 @@ class VRPConnector
     {
         register_setting('VRPConnector', 'vrpAPI');
         register_setting('VRPConnector', 'vrpTheme');
-//        add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
-//        add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
-//        add_settings_section('vrpTheme', 'VRP Theme Selection', false, 'VRPConnector');
-        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'settingThemeFieldCallback'], 'VRPConnector',
-            'vrpTheme');
     }
 
-//    public function apiKeySettingTitleCallback()
-//    {
-//        echo "<p>Your API Key can be found in the settings section after logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
-//        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='http://www.gueststream.net'>Gueststream.net</a> account.</p>
-//        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
-//    }
-//
-//    public function apiKeyCallback()
-//    {
-//        echo '<input type="text" name="vrpAPI" value="' . esc_attr(get_option('vrpAPI')) . '" style="width:400px;"/>';
-//    }
-//
-//    public function vrpThemeSettingTitleCallback()
-//    {
-//
-//    }
-
-    public function settingThemeFieldCallback()
-    {
-        echo '<select name="vrpTheme">';
-        foreach ($this->available_themes as $name => $displayname) {
-            $sel = "";
-            if ($name == $this->themename) {
-                $sel = "SELECTED";
-            }
-            echo '<option value="' . esc_attr($name) . '" ' . esc_attr($sel) . '>' . esc_attr($displayname) . '</option>';
-        }
-        echo '</select>';
-    }
 
     /**
      * Displays the 'VRP Login' admin page.
@@ -1393,11 +1360,41 @@ class VRPConnector
         include VRP_PATH . 'views/login.php';
     }
 
+    private function processUpdate($actionToUpdate)
+    {
+        if (
+            ! isset( $_POST['nonceField'] )
+            || ! wp_verify_nonce( $_POST['nonceField'], $actionToUpdate )
+        ) {
+            $this->pluginNotification = [
+                'type' => 'warning',
+                'prettyType' => 'Warning',
+                'message' => 'Your CSRF token did not verify.'
+            ];
+            return false;
+        }
+
+        if(!empty($_POST['vrpAPI']) && trim($_POST['vrpAPI']) !== "") {
+            update_option('vrpAPI', trim($_POST['vrpAPI']));
+            $this->pluginNotification = [
+                'type' => 'success',
+                'prettyType' => 'Success',
+                'message' => 'Your settings have been updated!'
+            ];
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      * Displays the 'VRP API Code Entry' admin page
      */
     public function settingsPage()
     {
+        if(!empty($_POST)) {
+            $this->processUpdate('updateVRPAPISettings');
+        }
         include VRP_PATH . 'views/settings.php';
     }
 

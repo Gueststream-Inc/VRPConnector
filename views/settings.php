@@ -16,13 +16,23 @@
                 <img src="<?php echo plugins_url('/images/vrpconnector-logo.png',__FILE__);; ?>" alt="VRP Connector Logo"/>
             </div>
         </div>
+        <?php if($this->pluginNotification['message'] !== ""):?>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="alert alert-<?=$this->pluginNotification['type'];?> alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <strong><?=$this->pluginNotification['prettyType'];?></strong> <?=$this->pluginNotification['message'];?>
+                </div>
+            </div>
+        </div>
+        <?php endif;?>
         <div class="row">
             <div class="col-sm-12">
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs" role="tablist">
                     <li><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
-                    <li class="active"><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
-                    <li><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
+                    <li><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
+                    <li class="active"><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
                     <li><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
                     <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a></li>
                     <li class="pull-right">
@@ -47,7 +57,7 @@
         <div class="row">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane" id="overview">1</div>
-                <div role="tabpanel" class="tab-pane active" id="theme">
+                <div role="tabpanel" class="tab-pane" id="theme">
                     <!-- @TODO: right align active theme, to the left show theme options (e.g: featured properties, perhaps certain display items in the products, etc. -->
                     <div class="row">
                         <?php foreach ($this->available_themes as $name => $displayname):?>
@@ -70,9 +80,12 @@
                         <?php endforeach;?>
                     </div>
                 </div>
-                <div role="tabpanel" class="tab-pane" id="api">
-                    <input type="text" name="vrpAPI" value="<?=esc_attr(get_option('vrpAPI'));?>" />
-                    <?=esc_attr(get_option('vrpAPI'));?>
+                <div role="tabpanel" class="tab-pane active" id="api">
+                    <form method="post">
+                        <input type="text" name="vrpAPI" value="<?=esc_attr(get_option('vrpAPI'));?>" />
+                        <?=esc_attr(get_option('vrpAPI'));?>
+                        <?php wp_nonce_field('updateVRPAPISettings', 'nonceField'); ?>
+                    </form>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="support">4</div>
                 <div role="tabpanel" class="tab-pane" id="documentation">5</div>
