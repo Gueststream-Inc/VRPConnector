@@ -11,6 +11,8 @@ class VRPConnector
     public $api;
     public $themes;
     public $shortCodes;
+    public $pages;
+    public $wpQuery;
 //    public $theme = "";                            // Full path to plugin theme folder || @depcreciated?
 //    public $themename = "";                        // Plugin theme name.
 //    public $default_theme_name = "mountainsunset"; // Default plugin theme name.
@@ -33,11 +35,11 @@ class VRPConnector
         $this->api = new VRPApi;
         $this->themes = new VRPThemes;
         $this->shortCodes = new VRPShortCodes($this->api, $this->themes);
+        $this->pages = new VRPPages($this->api, $this->themes);
         if(!$this->api) {
             $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
 
-        $this->prepareData();
         $this->initializeActions();
         //Prepare theme...
         $this->themes->set(get_option('vrpTheme'));
@@ -45,21 +47,6 @@ class VRPConnector
     }
 
     /* Plugin security, initialization, helper & notification methods */
-
-    /**
-     * Generates the admin automatic login url.
-     *
-     * @param $email
-     * @param $password
-     *
-     * @return array|mixed
-     */
-    public function doLogin($email, $password)
-    {
-        $url = $this->api->apiURL . $this->api->apiKey() . "/userlogin/?email=$email&password=$password";
-
-        return json_decode(file_get_contents($url));
-    }
 
     /**
      * init WordPress Actions, Filters & shortcodes
@@ -215,227 +202,12 @@ class VRPConnector
         }
 
         if ($query->query_vars['action'] == 'flipkey') {
-            $this->getflipkey();
+            $this->api->getflipkey();
         }
-        add_filter('the_posts', [$this, "filterPosts"], 1, 2);
+        add_filter('the_posts', [$this->pages, "route"], 1, 2);
     }
 
-    /**
-     * @param $posts
-     *
-     * @return array
-     */
-    public function filterPosts($posts, $query)
-    {
-        if (!isset($query->query_vars['action'])) {
-            return false;
-        }
 
-        $content = "";
-        $pagetitle = "";
-        $pagedescription = "";
-        $action = $query->query_vars['action'];
-        $slug = $query->query_vars['slug'];
-
-        switch ($action) {
-            case "unit":
-                $data2 = $this->api->call("getunit/" . $slug);
-                $data = json_decode($data2);
-
-                if (isset($data->SEOTitle)) {
-                    $pagetitle = $data->SEOTitle;
-                } else {
-                    $pagetitle = $data->Name;
-                }
-
-                $pagedescription = $data->SEODescription;
-
-                if (!isset($data->id)) {
-                    global $wp_query;
-                    $wp_query->is_404 = true;
-                }
-
-                if (isset($data->Error)) {
-                    $content = $this->themes->load("error", $data);
-                } else {
-                    $content = $this->themes->load("unit", $data);
-                }
-
-
-                break;
-
-            case "complex": // If Complex Page.
-                $data = json_decode($this->api->call("getcomplex/" . $slug));
-
-                if (isset($data->Error)) {
-                    $content = $this->themes->load("error", $data);
-                } else {
-                    $content = $this->themes->load("complex", $data);
-                }
-                $pagetitle = $data->name;
-
-                break;
-
-            case "favorites":
-                $content = "hi";
-                switch ($slug) {
-                    case "add":
-                        $this->addFavorite();
-                        break;
-                    case "remove":
-                        $this->removeFavorite();
-                        break;
-                    case "json":
-                        echo json_encode($this->favorites);
-                        exit;
-                        break;
-                    default:
-                        $content = $this->showFavorites();
-                        $pagetitle = "Favorites";
-                        break;
-                }
-                break;
-
-            case "specials": // If Special Page.
-                $content = $this->specialPage($slug);
-                $pagetitle = $this->pagetitle; //
-                break;
-
-            case "search": // If Search Page.
-                $data = json_decode($this->search());
-
-                if ($data->count > 0) {
-                    $data = $this->prepareSearchResults($data);
-                }
-
-                if (isset($_GET['json'])) {
-                    echo json_encode($data, JSON_PRETTY_PRINT);
-                    exit;
-                }
-
-                if (isset($data->type)) {
-                    $content = $this->themes->load($data->type, $data);
-                } else {
-                    $content = $this->themes->load("results", $data);
-                }
-
-                $pagetitle = "Search Results";
-                break;
-
-            case "complexsearch": // If Search Page.
-                $data = json_decode($this->api->complexsearch());
-                if (isset($data->type)) {
-                    $content = $this->themes->load($data->type, $data);
-                } else {
-                    $content = $this->themes->load("complexresults", $data);
-                }
-                $pagetitle = "Search Results";
-                break;
-
-            case "book":
-                if ($slug == 'dobooking') {
-                    if (isset($_SESSION['package'])) {
-                        $_POST['booking']['packages'] = $_SESSION['package'];
-                    }
-                }
-
-                if (isset($_POST['email'])) {
-                    $userinfo = $this->doLogin($_POST['email'], $_POST['password']);
-                    $_SESSION['userinfo'] = $userinfo;
-                    if (!isset($userinfo->Error)) {
-                        $query->query_vars['slug'] = "step3";
-                    }
-                }
-
-                if (isset($_POST['booking'])) {
-                    $_SESSION['userinfo'] = $_POST['booking'];
-                }
-
-                $data = json_decode($_SESSION['bookingresults']);
-                if ($data->ID != $_GET['obj']['PropID']) {
-                    $data = json_decode($this->checkavailability(false, true));
-                    $data->new = true;
-                }
-
-                if ($slug != 'confirm') {
-                    $data = json_decode($this->checkavailability(false, true));
-                    $data->new = true;
-                }
-
-                $data->PropID = $_GET['obj']['PropID'];
-                $data->booksettings = $this->bookSettings($data->PropID);
-
-                if ($slug == 'step1') {
-                    unset($_SESSION['package']);
-                }
-
-                $data->package = new \stdClass;
-                $data->package->packagecost = "0.00";
-                $data->package->items = [];
-
-                if (isset($_SESSION['package'])) {
-                    $data->package = $_SESSION['package'];
-                }
-
-                if ($slug == 'step1a') {
-                    if (isset($data->booksettings->HasPackages)) {
-                        $a = date("Y-m-d", strtotime($data->Arrival));
-                        $d = date("Y-m-d", strtotime($data->Departure));
-                        $data->packages = json_decode($this->api->call("getpackages/$a/$d/"));
-                    } else {
-                        $query->query_vars['slug'] = 'step2';
-                    }
-                }
-
-                if ($slug == 'step3') {
-                    $data->form = json_decode($this->api->call("bookingform/"));
-                }
-
-                if ($slug == 'confirm') {
-                    $data->thebooking = json_decode($_SESSION['bresults']);
-                    $pagetitle = "Reservations";
-                    $content = $this->themes->load("confirm", $data);
-                } else {
-                    $pagetitle = "Reservations";
-                    $content = $this->themes->load("booking", $data);
-                }
-                break;
-
-            case "xml":
-                $content = "";
-                $pagetitle = "";
-                break;
-        }
-
-        return [new DummyResult(0, $pagetitle, $content, $pagedescription)];
-    }
-
-    private function specialPage($slug)
-    {
-        if ($slug == "list") {
-            // Special by Category
-            $data = json_decode($this->api->call("getspecialsbycat/1"));
-            $this->pagetitle = "Specials";
-
-            return $this->themes->load("specials", $data);
-        }
-
-        if (is_numeric($slug)) {
-            // Special by ID
-            $data = json_decode($this->api->call("getspecialbyid/" . $slug));
-            $this->pagetitle = $data->title;
-
-            return $this->themes->load("special", $data);
-        }
-
-        if (is_string($slug)) {
-            // Special by slug
-            $data = json_decode($this->api->call("getspecial/" . $slug));
-            $this->pagetitle = $data->title;
-
-            return $this->themes->load("special", $data);
-        }
-    }
 
     public function villafilter()
     {
@@ -673,42 +445,6 @@ class VRPConnector
     //  VRP Favorites/Compare
     //
 
-    private function addFavorite()
-    {
-        if (!isset($_GET['unit'])) {
-            return false;
-        }
-
-        if (!isset($_SESSION['favorites'])) {
-            $_SESSION['favorites'] = [];
-        }
-
-        $unit_id = $_GET['unit'];
-        if (!in_array($unit_id, $_SESSION['favorites'])) {
-            array_push($_SESSION['favorites'], $unit_id);
-        }
-
-        exit;
-    }
-
-    private function removeFavorite()
-    {
-        if (!isset($_GET['unit'])) {
-            return false;
-        }
-        if (!isset($_SESSION['favorites'])) {
-            return false;
-        }
-        $unit = $_GET['unit'];
-        foreach ($this->favorites as $key => $unit_id) {
-            if ($unit == $unit_id) {
-                unset($this->favorites[$key]);
-            }
-        }
-        $_SESSION['favorites'] = $this->favorites;
-        exit;
-    }
-
     public function savecompare()
     {
         $obj = new \stdClass();
@@ -719,78 +455,6 @@ class VRPConnector
         $results = $this->api->call('savecompare', $search);
 
         return $results;
-    }
-
-    public function showFavorites()
-    {
-        if (isset($_GET['shared'])) {
-            $_SESSION['cp'] = 1;
-            $id = (int) $_GET['shared'];
-            $source = "";
-            if (isset($_GET['source'])) {
-                $source = $_GET['source'];
-            }
-            $data = json_decode($this->api->call("getshared/" . $id . "/" . $source));
-            $_SESSION['compare'] = $data->compare;
-            $_SESSION['arrival'] = $data->arrival;
-            $_SESSION['depart'] = $data->depart;
-        }
-
-        $obj = new \stdClass();
-
-        if (!isset($_GET['favorites'])) {
-            if (count($this->favorites) == 0) {
-                return $this->themes->load('vrpFavoritesEmpty');
-            }
-
-            $url_string = site_url() . "/vrp/favorites/show?";
-            foreach ($this->favorites as $unit_id) {
-                $url_string .= "&favorites[]=" . $unit_id;
-            }
-            header("Location: " . $url_string);
-        }
-
-        $compare = $_GET['favorites'];
-        $_SESSION['favorites'] = $compare;
-
-        if (isset($_GET['arrival'])) {
-            $obj->arrival = $_GET['arrival'];
-            $obj->departure = $_GET['depart'];
-            $_SESSION['arrival'] = $obj->arrival;
-            $_SESSION['depart'] = $obj->departure;
-        } else {
-            if (isset($_SESSION['arrival'])) {
-                $obj->arrival = $_SESSION['arrival'];
-                $obj->departure = $_SESSION['depart'];
-            }
-        }
-
-        $obj->items = $compare;
-        sort($obj->items);
-        $search['search'] = json_encode($obj);
-        $results = json_decode($this->api->call('compare', $search));
-        if (count($results->results) == 0) {
-            return $this->themes->load('vrpFavoritesEmpty');
-        }
-
-        $results = $this->prepareSearchResults($results);
-
-        return $this->themes->load('vrpFavorites', $results);
-    }
-
-    private function setFavorites()
-    {
-        if (isset($_SESSION['favorites'])) {
-            foreach ($_SESSION['favorites'] as $unit_id) {
-                $this->favorites[] = (int) $unit_id;
-            }
-
-            return;
-        }
-
-        $this->favorites = [];
-
-        return;
     }
 
 
@@ -830,136 +494,6 @@ class VRPConnector
      *
      */
 
-
-    private function prepareData()
-    {
-        $this->setFavorites();
-        $this->prepareSearchData();
-    }
-
-    private function prepareSearchResults($data)
-    {
-        foreach ($data->results as $key => $unit) {
-            if (strlen($unit->Thumb) == 0) {
-                // Replacing non-existent thumbnails w/full size Photo URL
-                $unit->Thumb = $unit->Photo;
-            }
-            $data->results[$key] = $unit;
-        }
-
-        return $data;
-    }
-
-    private function prepareSearchData()
-    {
-        $this->search = new \stdClass();
-
-        // Arrival
-        if (isset($_GET['search']['arrival'])) {
-            $_SESSION['arrival'] = $_GET['search']['arrival'];
-        }
-
-        if (isset($_SESSION['arrival'])) {
-            $this->search->arrival = date('m/d/Y', strtotime($_SESSION['arrival']));
-        } else {
-            $this->search->arrival = date('m/d/Y', strtotime("+1 Days"));
-        }
-
-        // Departure
-        if (isset($_GET['search']['departure'])) {
-            $_SESSION['depart'] = $_GET['search']['departure'];
-        }
-
-        if (isset($_SESSION['depart'])) {
-            $this->search->depart = date('m/d/Y', strtotime($_SESSION['depart']));
-        } else {
-            $this->search->depart = date('m/d/Y', strtotime("+4 Days"));
-        }
-
-        // Nights
-        if (isset($_GET['search']['nights'])) {
-            $_SESSION['nights'] = $_GET['search']['nights'];
-        }
-
-        if (isset($_SESSION['nights'])) {
-            $this->search->nights = $_SESSION['nights'];
-        } else {
-            $this->search->nights = (strtotime($this->search->depart) - strtotime($this->search->arrival)) / 60 / 60 / 24;
-        }
-
-        $this->search->type = "";
-        if (isset($_GET['search']['type'])) {
-            $_SESSION['type'] = $_GET['search']['type'];
-        }
-
-        if (isset($_SESSION['type'])) {
-            $this->search->type = $_SESSION['type'];
-            $this->search->complex = $_SESSION['type'];
-        }
-
-        // Sleeps
-        $this->search->sleeps = "";
-        if (isset($_GET['search']['sleeps'])) {
-            $_SESSION['sleeps'] = $_GET['search']['sleeps'];
-        }
-
-        if (isset($_SESSION['sleeps'])) {
-            $this->search->sleeps = $_SESSION['sleeps'];
-        } else {
-            $this->search->sleeps = false;
-        }
-
-        // Location
-        $this->search->location = "";
-        if (isset($_GET['search']['location'])) {
-            $_SESSION['location'] = $_GET['search']['location'];
-        }
-
-        if (isset($_SESSION['location'])) {
-            $this->search->location = $_SESSION['location'];
-        } else {
-            $this->search->location = false;
-        }
-
-        // Bedrooms
-        $this->search->bedrooms = "";
-        if (isset($_GET['search']['bedrooms'])) {
-            $_SESSION['bedrooms'] = $_GET['search']['bedrooms'];
-        }
-
-        if (isset($_SESSION['bedrooms'])) {
-            $this->search->bedrooms = $_SESSION['bedrooms'];
-        } else {
-            $this->search->bedrooms = false;
-        }
-
-        // Adults
-        if (isset($_GET['search']['adults'])) {
-            $_SESSION['adults'] = (int) $_GET['search']['adults'];
-        }
-
-        if (isset($_GET['obj']['Adults'])) {
-            $_SESSION['adults'] = (int) $_GET['obj']['Adults'];
-        }
-
-        if (isset($_SESSION['adults'])) {
-            $this->search->adults = $_SESSION['adults'];
-        } else {
-            $this->search->adults = 2;
-        }
-
-        // Children
-        if (isset($_GET['search']['children'])) {
-            $_SESSION['children'] = $_GET['search']['children'];
-        }
-
-        if (isset($_SESSION['children'])) {
-            $this->search->children = $_SESSION['children'];
-        } else {
-            $this->search->children = 0;
-        }
-
-    }
 
 
     /* VRPConnector Plugin Administration Methods */

@@ -178,6 +178,21 @@ class VRPApi
     }
 
     /**
+     * Generates the admin automatic login url.
+     *
+     * @param $email
+     * @param $password
+     *
+     * @return array|mixed
+     */
+    public function doLogin($email, $password)
+    {
+        $url = $this->apiURL . $this->apiKey . "/userlogin/?email=$email&password=$password";
+
+        return json_decode(file_get_contents($url));
+    }
+
+    /**
      * Class Destruct w/basic debugging.
      */
     public function __destruct()
