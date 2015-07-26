@@ -23,7 +23,7 @@ class VRPApi
         if ($this->apiKey !== '') {
             $apiAvailable = (json_decode($this->call("testAPI"))->Status === 'Online' ? true : false);
             $this->available = $apiAvailable;
-            return $this->status;
+            return $this->available;
         }
 
         $this->available = false;
@@ -34,8 +34,7 @@ class VRPApi
     public function setAPIKey($apiKey)
     {
         $this->apiKey = $apiKey;
-        $apiAvailable = (json_decode($this->call("testAPI"))->Status === 'Online' ? true : false);
-        $this->status = (object) ['apiAvailable' => $apiAvailable];
+        $this->available = (json_decode($this->call("testAPI"))->Status === 'Online' ? true : false);
     }
 
     /* VRPConnector Plugin API Call methods
@@ -53,9 +52,12 @@ class VRPApi
      */
     public function call($call, $params = [])
     {
+        echo "<PRE>";
+        print_r($this->apiURL . $this->apiKey . "/" . $call); echo "<BR/>";
+        echo "</PRE>";
         $cache_key = md5($call . json_encode($params));
         $results = wp_cache_get($cache_key, 'vrp');
-        if (false == $results) {
+        if ( $results == false ) {
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call);
             curl_setopt($ch, CURLOPT_POST, 1);

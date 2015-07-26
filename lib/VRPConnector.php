@@ -31,7 +31,7 @@ class VRPConnector
         $this->themes = new VRPThemes;
         $this->shortCodes = new VRPShortCodes($this->api, $this->themes);
         $this->pages = new VRPPages($this->api, $this->themes);
-        if(!$this->api) {
+        if(!$this->api->available) {
             $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
         $this->initializeActions();
