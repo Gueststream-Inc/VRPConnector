@@ -1,6 +1,5 @@
 <?php
 global $vrp;
-$data = (object) ['api' => $vrp->testAPI()];
 ?>
 <style>
     .tab-content {
@@ -41,15 +40,8 @@ $data = (object) ['api' => $vrp->testAPI()];
                 <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a></li>
                 <li class="pull-right">
                     <a href="#">
-                        <?php
-                        $badge = 'badge progress-bar-success';
-                        if (!isset($data->api->Status)) :
-                            $badge = 'badge progress-bar-warning';
-                            $data->api->Status = false;
-                        endif;
-                        ?>
-                        <div title="Status: <?= $data->api->Status; ?>">
-                            <span class="<?= $badge; ?>">&nbsp;</span>
+                        <div>
+                            <span class="badge progress-bar-<?= ($this->api->available ? 'success':'warning'); ?>">&nbsp;</span>
                         </div>
                     </a>
                 </li>

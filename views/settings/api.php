@@ -31,8 +31,8 @@
         <hr />
         <h5><strong>Status</strong></h5>
         API is currently:
-        <span class="text-<?=$data->api->Status === "Online" ? 'success' : 'warning';?>">
-            <strong><?=$data->api->Status;?></strong>
+        <span class="text-<?= ($this->api->available? 'success':'warning'); ?>">
+            <strong><?= ($this->api->available? 'Online':'Offline'); ?></strong>
         </span>
         <br />
         API Key: <strong><?= esc_attr(get_option('vrpAPI')); ?></strong>
@@ -57,7 +57,7 @@
                            value="<?= esc_attr(get_option('vrpAPI')); ?>"
                         />
                     <span class="input-group-btn">
-                        <input type="submit" value="Update" class="btn btn-<?=$data->api->Status === "Online" ? 'success' : 'warning';?>" />
+                        <input type="submit" value="Update" class="btn btn-<?=$this->api->available? 'success' : 'warning';?>" />
                     </span>
                 </div>
             </div>

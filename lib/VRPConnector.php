@@ -8,9 +8,7 @@ namespace Gueststream;
 
 class VRPConnector
 {
-    private $apiKey;                                // Gueststream.net API Key
-    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
-    private $allowCache = true;                     // @todo - Remove this.
+    public $api;
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
     public $default_theme_name = "mountainsunset"; // Default plugin theme name.
@@ -30,55 +28,39 @@ class VRPConnector
      */
     public function __construct()
     {
-        $this->apiKey = get_option('vrpAPI');
-
-        if ($this->apiKey == '') {
-            add_action('admin_notices', [$this, 'notice']);
+        $this->api = new VRPApi;
+        if(!$this->api) {
+            $this->pluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
 
         $this->prepareData();
+        $this->initializeActions();
+        //Prepare theme...
         $this->setTheme();
-        $this->actions();
-        $this->themeActions();
+        $this->initializeThemeActions();
     }
 
-    /**
-     * Class Destruct w/basic debugging.
-     */
-    public function __destruct()
-    {
-        if (!isset($_GET['showdebug'])) {
-            return false;
-        }
-
-        if (!$this->is_vrp_page()) {
-            return false;
-        }
-
-        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
-        echo "GET VARIABLES:<br><pre>";
-        print_r($_GET);
-        echo "</pre>";
-        echo "Debug VARIABLES:<br><pre>";
-        print_r($this->debug);
-        echo "</pre>";
-        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
-        echo "</div>";
-    }
+    /* Plugin security, initialization, helper & notification methods */
 
     /**
-     * Use the demo API key.
+     * Generates the admin automatic login url.
+     *
+     * @param $email
+     * @param $password
+     *
+     * @return array|mixed
      */
-    function __load_demo_key()
+    public function doLogin($email, $password)
     {
-        $this->apiKey = '1533020d1121b9fea8c965cd2c978296';
+        $url = $this->api->apiURL . $this->api->apiKey() . "/userlogin/?email=$email&password=$password";
+
+        return json_decode(file_get_contents($url));
     }
 
     /**
      * init WordPress Actions, Filters & shortcodes
      */
-    public function actions()
+    public function initializeActions()
     {
         if (is_admin()) {
             add_action('admin_menu', [$this, 'setupPage']);
@@ -89,7 +71,7 @@ class VRPConnector
         // Actions
         add_action('init', [$this, 'ajax']);
         add_action('init', [$this, 'sitemap']);
-        add_action('init', [$this, 'featuredunit']);
+        add_action('init', [$this->api, 'featuredunit']);
         add_action('init', [$this, 'otheractions']);
         add_action('init', [$this, 'rewrite']);
         add_action('init', [$this, 'villafilter']);
@@ -111,9 +93,6 @@ class VRPConnector
         add_shortcode("vrpAdvancedSearchForm", [$this, "vrpAdvancedSearchForm"]);
         add_shortcode("vrpComplexes", [$this, "vrpComplexes"]);
         add_shortcode("vrpComplexSearch", [$this, "vrpComplexSearch"]);
-        //add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
-        //add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
-        //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpshort", [$this, "vrpShort"]);
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
 
@@ -121,27 +100,42 @@ class VRPConnector
     }
 
     /**
-     * Set the plugin theme used & include the theme functions file.
+     * Validates nonce token for wordpress security
+     *
+     * @return bool
      */
-    public function setTheme()
+    private function validateNonce()
     {
-        $plugin_theme_Folder = VRP_PATH . 'themes/';
-        $theme = get_option('vrpTheme');
-        if (!$theme) {
-            $theme = $this->default_theme_name;
-            $this->themename = $this->default_theme_name;
-            $this->theme = $plugin_theme_Folder . $this->default_theme_name;
-        } else {
-            $this->theme = $plugin_theme_Folder . $theme;
-            $this->themename = $theme;
+        if (
+            ! isset($_GET['vrpUpdateSection'])
+            || ! isset( $_POST['nonceField'] )
+            || ! wp_verify_nonce( $_POST['nonceField'], $_GET['vrpUpdateSection'] )
+        ) {
+            $this->preparePluginNotification('warning', 'Warning', 'Your none token did not verify.');
+            return false;
         }
-        $this->themename = $theme;
 
-        if (file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {
-            include get_stylesheet_directory() . "/vrp/functions.php";
-        } else {
-            include $this->theme . "/functions.php";
-        }
+        return true;
+    }
+
+    /**
+     * Sets plugin notification
+     *
+     * @param $type
+     * @param $prettyType
+     * @param $message
+     *
+     * @return bool
+     */
+    private function preparePluginNotification($type, $prettyType, $message)
+    {
+
+        return $this->pluginNotification = [
+            'type' => $type,
+            'prettyType' => $prettyType,
+            'message' => $message
+        ];
+
     }
 
     /**
@@ -160,14 +154,6 @@ class VRPConnector
         $query->is_home = false;
 
         return $query;
-    }
-
-    public function themeActions()
-    {
-        $theme = new $this->themename;
-        if (method_exists($theme, "actions")) {
-            $theme->actions();
-        }
     }
 
     public function otheractions()
@@ -262,7 +248,7 @@ class VRPConnector
 
         switch ($action) {
             case "unit":
-                $data2 = $this->call("getunit/" . $slug);
+                $data2 = $this->api->call("getunit/" . $slug);
                 $data = json_decode($data2);
 
                 if (isset($data->SEOTitle)) {
@@ -288,7 +274,7 @@ class VRPConnector
                 break;
 
             case "complex": // If Complex Page.
-                $data = json_decode($this->call("getcomplex/" . $slug));
+                $data = json_decode($this->api->call("getcomplex/" . $slug));
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
@@ -404,14 +390,14 @@ class VRPConnector
                     if (isset($data->booksettings->HasPackages)) {
                         $a = date("Y-m-d", strtotime($data->Arrival));
                         $d = date("Y-m-d", strtotime($data->Departure));
-                        $data->packages = json_decode($this->call("getpackages/$a/$d/"));
+                        $data->packages = json_decode($this->api->call("getpackages/$a/$d/"));
                     } else {
                         $query->query_vars['slug'] = 'step2';
                     }
                 }
 
                 if ($slug == 'step3') {
-                    $data->form = json_decode($this->call("bookingform/"));
+                    $data->form = json_decode($this->api->call("bookingform/"));
                 }
 
                 if ($slug == 'confirm') {
@@ -437,7 +423,7 @@ class VRPConnector
     {
         if ($slug == "list") {
             // Special by Category
-            $data = json_decode($this->call("getspecialsbycat/1"));
+            $data = json_decode($this->api->call("getspecialsbycat/1"));
             $this->pagetitle = "Specials";
 
             return $this->loadTheme("specials", $data);
@@ -445,7 +431,7 @@ class VRPConnector
 
         if (is_numeric($slug)) {
             // Special by ID
-            $data = json_decode($this->call("getspecialbyid/" . $slug));
+            $data = json_decode($this->api->call("getspecialbyid/" . $slug));
             $this->pagetitle = $data->title;
 
             return $this->loadTheme("special", $data);
@@ -453,7 +439,7 @@ class VRPConnector
 
         if (is_string($slug)) {
             // Special by slug
-            $data = json_decode($this->call("getspecial/" . $slug));
+            $data = json_decode($this->api->call("getspecial/" . $slug));
             $this->pagetitle = $data->title;
 
             return $this->loadTheme("special", $data);
@@ -531,15 +517,15 @@ class VRPConnector
         if (isset($_GET['specialsearch'])) {
             // This might only be used by suite-paradise.com but is available
             // To all ISILink based PMS softwares.
-            return $this->call('specialsearch', $search);
+            return $this->api->call('specialsearch', $search);
         }
 
-        return $this->call('search', $search);
+        return $this->api->call('search', $search);
     }
 
     public function complexsearch()
     {
-        $url = $this->apiURL . $this->apiKey . "/complexsearch3/";
+        $url = $this->api->apiURL . $this->api->apiKey() . "/complexsearch3/";
 
         $obj = new \stdClass();
         foreach ($_GET['search'] as $k => $v) {
@@ -561,43 +547,9 @@ class VRPConnector
         }
 
         $search['search'] = json_encode($obj);
-        $results = $this->call('complexsearch3', $search);
+        $results = $this->api->call('complexsearch3', $search);
 
         return $results;
-    }
-
-    /**
-     * Loads the VRP Theme.
-     *
-     * @param string $section
-     * @param        $data [] $data
-     *
-     * @return string
-     */
-    public function loadTheme($section, $data = [])
-    {
-        $wptheme = get_stylesheet_directory() . "/vrp/$section.php";
-
-        if (file_exists($wptheme)) {
-            $load = $wptheme;
-        } else {
-            $load = $this->theme . "/" . $section . ".php";
-        }
-
-        if (isset($_GET['printme'])) {
-            include $this->theme . "/print.php";
-            exit;
-        }
-
-        $this->debug['data'] = $data;
-        $this->debug['theme_file'] = $load;
-
-        ob_start();
-        include $load;
-        $content = ob_get_contents();
-        ob_end_clean();
-
-        return $content;
     }
 
     public function ajax()
@@ -618,7 +570,7 @@ class VRPConnector
         set_time_limit(50);
 
         $fields_string = "obj=" . json_encode($_GET['obj']);
-        $results = $this->call('checkavail', $fields_string);
+        $results = $this->api->call('checkavail', $fields_string);
 
         if ($ret == true) {
             $_SESSION['bookingresults'] = $results;
@@ -650,7 +602,7 @@ class VRPConnector
         }
 
         $fields_string = "obj=" . json_encode($_POST['booking']);
-        $results = $this->call('processbooking', $fields_string);
+        $results = $this->api->call('processbooking', $fields_string);
         $res = json_decode($results);
         if (isset($res->Results)) {
             $_SESSION['bresults'] = json_encode($res->Results);
@@ -703,12 +655,12 @@ class VRPConnector
 
     public function getspecial()
     {
-        return json_decode($this->call("getonespecial"));
+        return json_decode($this->api->call("getonespecial"));
     }
 
     public function getTheSpecial($id)
     {
-        $data = json_decode($this->call("getspecialbyid/" . $id));
+        $data = json_decode($this->api->call("getspecialbyid/" . $id));
 
         return $data;
     }
@@ -718,7 +670,7 @@ class VRPConnector
         if (!isset($_GET['vrpsitemap'])) {
             return false;
         }
-        $data = json_decode($this->call("allvrppages"));
+        $data = json_decode($this->api->call("allvrppages"));
         ob_start();
         include "xml.php";
         $content = ob_get_contents();
@@ -753,117 +705,6 @@ class VRPConnector
             array_unshift( $links, $settings_link ); // before other links
         }
         return $links;
-    }
-
-    //
-    //  API Calls
-    //
-
-    /**
-     * Make a call to the VRPc API
-     *
-     * @param $call
-     * @param array $params
-     *
-     * @return string
-     */
-    public function call($call, $params = [])
-    {
-        $cache_key = md5($call . json_encode($params));
-        $results = wp_cache_get($cache_key, 'vrp');
-        if (false == $results) {
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $this->apiURL . $this->apiKey . "/" . $call);
-            curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_HEADER, 0);
-            $results = curl_exec($ch);
-            curl_close($ch);
-            wp_cache_set($cache_key, $results, 'vrp', 300); // 5 Minutes.
-        }
-
-        return $results;
-    }
-
-    public function customcall($call)
-    {
-        echo wp_kses($this->call("customcall/$call"));
-    }
-
-    public function custompost($call)
-    {
-        $obj = new \stdClass();
-        foreach ($_POST['obj'] as $k => $v) {
-            $obj->$k = $v;
-        }
-
-        $search['search'] = json_encode($obj);
-        $results = $this->call($call, $search);
-        $this->debug['results'] = $results;
-        echo wp_kses($results);
-    }
-
-    public function bookSettings($propID)
-    {
-        return json_decode($this->call("booksettings/" . $propID));
-    }
-
-    /**
-     * Get available search options.
-     *
-     * Example: minbeds, maxbeds, minbaths, maxbaths, minsleeps, maxsleeps, types (hotel, villa), cities, areas, views, attributes, locations
-     *
-     * @return mixed
-     */
-    public function searchoptions()
-    {
-        return json_decode($this->call("searchoptions"));
-    }
-
-    /**
-     * List out property names. Useful in listing names for propery select box.
-     */
-    function proplist()
-    {
-        $data = $this->call("namelist");
-
-        return json_decode($data);
-    }
-
-    /**
-     * Get a featured unit
-     * @ajax
-     */
-    public function featuredunit()
-    {
-        if (isset($_GET['featuredunit'])) {
-            $featured_unit = json_decode($this->call("featuredunit"));
-            wp_send_json($featured_unit);
-            exit;
-        }
-    }
-
-    public function allSpecials()
-    {
-        return json_decode($this->call("allspecials"));
-    }
-
-    /**
-     * Get flipkey reviews for a given unit.
-     *
-     * @ajax
-     */
-    public function getflipkey()
-    {
-        $id = $_GET['slug'];
-        $call = "getflipkey/?unit_id=$id";
-        $data = $this->customcall($call);
-        echo "<!DOCTYPE html><html>";
-        echo "<body>";
-        echo wp_kses_post($data);
-        echo "</body></html>";
-        exit;
     }
 
     //
@@ -913,7 +754,7 @@ class VRPConnector
         $obj->arrival = $_SESSION['arrival'];
         $obj->depart = $_SESSION['depart'];
         $search['search'] = json_encode($obj);
-        $results = $this->call('savecompare', $search);
+        $results = $this->api->call('savecompare', $search);
 
         return $results;
     }
@@ -927,7 +768,7 @@ class VRPConnector
             if (isset($_GET['source'])) {
                 $source = $_GET['source'];
             }
-            $data = json_decode($this->call("getshared/" . $id . "/" . $source));
+            $data = json_decode($this->api->call("getshared/" . $id . "/" . $source));
             $_SESSION['compare'] = $data->compare;
             $_SESSION['arrival'] = $data->arrival;
             $_SESSION['depart'] = $data->depart;
@@ -965,7 +806,7 @@ class VRPConnector
         $obj->items = $compare;
         sort($obj->items);
         $search['search'] = json_encode($obj);
-        $results = json_decode($this->call('compare', $search));
+        $results = json_decode($this->api->call('compare', $search));
         if (count($results->results) == 0) {
             return $this->loadTheme('vrpFavoritesEmpty');
         }
@@ -990,475 +831,11 @@ class VRPConnector
         return;
     }
 
-    //
-    //  Shortcode methods
-    //
-
-    /**
-     * [vrpComplexes] Shortcode
-     *
-     * @param array $items
-     *
-     * @return string
-     */
-    public function vrpComplexes($items = [])
-    {
-        $items['page'] = 1;
-
-        if (isset($_GET['page'])) {
-            $items['page'] = (int) $_GET['page'];
-        }
-
-        if (isset($_GET['beds'])) {
-            $items['beds'] = (int) $_GET['beds'];
-        }
-        if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int) $_GET['minbed'];
-            $items['maxbed'] = (int) $_GET['maxbed'];
-        }
-
-        $obj = new \stdClass();
-        $obj->okay = 1;
-        if (count($items) != 0) {
-            foreach ($items as $k => $v) {
-                $obj->$k = $v;
-            }
-        }
-
-        $search['search'] = json_encode($obj);
-        $results = $this->call('allcomplexes', $search);
-        $results = json_decode($results);
-        $content = $this->loadTheme('vrpComplexes', $results);
-
-        return $content;
-    }
-
-    /**
-     * [vrpUnits] Shortcode
-     *
-     * @param array $items
-     *
-     * @return string
-     */
-    public function vrpUnits($items = [])
-    {
-        $items['showall'] = 1;
-        if (isset($_GET['page'])) {
-            $items['page'] = (int) $_GET['page'];
-        }
-
-        if (isset($_GET['beds'])) {
-            $items['beds'] = (int) $_GET['beds'];
-        }
-
-        if (isset($_GET['search'])) {
-            foreach ($_GET['search'] as $k => $v):
-                $items[$k] = $v;
-            endforeach;
-        }
-
-        if (isset($_GET['minbed'])) {
-            $items['minbed'] = (int) $_GET['minbed'];
-            $items['maxbed'] = (int) $_GET['maxbed'];
-        }
-
-        $obj = new \stdClass();
-        $obj->okay = 1;
-        if (count($items) != 0) {
-            foreach ($items as $k => $v) {
-                $obj->$k = $v;
-            }
-        }
-
-        $search['search'] = json_encode($obj);
-        $results = $this->call('allunits', $search);
-        $results = json_decode($results);
-        $content = $this->loadTheme('vrpUnits', $results);
-
-        return $content;
-    }
-
-    /**
-     * [vrpSearchForm] Shortcode
-     *
-     * @return string
-     */
-    public function vrpSearchForm()
-    {
-        $data = "";
-        $page = $this->loadTheme("vrpSearchForm", $data);
-
-        return $page;
-    }
-
-    /**
-     * [vrpAdvancedSearch] Shortcode
-     *
-     * @return string
-     */
-    public function vrpAdvancedSearchForm()
-    {
-        $data = "";
-        $page = $this->loadTheme("vrpAdvancedSearchForm", $data);
-
-        return $page;
-    }
-
-    /**
-     * [vrpSearch] Shortcode
-     *
-     * @param array $arr
-     *
-     * @return string
-     */
-    public function vrpSearch($arr = [])
-    {
-        $_GET['search'] = $arr;
-        $_GET['search']['showall'] = 1;
-        $data = $this->search();
-        $data = json_decode($data);
-
-        if ($data->count > 0) {
-            $data = $this->prepareSearchResults($data);
-        }
-
-        if (isset($data->type)) {
-            $content = $this->loadTheme($data->type, $data);
-        } else {
-            $content = $this->loadTheme("results", $data);
-        }
-
-        return $content;
-    }
-
-    /**
-     * [vrpComplexSearch]
-     *
-     * @param array $arr
-     *
-     * @return string
-     */
-    public function vrpcomplexsearch($arr = [])
-    {
-        foreach ($arr as $k => $v):
-            if (stristr($v, "|")) {
-                $arr[$k] = explode("|", $v);
-            }
-        endforeach;
-        $_GET['search'] = $arr;
-        $_GET['search']['showall'] = 1;
-
-        $this->time = microtime(true);
-        $data = $this->complexsearch();
-
-        $this->time = round((microtime(true) - $this->time), 4);
-        $data = json_decode($data);
-        if (isset($data->type)) {
-            $content = $this->loadTheme($data->type, $data);
-        } else {
-            $content = $this->loadTheme("complexresults", $data);
-        }
-
-        return $content;
-    }
-
-    /**
-     * [vrpAreaList] Shortcode
-     *
-     * @param $arr
-     *
-     * @return string
-     */
-    public function vrpAreaList($arr)
-    {
-        $area = $arr['area'];
-        $r = $this->call("areabymainlocation/$area");
-        $data = json_decode($r);
-        $content = $this->loadTheme("arealist", $data);
-
-        return $content;
-    }
-
-    /**
-     * [vrpSpecials] Shortcode
-     *
-     * @param array $items
-     *
-     * @return string
-     *
-     * @todo support getOneSpecial
-     */
-    public function vrpSpecials($items = [])
-    {
-        if (!isset($items['cat'])) {
-            $items['cat'] = 1;
-        }
-
-        if (isset($items['special_id'])) {
-            $data = json_decode($this->call("getspecialbyid/" . $items['special_id']));
-        } else {
-            $data = json_decode($this->call("getspecialsbycat/" . $items['cat']));
-        }
-
-        return $this->loadTheme("vrpSpecials", $data);
-    }
-
-    /**
-     * [vrpLinks] Shortcode
-     *
-     * @param $items
-     *
-     * @return string
-     */
-    public function vrpLinks($items)
-    {
-        $items['showall'] = true;
-
-        switch ($items['type']) {
-            case "Condo";
-                $call = "/allcomplexes/";
-                break;
-            case "Villa";
-                $call = "/allunits/";
-                break;
-        }
-
-        $obj = new \stdClass();
-        $obj->okay = 1;
-        if (count($items) != 0) {
-            foreach ($items as $k => $v) {
-                $obj->$k = $v;
-            }
-        }
-
-        $search['search'] = json_encode($obj);
-        $results = json_decode($this->call($call, $search));
-
-        $ret = "<ul style='list-style:none'>";
-        if ($items['type'] == 'Villa') {
-            foreach ($results->results as $v):
-                $ret .= "<li><a href='/vrp/unit/$v->page_slug'>$v->Name</a></li>";
-            endforeach;
-        } else {
-            foreach ($results as $v):
-                $ret .= "<li><a href='/vrp/complex/$v->page_slug'>$v->name</a></li>";
-            endforeach;
-        }
-        $ret .= "</ul>";
-
-        return $ret;
-    }
-
-    /**
-     * [vrpShort] Shortcode
-     *
-     * This is only here for legacy support.
-     *  Suite-Paradise.com
-     *
-     * @param $params
-     *
-     * @return string
-     */
-    public function vrpShort($params)
-    {
-        if ($params['type'] == 'resort') {
-            $params['type'] = 'Location';
-        }
-
-        if (
-            (isset($params['attribute']) && $params['attribute'] == true) ||
-            (($params['type'] == 'complex') || $params['type'] == 'View')
-        ) {
-            $items['attributes'] = true;
-            $items['aname'] = $params['type'];
-            $items['value'] = $params['value'];
-        } else {
-            $items[$params['type']] = $params['value'];
-        }
-
-        $items['sort'] = "Name";
-        $items['order'] = "low";
-
-        return $this->loadTheme('vrpShort', $items);
-    }
-
-    public function vrpFeaturedUnit($params = [])
-    {
-        if (empty($params)) {
-            // No Params = Get one random featured unit
-            $data = json_decode($this->call("featuredunit"));
-
-            return $this->loadTheme("vrpFeaturedUnit", $data);
-        }
-
-        if (count($params) == 1 && isset($params['show'])) {
-            // 'show' param = get multiple random featured units
-            $data = json_decode($this->call("getfeaturedunits/" . $params['show']));
-
-            return $this->loadTheme("vrpFeaturedUnits", $data);
-        }
-
-        if (isset($params['field']) && isset($params['value'])) {
-            // if Field AND Value exist find a custom featured unit
-            if (isset($params['show'])) {
-                // Returning Multiple units
-                $params['num'] = $params['show'];
-                unset($params['show']);
-                $data = json_decode($this->call("getfeaturedbyoption", $params));
-
-                return $this->loadTheme("vrpFeaturedUnits", $data);
-            }
-            // Returning a single unit
-            $params['num'] = 1;
-            $data = json_decode($this->call("getfeaturedbyoption", $params));
-
-            return $this->loadTheme("vrpFeaturedUnit", $data);
-        }
-
-    }
 
     //
     //  Wordpress Admin Methods
     //
 
-    /**
-     * Display notice for user to enter their VRPc API key.
-     */
-    public function notice()
-    {
-        $siteurl = admin_url('admin.php?page=VRPConnector');
-        echo '<div class="updated fade"><b>Vacation Rental Platform</b>: <a href="' . esc_url($siteurl) . '">Please enter your API key.</a></div>';
-    }
-
-    /**
-     * Admin nav menu items
-     */
-    public function setupPage()
-    {
-        add_options_page(
-            "Settings Admin",
-            'VRPConnector',
-            'activate_plugins',
-            "VRPConnector",
-            [$this, 'settingsPage']
-        );
-    }
-
-    public function registerSettings()
-    {
-        register_setting('VRPConnector', 'vrpAPI');
-        register_setting('VRPConnector', 'vrpTheme');
-    }
-
-
-    /**
-     * Displays the 'VRP Login' admin page.
-     */
-    public function loadVRP()
-    {
-        include VRP_PATH . 'views/login.php';
-    }
-
-    private function validateNonce()
-    {
-        if (
-            ! isset($_GET['vrpUpdateSection'])
-            || ! isset( $_POST['nonceField'] )
-            || ! wp_verify_nonce( $_POST['nonceField'], $_GET['vrpUpdateSection'] )
-        ) {
-            $this->preparePluginNotification('warning', 'Warning', 'Your none token did not verify.');
-            return false;
-        }
-
-        return true;
-    }
-
-    private function processVRPThemeUpdates()
-    {
-        if(
-            isset($_POST['vrpTheme'])
-        ) {
-            if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
-                $this->preparePluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
-                return false;
-            }
-
-            update_option('vrpTheme', $_POST['vrpTheme']);
-            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
-            $this->themename = $_POST['vrpTheme'];
-            return true;
-        }
-
-        return false;
-    }
-
-    private function processVRPAPIUpdates()
-    {
-        if(
-            isset($_POST['vrpAPI']) && isset($_POST['vrpPluginMode'])
-        ) {
-
-            update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
-            update_option('vrpAPI', trim($_POST['vrpAPI']));
-            $this->apiKey = trim($_POST['vrpAPI']);
-            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
-
-            return true;
-        }
-        return false;
-    }
-
-    private function preparePluginNotification($type, $prettyType, $message)
-    {
-
-        return $this->pluginNotification = [
-            'type' => $type,
-            'prettyType' => $prettyType,
-            'message' => $message
-        ];
-
-    }
-
-    /**
-     * Displays the 'VRP API Code Entry' admin page
-     */
-    public function settingsPage()
-    {
-        if(!empty($_POST) && $this->validateNonce() !== false) {
-            $this->processVRPAPIUpdates();
-            $this->processVRPThemeUpdates();
-        }
-
-        wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
-        wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
-        wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
-        include VRP_PATH . 'views/settings.php';
-    }
-
-    /**
-     * Checks if API Key is good and API is available.
-     *
-     * @return mixed
-     */
-    public function testAPI()
-    {
-        return json_decode($this->call("testAPI"));
-    }
-
-    /**
-     * Generates the admin automatic login url.
-     *
-     * @param $email
-     * @param $password
-     *
-     * @return array|mixed
-     */
-    public function doLogin($email, $password)
-    {
-        $url = $this->apiURL . $this->apiKey . "/userlogin/?email=$email&password=$password";
-
-        return json_decode(file_get_contents($url));
-    }
 
     /**
      * Checks to see if the page loaded is a VRP page.
@@ -1486,9 +863,11 @@ class VRPConnector
         }
     }
 
-    //
-    //  Data Processing Methods
-    //
+    /* VRPConnector Plugin Data Processing Methods
+     *
+     *
+     */
+
 
     private function prepareData()
     {
@@ -1619,4 +998,438 @@ class VRPConnector
         }
 
     }
+
+    /* VRPConnector Plugin Shortcode Methods
+     *
+     *
+     */
+
+    /**
+     * [vrpComplexes] Shortcode
+     *
+     * @param array $items
+     *
+     * @return string
+     */
+    public function vrpComplexes($items = [])
+    {
+        $items['page'] = 1;
+
+        if (isset($_GET['page'])) {
+            $items['page'] = (int) $_GET['page'];
+        }
+
+        if (isset($_GET['beds'])) {
+            $items['beds'] = (int) $_GET['beds'];
+        }
+        if (isset($_GET['minbed'])) {
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
+        }
+
+        $obj = new \stdClass();
+        $obj->okay = 1;
+        if (count($items) != 0) {
+            foreach ($items as $k => $v) {
+                $obj->$k = $v;
+            }
+        }
+
+        $search['search'] = json_encode($obj);
+        $results = $this->api->call('allcomplexes', $search);
+        $results = json_decode($results);
+        $content = $this->loadTheme('vrpComplexes', $results);
+
+        return $content;
+    }
+
+    /**
+     * [vrpUnits] Shortcode
+     *
+     * @param array $items
+     *
+     * @return string
+     */
+    public function vrpUnits($items = [])
+    {
+        $items['showall'] = 1;
+        if (isset($_GET['page'])) {
+            $items['page'] = (int) $_GET['page'];
+        }
+
+        if (isset($_GET['beds'])) {
+            $items['beds'] = (int) $_GET['beds'];
+        }
+
+        if (isset($_GET['search'])) {
+            foreach ($_GET['search'] as $k => $v):
+                $items[$k] = $v;
+            endforeach;
+        }
+
+        if (isset($_GET['minbed'])) {
+            $items['minbed'] = (int) $_GET['minbed'];
+            $items['maxbed'] = (int) $_GET['maxbed'];
+        }
+
+        $obj = new \stdClass();
+        $obj->okay = 1;
+        if (count($items) != 0) {
+            foreach ($items as $k => $v) {
+                $obj->$k = $v;
+            }
+        }
+
+        $search['search'] = json_encode($obj);
+        $results = $this->api->call('allunits', $search);
+        $results = json_decode($results);
+        $content = $this->loadTheme('vrpUnits', $results);
+
+        return $content;
+    }
+
+    /**
+     * [vrpSearchForm] Shortcode
+     *
+     * @return string
+     */
+    public function vrpSearchForm()
+    {
+        $data = "";
+        $page = $this->loadTheme("vrpSearchForm", $data);
+
+        return $page;
+    }
+
+    /**
+     * [vrpAdvancedSearch] Shortcode
+     *
+     * @return string
+     */
+    public function vrpAdvancedSearchForm()
+    {
+        $data = "";
+        $page = $this->loadTheme("vrpAdvancedSearchForm", $data);
+
+        return $page;
+    }
+
+    /**
+     * [vrpSearch] Shortcode
+     *
+     * @param array $arr
+     *
+     * @return string
+     */
+    public function vrpSearch($arr = [])
+    {
+        $_GET['search'] = $arr;
+        $_GET['search']['showall'] = 1;
+        $data = $this->search();
+        $data = json_decode($data);
+
+        if ($data->count > 0) {
+            $data = $this->prepareSearchResults($data);
+        }
+
+        if (isset($data->type)) {
+            $content = $this->loadTheme($data->type, $data);
+        } else {
+            $content = $this->loadTheme("results", $data);
+        }
+
+        return $content;
+    }
+
+    /**
+     * [vrpComplexSearch]
+     *
+     * @param array $arr
+     *
+     * @return string
+     */
+    public function vrpcomplexsearch($arr = [])
+    {
+        foreach ($arr as $k => $v):
+            if (stristr($v, "|")) {
+                $arr[$k] = explode("|", $v);
+            }
+        endforeach;
+        $_GET['search'] = $arr;
+        $_GET['search']['showall'] = 1;
+
+        $this->time = microtime(true);
+        $data = $this->complexsearch();
+
+        $this->time = round((microtime(true) - $this->time), 4);
+        $data = json_decode($data);
+        if (isset($data->type)) {
+            $content = $this->loadTheme($data->type, $data);
+        } else {
+            $content = $this->loadTheme("complexresults", $data);
+        }
+
+        return $content;
+    }
+
+
+
+    /**
+     * [vrpShort] Shortcode
+     *
+     * This is only here for legacy support.
+     *  Suite-Paradise.com
+     *
+     * @param $params
+     *
+     * @return string
+     */
+    public function vrpShort($params)
+    {
+        if ($params['type'] == 'resort') {
+            $params['type'] = 'Location';
+        }
+
+        if (
+            (isset($params['attribute']) && $params['attribute'] == true) ||
+            (($params['type'] == 'complex') || $params['type'] == 'View')
+        ) {
+            $items['attributes'] = true;
+            $items['aname'] = $params['type'];
+            $items['value'] = $params['value'];
+        } else {
+            $items[$params['type']] = $params['value'];
+        }
+
+        $items['sort'] = "Name";
+        $items['order'] = "low";
+
+        return $this->loadTheme('vrpShort', $items);
+    }
+
+    public function vrpFeaturedUnit($params = [])
+    {
+        if (empty($params)) {
+            // No Params = Get one random featured unit
+            $data = json_decode($this->api->call("featuredunit"));
+
+            return $this->loadTheme("vrpFeaturedUnit", $data);
+        }
+
+        if (count($params) == 1 && isset($params['show'])) {
+            // 'show' param = get multiple random featured units
+            $data = json_decode($this->api->call("getfeaturedunits/" . $params['show']));
+
+            return $this->loadTheme("vrpFeaturedUnits", $data);
+        }
+
+        if (isset($params['field']) && isset($params['value'])) {
+            // if Field AND Value exist find a custom featured unit
+            if (isset($params['show'])) {
+                // Returning Multiple units
+                $params['num'] = $params['show'];
+                unset($params['show']);
+                $data = json_decode($this->api->call("getfeaturedbyoption", $params));
+
+                return $this->loadTheme("vrpFeaturedUnits", $data);
+            }
+            // Returning a single unit
+            $params['num'] = 1;
+            $data = json_decode($this->api->call("getfeaturedbyoption", $params));
+
+            return $this->loadTheme("vrpFeaturedUnit", $data);
+        }
+
+    }
+
+    /* VRPConnector Plugin Theme Methods */
+
+    /**
+     * Set the plugin theme used & include the theme functions file.
+     */
+    public function setTheme()
+    {
+        $plugin_theme_Folder = VRP_PATH . 'themes/';
+        $theme = get_option('vrpTheme');
+        if (!$theme) {
+            $theme = $this->default_theme_name;
+            $this->themename = $this->default_theme_name;
+            $this->theme = $plugin_theme_Folder . $this->default_theme_name;
+        } else {
+            $this->theme = $plugin_theme_Folder . $theme;
+            $this->themename = $theme;
+        }
+        $this->themename = $theme;
+
+        if (file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {
+            include get_stylesheet_directory() . "/vrp/functions.php";
+        } else {
+            include $this->theme . "/functions.php";
+        }
+    }
+
+    /**
+     * Loads the VRP Theme.
+     *
+     * @param string $section
+     * @param        $data [] $data
+     *
+     * @return string
+     */
+    public function loadTheme($section, $data = [])
+    {
+        $wptheme = get_stylesheet_directory() . "/vrp/$section.php";
+
+        if (file_exists($wptheme)) {
+            $load = $wptheme;
+        } else {
+            $load = $this->theme . "/" . $section . ".php";
+        }
+
+        if (isset($_GET['printme'])) {
+            include $this->theme . "/print.php";
+            exit;
+        }
+
+        $this->debug['data'] = $data;
+        $this->debug['theme_file'] = $load;
+
+        ob_start();
+        include $load;
+        $content = ob_get_contents();
+        ob_end_clean();
+
+        return $content;
+    }
+
+    public function initializeThemeActions()
+    {
+        $theme = new $this->themename;
+        if (method_exists($theme, "actions")) {
+            $theme->actions();
+        }
+    }
+
+    /* VRPConnector Plugin Administration Methods */
+
+    /** @TODO: remove, depreciated?
+     * Displays the 'VRP Login' admin page.
+     */
+//    public function loadVRP()
+//    {
+//        include VRP_PATH . 'views/login.php';
+//    }
+
+    /**
+     * Admin nav menu items
+     */
+    public function setupPage()
+    {
+        add_options_page(
+            "Settings Admin",
+            'VRPConnector',
+            'activate_plugins',
+            "VRPConnector",
+            [$this, 'settingsPage']
+        );
+    }
+
+    public function registerSettings()
+    {
+        register_setting('VRPConnector', 'vrpAPI');
+        register_setting('VRPConnector', 'vrpTheme');
+        register_setting('VRPConnector', 'vrpPluginMode');
+    }
+
+    /**
+     * Displays the 'VRP API Code Entry' admin page
+     */
+    public function settingsPage()
+    {
+        if(!empty($_POST) && $this->validateNonce() !== false) {
+            $this->processVRPAPIUpdates();
+            $this->processVRPThemeUpdates();
+        }
+
+        wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
+        wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
+        wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
+        include VRP_PATH . 'views/settings.php';
+    }
+
+    /**
+     * Checks if VRP Theme settings are being updated
+     *
+     * @return bool
+     */
+    private function processVRPThemeUpdates()
+    {
+        if(
+        isset($_POST['vrpTheme'])
+        ) {
+            if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
+                $this->preparePluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
+                return false;
+            }
+
+            update_option('vrpTheme', $_POST['vrpTheme']);
+            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
+            $this->themename = $_POST['vrpTheme'];
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks if VRP API credentials are being updated
+     *
+     * @return bool
+     */
+    private function processVRPAPIUpdates()
+    {
+        if(
+            isset($_POST['vrpAPI']) && isset($_POST['vrpPluginMode'])
+        ) {
+
+            update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
+            update_option('vrpAPI', trim($_POST['vrpAPI']));
+            $this->api->setAPIKey(trim($_POST['vrpAPI']));
+            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
+
+            return true;
+        }
+        return false;
+    }
+
+    /* VRPConnector Plugin magic methods
+     *
+     *
+     */
+
+    /**
+     * Class Destruct w/basic debugging.
+     */
+    public function __destruct()
+    {
+        if (!isset($_GET['showdebug'])) {
+            return false;
+        }
+
+        if (!$this->is_vrp_page()) {
+            return false;
+        }
+
+        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
+        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
+        echo "GET VARIABLES:<br><pre>";
+        print_r($_GET);
+        echo "</pre>";
+        echo "Debug VARIABLES:<br><pre>";
+        print_r($this->debug);
+        echo "</pre>";
+        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
+        echo "</div>";
+    }
+
 }
