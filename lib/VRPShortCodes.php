@@ -8,12 +8,16 @@ namespace Gueststream;
 
 class VRPShortCodes
 {
+    private $themes;
+    private $api;
     /**
      * Class Construct
      */
-    public function __construct()
+    public function __construct($api, $themes)
     {
 
+        $this->api = $api;
+        $this->themes = $themes;
         // Shortcodes
         add_shortcode("vrpUnits", [$this, "vrpUnits"]);
         add_shortcode("vrpSearch", [$this, "vrpSearch"]);
@@ -23,6 +27,7 @@ class VRPShortCodes
         add_shortcode("vrpComplexSearch", [$this, "vrpComplexSearch"]);
         add_shortcode("vrpshort", [$this, "vrpShort"]);
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
+        add_filter('widget_text', 'do_shortcode');
 
 //        $this->apiKey = get_option('vrpAPI');
 
@@ -68,7 +73,7 @@ class VRPShortCodes
         $search['search'] = json_encode($obj);
         $results = $this->api->call('allcomplexes', $search);
         $results = json_decode($results);
-        $content = $this->loadTheme('vrpComplexes', $results);
+        $content = $this->themes->load('vrpComplexes', $results);
 
         return $content;
     }
@@ -113,7 +118,7 @@ class VRPShortCodes
         $search['search'] = json_encode($obj);
         $results = $this->api->call('allunits', $search);
         $results = json_decode($results);
-        $content = $this->loadTheme('vrpUnits', $results);
+        $content = $this->themes->load('vrpUnits', $results);
 
         return $content;
     }
@@ -126,7 +131,7 @@ class VRPShortCodes
     public function vrpSearchForm()
     {
         $data = "";
-        $page = $this->loadTheme("vrpSearchForm", $data);
+        $page = $this->themes->load("vrpSearchForm", $data);
 
         return $page;
     }
@@ -139,7 +144,7 @@ class VRPShortCodes
     public function vrpAdvancedSearchForm()
     {
         $data = "";
-        $page = $this->loadTheme("vrpAdvancedSearchForm", $data);
+        $page = $this->themes->load("vrpAdvancedSearchForm", $data);
 
         return $page;
     }
@@ -163,9 +168,9 @@ class VRPShortCodes
         }
 
         if (isset($data->type)) {
-            $content = $this->loadTheme($data->type, $data);
+            $content = $this->themes->load($data->type, $data);
         } else {
-            $content = $this->loadTheme("results", $data);
+            $content = $this->themes->load("results", $data);
         }
 
         return $content;
@@ -178,7 +183,7 @@ class VRPShortCodes
      *
      * @return string
      */
-    public function vrpcomplexsearch($arr = [])
+    public function vrpComplexSearch($arr = [])
     {
         foreach ($arr as $k => $v):
             if (stristr($v, "|")) {
@@ -189,14 +194,14 @@ class VRPShortCodes
         $_GET['search']['showall'] = 1;
 
         $this->time = microtime(true);
-        $data = $this->complexsearch();
+        $data = $this->api->complexsearch();
 
         $this->time = round((microtime(true) - $this->time), 4);
         $data = json_decode($data);
         if (isset($data->type)) {
-            $content = $this->loadTheme($data->type, $data);
+            $content = $this->themes->load($data->type, $data);
         } else {
-            $content = $this->loadTheme("complexresults", $data);
+            $content = $this->themes->load("complexresults", $data);
         }
 
         return $content;
@@ -232,7 +237,7 @@ class VRPShortCodes
         $items['sort'] = "Name";
         $items['order'] = "low";
 
-        return $this->loadTheme('vrpShort', $items);
+        return $this->themes->load('vrpShort', $items);
     }
 
     public function vrpFeaturedUnit($params = [])
@@ -241,14 +246,14 @@ class VRPShortCodes
             // No Params = Get one random featured unit
             $data = json_decode($this->api->call("featuredunit"));
 
-            return $this->loadTheme("vrpFeaturedUnit", $data);
+            return $this->themes->load("vrpFeaturedUnit", $data);
         }
 
         if (count($params) == 1 && isset($params['show'])) {
             // 'show' param = get multiple random featured units
             $data = json_decode($this->api->call("getfeaturedunits/" . $params['show']));
 
-            return $this->loadTheme("vrpFeaturedUnits", $data);
+            return $this->themes->load("vrpFeaturedUnits", $data);
         }
 
         if (isset($params['field']) && isset($params['value'])) {
@@ -259,13 +264,13 @@ class VRPShortCodes
                 unset($params['show']);
                 $data = json_decode($this->api->call("getfeaturedbyoption", $params));
 
-                return $this->loadTheme("vrpFeaturedUnits", $data);
+                return $this->themes->load("vrpFeaturedUnits", $data);
             }
             // Returning a single unit
             $params['num'] = 1;
             $data = json_decode($this->api->call("getfeaturedbyoption", $params));
 
-            return $this->loadTheme("vrpFeaturedUnit", $data);
+            return $this->themes->load("vrpFeaturedUnit", $data);
         }
 
     }

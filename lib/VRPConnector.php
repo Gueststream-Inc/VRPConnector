@@ -9,12 +9,14 @@ namespace Gueststream;
 class VRPConnector
 {
     public $api;
-    public $theme = "";                            // Full path to plugin theme folder
-    public $themename = "";                        // Plugin theme name.
-    public $default_theme_name = "mountainsunset"; // Default plugin theme name.
-    public $available_themes = ['mountainsunset' => 'Mountain Sunset', 'oceanbreeze' => 'Ocean Breeze', 'relaxation' => 'Relaxation'];
+    public $themes;
+    public $shortCodes;
+//    public $theme = "";                            // Full path to plugin theme folder || @depcreciated?
+//    public $themename = "";                        // Plugin theme name.
+//    public $default_theme_name = "mountainsunset"; // Default plugin theme name.
+//    public $available_themes = ['mountainsunset' => 'Mountain Sunset', 'oceanbreeze' => 'Ocean Breeze', 'relaxation' => 'Relaxation'];
     public $otheractions = [];                //
-    public $time;                                  // Time (in seconds?) spent making calls to the API
+    public $time;                                // Time (in seconds?) spent making calls to the API
     public $debug = [];                       // Container for debug data
     public $action = false; // VRP Action
     public $favorites;
@@ -29,16 +31,17 @@ class VRPConnector
     public function __construct()
     {
         $this->api = new VRPApi;
+        $this->themes = new VRPThemes;
+        $this->shortCodes = new VRPShortCodes($this->api, $this->themes);
         if(!$this->api) {
-            $this->pluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
+            $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
 
         $this->prepareData();
         $this->initializeActions();
-        $this->initializeShortcodes();
         //Prepare theme...
-        $this->setTheme();
-        $this->initializeThemeActions();
+        $this->themes->set(get_option('vrpTheme'));
+        $this->themes->initializeThemeActions();
     }
 
     /* Plugin security, initialization, helper & notification methods */
@@ -56,12 +59,6 @@ class VRPConnector
         $url = $this->api->apiURL . $this->api->apiKey() . "/userlogin/?email=$email&password=$password";
 
         return json_decode(file_get_contents($url));
-    }
-
-    public function initializeShortcodes()
-    {
-        $shortcodes = new VRPShortCodes;
-        add_filter('widget_text', 'do_shortcode');
     }
 
     /**
@@ -105,7 +102,7 @@ class VRPConnector
             || ! isset( $_POST['nonceField'] )
             || ! wp_verify_nonce( $_POST['nonceField'], $_GET['vrpUpdateSection'] )
         ) {
-            $this->preparePluginNotification('warning', 'Warning', 'Your none token did not verify.');
+            $this->setPluginNotification('warning', 'Warning', 'Your none token did not verify.');
             return false;
         }
 
@@ -121,7 +118,7 @@ class VRPConnector
      *
      * @return bool
      */
-    private function preparePluginNotification($type, $prettyType, $message)
+    private function setPluginNotification($type, $prettyType, $message)
     {
 
         return $this->pluginNotification = [
@@ -259,9 +256,9 @@ class VRPConnector
                 }
 
                 if (isset($data->Error)) {
-                    $content = $this->loadTheme("error", $data);
+                    $content = $this->themes->load("error", $data);
                 } else {
-                    $content = $this->loadTheme("unit", $data);
+                    $content = $this->themes->load("unit", $data);
                 }
 
 
@@ -271,9 +268,9 @@ class VRPConnector
                 $data = json_decode($this->api->call("getcomplex/" . $slug));
 
                 if (isset($data->Error)) {
-                    $content = $this->loadTheme("error", $data);
+                    $content = $this->themes->load("error", $data);
                 } else {
-                    $content = $this->loadTheme("complex", $data);
+                    $content = $this->themes->load("complex", $data);
                 }
                 $pagetitle = $data->name;
 
@@ -317,20 +314,20 @@ class VRPConnector
                 }
 
                 if (isset($data->type)) {
-                    $content = $this->loadTheme($data->type, $data);
+                    $content = $this->themes->load($data->type, $data);
                 } else {
-                    $content = $this->loadTheme("results", $data);
+                    $content = $this->themes->load("results", $data);
                 }
 
                 $pagetitle = "Search Results";
                 break;
 
             case "complexsearch": // If Search Page.
-                $data = json_decode($this->complexsearch());
+                $data = json_decode($this->api->complexsearch());
                 if (isset($data->type)) {
-                    $content = $this->loadTheme($data->type, $data);
+                    $content = $this->themes->load($data->type, $data);
                 } else {
-                    $content = $this->loadTheme("complexresults", $data);
+                    $content = $this->themes->load("complexresults", $data);
                 }
                 $pagetitle = "Search Results";
                 break;
@@ -397,10 +394,10 @@ class VRPConnector
                 if ($slug == 'confirm') {
                     $data->thebooking = json_decode($_SESSION['bresults']);
                     $pagetitle = "Reservations";
-                    $content = $this->loadTheme("confirm", $data);
+                    $content = $this->themes->load("confirm", $data);
                 } else {
                     $pagetitle = "Reservations";
-                    $content = $this->loadTheme("booking", $data);
+                    $content = $this->themes->load("booking", $data);
                 }
                 break;
 
@@ -420,7 +417,7 @@ class VRPConnector
             $data = json_decode($this->api->call("getspecialsbycat/1"));
             $this->pagetitle = "Specials";
 
-            return $this->loadTheme("specials", $data);
+            return $this->themes->load("specials", $data);
         }
 
         if (is_numeric($slug)) {
@@ -428,7 +425,7 @@ class VRPConnector
             $data = json_decode($this->api->call("getspecialbyid/" . $slug));
             $this->pagetitle = $data->title;
 
-            return $this->loadTheme("special", $data);
+            return $this->themes->load("special", $data);
         }
 
         if (is_string($slug)) {
@@ -436,7 +433,7 @@ class VRPConnector
             $data = json_decode($this->api->call("getspecial/" . $slug));
             $this->pagetitle = $data->title;
 
-            return $this->loadTheme("special", $data);
+            return $this->themes->load("special", $data);
         }
     }
 
@@ -515,35 +512,6 @@ class VRPConnector
         }
 
         return $this->api->call('search', $search);
-    }
-
-    public function complexsearch()
-    {
-        $url = $this->api->apiURL . $this->api->apiKey() . "/complexsearch3/";
-
-        $obj = new \stdClass();
-        foreach ($_GET['search'] as $k => $v) {
-            $obj->$k = $v;
-        }
-        if (isset($_GET['page'])) {
-            $obj->page = (int) $_GET['page'];
-        } else {
-            $obj->page = 1;
-        }
-        if (isset($_GET['show'])) {
-            $obj->limit = (int) $_GET['show'];
-        } else {
-            $obj->limit = 10;
-        }
-        if ($obj->arrival == 'Not Sure') {
-            $obj->arrival = '';
-            $obj->depart = '';
-        }
-
-        $search['search'] = json_encode($obj);
-        $results = $this->api->call('complexsearch3', $search);
-
-        return $results;
     }
 
     public function ajax()
@@ -772,7 +740,7 @@ class VRPConnector
 
         if (!isset($_GET['favorites'])) {
             if (count($this->favorites) == 0) {
-                return $this->loadTheme('vrpFavoritesEmpty');
+                return $this->themes->load('vrpFavoritesEmpty');
             }
 
             $url_string = site_url() . "/vrp/favorites/show?";
@@ -802,12 +770,12 @@ class VRPConnector
         $search['search'] = json_encode($obj);
         $results = json_decode($this->api->call('compare', $search));
         if (count($results->results) == 0) {
-            return $this->loadTheme('vrpFavoritesEmpty');
+            return $this->themes->load('vrpFavoritesEmpty');
         }
 
         $results = $this->prepareSearchResults($results);
 
-        return $this->loadTheme('vrpFavorites', $results);
+        return $this->themes->load('vrpFavorites', $results);
     }
 
     private function setFavorites()
@@ -1052,12 +1020,12 @@ class VRPConnector
         isset($_POST['vrpTheme'])
         ) {
             if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
-                $this->preparePluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
+                $this->setPluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
                 return false;
             }
 
             update_option('vrpTheme', $_POST['vrpTheme']);
-            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
+            $this->setPluginNotification('success', 'Success', 'Your settings have been updated!');
             $this->themename = $_POST['vrpTheme'];
             return true;
         }
@@ -1079,7 +1047,7 @@ class VRPConnector
             update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
             update_option('vrpAPI', trim($_POST['vrpAPI']));
             $this->api->setAPIKey(trim($_POST['vrpAPI']));
-            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
+            $this->setPluginNotification('success', 'Success', 'Your settings have been updated!');
 
             return true;
         }

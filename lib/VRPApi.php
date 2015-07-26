@@ -115,6 +115,33 @@ class VRPApi
         return json_decode($data);
     }
 
+    public function complexsearch()
+    {
+        $obj = new \stdClass();
+        foreach ($_GET['search'] as $k => $v) {
+            $obj->$k = $v;
+        }
+        if (isset($_GET['page'])) {
+            $obj->page = (int) $_GET['page'];
+        } else {
+            $obj->page = 1;
+        }
+        if (isset($_GET['show'])) {
+            $obj->limit = (int) $_GET['show'];
+        } else {
+            $obj->limit = 10;
+        }
+        if ($obj->arrival == 'Not Sure') {
+            $obj->arrival = '';
+            $obj->depart = '';
+        }
+
+        $search['search'] = json_encode($obj);
+        $results = $this->api->call('complexsearch3', $search);
+
+        return $results;
+    }
+
     /**
      * Get a featured unit
      * @ajax
