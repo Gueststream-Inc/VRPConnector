@@ -443,14 +443,14 @@ class VRPConnector
         if(
         isset($_POST['vrpTheme'])
         ) {
-            if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
+            if(!in_array($_POST['vrpTheme'], array_keys($this->themes->availableThemes))) {
                 $this->setPluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
                 return false;
             }
 
             update_option('vrpTheme', $_POST['vrpTheme']);
             $this->setPluginNotification('success', 'Success', 'Your settings have been updated!');
-            $this->themename = $_POST['vrpTheme'];
+            $this->themes->theme = $_POST['vrpTheme'];
             return true;
         }
 
