@@ -8,11 +8,10 @@ namespace Gueststream;
 
 class VRPThemes
 {
-    public $themename;
     public $theme;
     public $defaultTheme = "mountainsunset"; // Default plugin theme name.
     public $themePath;
-    public $available_themes = [
+    public $availableThemes = [
         'mountainsunset'        => 'Mountain Sunset',
         'oceanbreeze'           => 'Ocean Breeze',
         'relaxation'            => 'Relaxation'
@@ -39,8 +38,8 @@ class VRPThemes
             $this->theme = $this->defaultTheme;
             $this->themePath = $themesPath . $this->defaultTheme;
         } else {
-            $this->theme = $themesPath . $theme;
-            $this->themePath = $theme;
+            $this->theme = $theme;
+            $this->themePath = $themesPath . $theme;
         }
 
         if (file_exists(get_stylesheet_directory() . "/vrp/functions.php")) {

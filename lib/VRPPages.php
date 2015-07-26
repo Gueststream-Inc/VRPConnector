@@ -11,11 +11,15 @@ class VRPPages
     public $api;
     public $themes;
     public $search;
+    public $wpQuery;
     public $favorites = [];
     public $debug = [];
 
     /**
      * Class Construct
+     *
+     * @param $api
+     * @param $themes
      */
     public function __construct($api, $themes)
     {
@@ -28,6 +32,7 @@ class VRPPages
 
     /**
      * @param $posts
+     * @param $query
      *
      * @return array
      */
@@ -199,17 +204,17 @@ class VRPPages
 
         $data = json_decode($_SESSION['bookingresults']);
         if ($data->ID != $_GET['obj']['PropID']) {
-            $data = json_decode($this->checkavailability(false, true));
+            $data = json_decode($this->checkAvailability(false, true));
             $data->new = true;
         }
 
         if ($slug != 'confirm') {
-            $data = json_decode($this->checkavailability(false, true));
+            $data = json_decode($this->checkAvailability(false, true));
             $data->new = true;
         }
 
         $data->PropID = $_GET['obj']['PropID'];
-        $data->booksettings = $this->bookSettings($data->PropID);
+        $data->booksettings = $this->api->bookSettings($data->PropID);
 
         if ($slug == 'step1') {
             unset($_SESSION['package']);
@@ -327,6 +332,77 @@ class VRPPages
             $title = $data->title;
 
             return ['title' => $title, 'content' => $this->themes->load("special", $data)];
+        }
+    }
+
+    public function search()
+    {
+        $obj = new \stdClass();
+
+        foreach ($_GET['search'] as $k => $v) {
+            $obj->$k = $v;
+        }
+
+        if (isset($_GET['page'])) {
+            $obj->page = (int) $_GET['page'];
+        } else {
+            $obj->page = 1;
+        }
+
+        if (!isset($obj->limit)) {
+            $obj->limit = 10;
+            if (isset($_GET['show'])) {
+                $obj->limit = (int) $_GET['show'];
+            }
+        }
+
+        if (isset($obj->arrival)) {
+            if ($obj->arrival == 'Not Sure') {
+                $obj->arrival = '';
+                $obj->depart = '';
+            } else {
+                $obj->arrival = date("m/d/Y", strtotime($obj->arrival));
+            }
+        }
+
+        $search['search'] = json_encode($obj);
+
+        if (isset($_GET['specialsearch'])) {
+            // This might only be used by suite-paradise.com but is available
+            // To all ISILink based PMS softwares.
+            return $this->api->call('specialsearch', $search);
+        }
+
+        return $this->api->call('search', $search);
+    }
+
+    public function checkAvailability($par = false, $ret = false)
+    {
+        set_time_limit(50);
+
+        $fields_string = "obj=" . json_encode($_GET['obj']);
+        $results = $this->api->call('checkavail', $fields_string);
+
+        if ($ret == true) {
+            $_SESSION['bookingresults'] = $results;
+
+            return $results;
+        }
+
+        if ($par != false) {
+            $_SESSION['bookingresults'] = $results;
+            echo wp_kses_post($results);
+
+            return false;
+        }
+
+        $res = json_decode($results);
+
+        if (isset($res->Error)) {
+            echo esc_html($res->Error);
+        } else {
+            $_SESSION['bookingresults'] = $results;
+            echo "1";
         }
     }
 
@@ -562,6 +638,23 @@ class VRPPages
 
     }
 
+    /**
+     * Checks to see if the page loaded is a VRP page.
+     * Formally $_GET['action'].
+     * @global WP_Query $wp_query
+     * @return bool
+     */
+    public function isVRPPage()
+    {
+        global $wp_query;
+        if (isset($wp_query->query_vars['action'])) { // Is VRP page.
+            $this->action = $wp_query->query_vars['action'];
+
+            return true;
+        }
+
+        return false;
+    }
     /**
      * Class Destruct w/basic debugging.
      */

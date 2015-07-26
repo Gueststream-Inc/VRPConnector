@@ -12,11 +12,6 @@ class VRPConnector
     public $themes;
     public $shortCodes;
     public $pages;
-    public $wpQuery;
-//    public $theme = "";                            // Full path to plugin theme folder || @depcreciated?
-//    public $themename = "";                        // Plugin theme name.
-//    public $default_theme_name = "mountainsunset"; // Default plugin theme name.
-//    public $available_themes = ['mountainsunset' => 'Mountain Sunset', 'oceanbreeze' => 'Ocean Breeze', 'relaxation' => 'Relaxation'];
     public $otheractions = [];                //
     public $time;                                // Time (in seconds?) spent making calls to the API
     public $debug = [];                       // Container for debug data
@@ -39,7 +34,6 @@ class VRPConnector
         if(!$this->api) {
             $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
-
         $this->initializeActions();
         //Prepare theme...
         $this->themes->set(get_option('vrpTheme'));
@@ -137,7 +131,7 @@ class VRPConnector
     public function otheractions()
     {
         if (isset($_GET['otherslug']) && $_GET['otherslug'] != '') {
-            $theme = $this->themename;
+            $theme = $this->themes->theme;
             $theme = new $theme;
             $func = $theme->otheractions;
             $func2 = $func[$_GET['otherslug']];
@@ -211,7 +205,7 @@ class VRPConnector
 
     public function villafilter()
     {
-        if (!$this->is_vrp_page()) {
+        if (!$this->pages->isVRPPage()) {
             return;
         }
 
@@ -224,6 +218,7 @@ class VRPConnector
         }
     }
 
+    //@TODO: this needs to go somewhere.. VRPAjax class maybe?
     public function searchjax()
     {
         if (isset($_GET['search']['arrival'])) {
@@ -235,7 +230,7 @@ class VRPConnector
         }
 
         ob_start();
-        $results = json_decode($this->search());
+        $results = json_decode($this->pages->search());
 
         $units = $results->results;
 
@@ -245,47 +240,9 @@ class VRPConnector
         echo wp_kses_post($content);
     }
 
-    public function search()
-    {
-        $obj = new \stdClass();
-
-        foreach ($_GET['search'] as $k => $v) {
-            $obj->$k = $v;
-        }
-
-        if (isset($_GET['page'])) {
-            $obj->page = (int) $_GET['page'];
-        } else {
-            $obj->page = 1;
-        }
-
-        if (!isset($obj->limit)) {
-            $obj->limit = 10;
-            if (isset($_GET['show'])) {
-                $obj->limit = (int) $_GET['show'];
-            }
-        }
-
-        if (isset($obj->arrival)) {
-            if ($obj->arrival == 'Not Sure') {
-                $obj->arrival = '';
-                $obj->depart = '';
-            } else {
-                $obj->arrival = date("m/d/Y", strtotime($obj->arrival));
-            }
-        }
-
-        $search['search'] = json_encode($obj);
-
-        if (isset($_GET['specialsearch'])) {
-            // This might only be used by suite-paradise.com but is available
-            // To all ISILink based PMS softwares.
-            return $this->api->call('specialsearch', $search);
-        }
-
-        return $this->api->call('search', $search);
-    }
-
+    //@TODO: this needs to go somewhere.. VRPAjax class maybe?
+    // looks like the refactors are going to break this, we might need to loop through $this->pages ?  I think that
+    // is right..
     public function ajax()
     {
         if (!isset($_GET['vrpjax'])) {
@@ -297,36 +254,6 @@ class VRPConnector
             $this->$act($par);
         }
         exit;
-    }
-
-    public function checkavailability($par = false, $ret = false)
-    {
-        set_time_limit(50);
-
-        $fields_string = "obj=" . json_encode($_GET['obj']);
-        $results = $this->api->call('checkavail', $fields_string);
-
-        if ($ret == true) {
-            $_SESSION['bookingresults'] = $results;
-
-            return $results;
-        }
-
-        if ($par != false) {
-            $_SESSION['bookingresults'] = $results;
-            echo wp_kses_post($results);
-
-            return false;
-        }
-
-        $res = json_decode($results);
-
-        if (isset($res->Error)) {
-            echo esc_html($res->Error);
-        } else {
-            $_SESSION['bookingresults'] = $results;
-            echo "1";
-        }
     }
 
     public function processbooking($par = false, $ret = false)
@@ -387,17 +314,19 @@ class VRPConnector
         $_SESSION['package'] = $currentpackage;
     }
 
-    public function getspecial()
-    {
-        return json_decode($this->api->call("getonespecial"));
-    }
+//@TODO: depreciated??
+//    public function getspecial()
+//    {
+//        return json_decode($this->api->call("getonespecial"));
+//    }
 
-    public function getTheSpecial($id)
-    {
-        $data = json_decode($this->api->call("getspecialbyid/" . $id));
-
-        return $data;
-    }
+//@TODO: depreciated??
+//    public function getTheSpecial($id)
+//    {
+//        $data = json_decode($this->api->call("getspecialbyid/" . $id));
+//
+//        return $data;
+//    }
 
     public function sitemap()
     {
@@ -416,13 +345,9 @@ class VRPConnector
     public function xmlexport()
     {
         header("Content-type: text/xml");
-        echo wp_kses($this->customcall("generatexml"));
+        echo wp_kses($this->api->customcall("generatexml"));
         exit;
     }
-
-    //
-    // Wordpress Filters
-    //
 
     public function robots_mod($output, $public)
     {
@@ -441,10 +366,6 @@ class VRPConnector
         return $links;
     }
 
-    //
-    //  VRP Favorites/Compare
-    //
-
     public function savecompare()
     {
         $obj = new \stdClass();
@@ -457,44 +378,13 @@ class VRPConnector
         return $results;
     }
 
-
-    //
-    //  Wordpress Admin Methods
-    //
-
-
-    /**
-     * Checks to see if the page loaded is a VRP page.
-     * Formally $_GET['action'].
-     * @global WP_Query $wp_query
-     * @return bool
-     */
-    public function is_vrp_page()
-    {
-        global $wp_query;
-        if (isset($wp_query->query_vars['action'])) { // Is VRP page.
-            $this->action = $wp_query->query_vars['action'];
-
-            return true;
-        }
-
-        return false;
-    }
-
     public function remove_filters()
     {
-        if ($this->is_vrp_page()) {
+        if ($this->pages->isVRPPage()) {
             remove_filter('the_content', 'wptexturize');
             remove_filter('the_content', 'wpautop');
         }
     }
-
-    /* VRPConnector Plugin Data Processing Methods
-     *
-     *
-     */
-
-
 
     /* VRPConnector Plugin Administration Methods */
 
@@ -602,7 +492,7 @@ class VRPConnector
             return false;
         }
 
-        if (!$this->is_vrp_page()) {
+        if (!$this->pages->isVRPPage()) {
             return false;
         }
 
