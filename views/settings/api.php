@@ -26,6 +26,10 @@
         </div>
     </div>
     <div class="col-sm-4">
+        <h5><strong>License</strong></h5>
+        Next Renewal: <strong><?=date('m/d/Y',strtotime("+30 days"));?></strong>
+        <hr />
+        <h5><strong>Status</strong></h5>
         API is currently:
         <span class="text-<?=$data->api->Status === "Online" ? 'success' : 'warning';?>">
             <strong><?=$data->api->Status;?></strong>

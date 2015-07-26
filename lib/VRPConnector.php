@@ -14,7 +14,7 @@ class VRPConnector
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
     public $default_theme_name = "mountainsunset"; // Default plugin theme name.
-    public $available_themes = ['mountainsunset' => 'Mountain Sunset'];
+    public $available_themes = ['mountainsunset' => 'Mountain Sunset', 'oceanbreeze' => 'Ocean Breeze', 'relaxation' => 'Relaxation'];
     public $otheractions = [];                //
     public $time;                                  // Time (in seconds?) spent making calls to the API
     public $debug = [];                       // Container for debug data
@@ -1360,28 +1360,55 @@ class VRPConnector
         include VRP_PATH . 'views/login.php';
     }
 
-    private function processUpdate($actionToUpdate)
+    private function validateNonce()
     {
         if (
-            ! isset( $_POST['nonceField'] )
-            || ! wp_verify_nonce( $_POST['nonceField'], $actionToUpdate )
+            ! isset($_GET['vrpUpdateSection'])
+            || ! isset( $_POST['nonceField'] )
+            || ! wp_verify_nonce( $_POST['nonceField'], $_GET['vrpUpdateSection'] )
         ) {
             $this->pluginNotification = [
                 'type' => 'warning',
                 'prettyType' => 'Warning',
-                'message' => 'Your CSRF token did not verify.'
+                'message' => 'Your nonce token did not verify.'
             ];
             return false;
         }
 
-        $this->processVRPAPIUpdates();
+        return true;
+    }
+
+    private function processVRPThemeUpdates()
+    {
+        if(
+            !empty($_POST['vrpTheme'])
+        ) {
+            if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
+
+                $this->pluginNotification = [
+                    'type' => 'danger',
+                    'prettyType' => 'Error',
+                    'message' => 'The theme you\'ve selected is not available!'
+                ];
+
+                return false;
+            }
+
+            update_option('vrpTheme', trim($_POST['vrpTheme']));
+            $this->pluginNotification = [
+                'type' => 'success',
+                'prettyType' => 'Success',
+                'message' => 'Your settings have been updated!'
+            ];
+
+            return true;
+        }
 
         return false;
     }
 
     private function processVRPAPIUpdates()
     {
-
         if(
             !empty($_POST['vrpAPI']) && trim($_POST['vrpAPI']) !== ""
             && !empty($_POST['vrpPluginMode'])
@@ -1406,9 +1433,12 @@ class VRPConnector
      */
     public function settingsPage()
     {
-        if(!empty($_POST)) {
-            $this->processUpdate('updateVRPAPISettings');
+        if(!empty($_POST) && $this->validateNonce() !== false) {
+            $this->processVRPAPIUpdates();
+            $this->processVRPThemeUpdates();
         }
+        wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
+        wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
         wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
         include VRP_PATH . 'views/settings.php';
     }

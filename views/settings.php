@@ -35,11 +35,10 @@ $data = (object) ['api' => $vrp->testAPI()];
             <!-- Nav tabs -->
             <ul class="nav nav-tabs">
                 <li><a href="#overview" aria-controls="overview" role="tab" data-toggle="tab">Overview</a></li>
-                <li><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
-                <li class="active"><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
+                <li class="active"><a href="#theme" aria-controls="theme" role="tab" data-toggle="tab">Theme</a></li>
+                <li><a href="#api" aria-controls="api" role="tab" data-toggle="tab">API</a></li>
                 <li><a href="#support" aria-controls="support" role="tab" data-toggle="tab">Support</a></li>
-                <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a>
-                </li>
+                <li><a href="#documentation" aria-controls="documentation" role="tab" data-toggle="tab">Documentation</a></li>
                 <li class="pull-right">
                     <a href="#">
                         <?php
@@ -63,10 +62,10 @@ $data = (object) ['api' => $vrp->testAPI()];
     <div role="tabpanel" class="tab-pane" id="overview">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/overview.php');?>
     </div>
-    <div role="tabpanel" class="tab-pane" id="theme">
+    <div role="tabpanel" class="tab-pane active" id="theme">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/theme.php');?>
     </div>
-    <div role="tabpanel" class="tab-pane active" id="api">
+    <div role="tabpanel" class="tab-pane" id="api">
         <?php include( plugin_dir_path( __FILE__ ) . '/settings/api.php');?>
     </div>
     <div role="tabpanel" class="tab-pane" id="support">

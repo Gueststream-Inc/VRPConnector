@@ -14,5 +14,13 @@
                 $('form[name=vrpAPISettings]').submit();
             }
         });
+        $('a[data-theme-selection]').click(function(){
+            var that = $(this),
+                form = $('form[name=vrpThemeSelection]'),
+                selectedTheme = that.data('theme-selection');
+
+            $('input[name=vrpTheme]').val(selectedTheme);
+            form.submit();
+        });
     });
 }(jQuery, window));
