@@ -37,7 +37,9 @@
         <br />
         API Key: <strong><?= esc_attr(get_option('vrpAPI')); ?></strong>
         <hr />
-        <form method="post" name="vrpAPISettings">
+        <form method="post"
+              action="<?=admin_url('options-general.php?page=VRPConnector&vrpUpdateSection=updateVRPAPISettings') ;?>"
+              name="vrpAPISettings">
             <div class="form-group">
                 <select autocomplete="off" class="form-control" name="vrpPluginMode">
                     <option>Select your operating mode</option>

@@ -127,7 +127,6 @@ class VRPConnector
     {
         $plugin_theme_Folder = VRP_PATH . 'themes/';
         $theme = get_option('vrpTheme');
-
         if (!$theme) {
             $theme = $this->default_theme_name;
             $this->themename = $this->default_theme_name;
@@ -1367,11 +1366,7 @@ class VRPConnector
             || ! isset( $_POST['nonceField'] )
             || ! wp_verify_nonce( $_POST['nonceField'], $_GET['vrpUpdateSection'] )
         ) {
-            $this->pluginNotification = [
-                'type' => 'warning',
-                'prettyType' => 'Warning',
-                'message' => 'Your nonce token did not verify.'
-            ];
+            $this->preparePluginNotification('warning', 'Warning', 'Your none token did not verify.');
             return false;
         }
 
@@ -1381,26 +1376,16 @@ class VRPConnector
     private function processVRPThemeUpdates()
     {
         if(
-            !empty($_POST['vrpTheme'])
+            isset($_POST['vrpTheme'])
         ) {
             if(!in_array($_POST['vrpTheme'], array_keys($this->available_themes))) {
-
-                $this->pluginNotification = [
-                    'type' => 'danger',
-                    'prettyType' => 'Error',
-                    'message' => 'The theme you\'ve selected is not available!'
-                ];
-
+                $this->preparePluginNotification('danger', 'Error', 'The theme you\'ve selected is not available!');
                 return false;
             }
 
-            update_option('vrpTheme', trim($_POST['vrpTheme']));
-            $this->pluginNotification = [
-                'type' => 'success',
-                'prettyType' => 'Success',
-                'message' => 'Your settings have been updated!'
-            ];
-
+            update_option('vrpTheme', $_POST['vrpTheme']);
+            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
+            $this->themename = $_POST['vrpTheme'];
             return true;
         }
 
@@ -1410,22 +1395,28 @@ class VRPConnector
     private function processVRPAPIUpdates()
     {
         if(
-            !empty($_POST['vrpAPI']) && trim($_POST['vrpAPI']) !== ""
-            && !empty($_POST['vrpPluginMode'])
+            isset($_POST['vrpAPI']) && isset($_POST['vrpPluginMode'])
         ) {
 
             update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
             update_option('vrpAPI', trim($_POST['vrpAPI']));
-
-            $this->pluginNotification = [
-                'type' => 'success',
-                'prettyType' => 'Success',
-                'message' => 'Your settings have been updated!'
-            ];
+            $this->apiKey = trim($_POST['vrpAPI']);
+            $this->preparePluginNotification('success', 'Success', 'Your settings have been updated!');
 
             return true;
         }
         return false;
+    }
+
+    private function preparePluginNotification($type, $prettyType, $message)
+    {
+
+        return $this->pluginNotification = [
+            'type' => $type,
+            'prettyType' => $prettyType,
+            'message' => $message
+        ];
+
     }
 
     /**
@@ -1437,6 +1428,7 @@ class VRPConnector
             $this->processVRPAPIUpdates();
             $this->processVRPThemeUpdates();
         }
+
         wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
         wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
         wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
