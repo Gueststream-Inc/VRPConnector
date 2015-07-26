@@ -10,14 +10,16 @@ class VRPShortCodes
 {
     private $themes;
     private $api;
+    private $pages;
     /**
      * Class Construct
      */
-    public function __construct($api, $themes)
+    public function __construct($api, $themes, $pages)
     {
 
         $this->api = $api;
         $this->themes = $themes;
+        $this->pages = $pages;
         // Shortcodes
         add_shortcode("vrpUnits", [$this, "vrpUnits"]);
         add_shortcode("vrpSearch", [$this, "vrpSearch"]);
@@ -160,11 +162,11 @@ class VRPShortCodes
     {
         $_GET['search'] = $arr;
         $_GET['search']['showall'] = 1;
-        $data = $this->search();
+        $data = $this->pages->search();
         $data = json_decode($data);
 
         if ($data->count > 0) {
-            $data = $this->prepareSearchResults($data);
+            $data = $this->pages->prepareSearchResults($data);
         }
 
         if (isset($data->type)) {

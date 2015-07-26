@@ -28,12 +28,13 @@ class VRPConnector
     public function __construct()
     {
         $this->api = new VRPApi;
-        $this->themes = new VRPThemes;
-        $this->shortCodes = new VRPShortCodes($this->api, $this->themes);
-        $this->pages = new VRPPages($this->api, $this->themes);
+        $this->api->setAPIKey(get_option('vrpAPI'));
         if(!$this->api->available) {
             $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
         }
+        $this->themes = new VRPThemes;
+        $this->pages = new VRPPages($this->api, $this->themes);
+        $this->shortCodes = new VRPShortCodes($this->api, $this->themes, $this->pages);
         $this->initializeActions();
         //Prepare theme...
         $this->themes->set(get_option('vrpTheme'));
@@ -426,7 +427,6 @@ class VRPConnector
             $this->processVRPAPIUpdates();
             $this->processVRPThemeUpdates();
         }
-
         wp_enqueue_script('vrp-bootstrap-js', plugins_url('vrpconnector/resources/bower/bootstrap/dist/js/bootstrap.min.js'), false, null, false);
         wp_enqueue_script('vrp-bootstrap-fix', plugins_url('vrpconnector/resources/js/bootstrap-fix.js'), false, null, false);
         wp_enqueue_script('vrp-settings-js', plugins_url('vrpconnector/resources/js/settings.js'), false, null, false);
@@ -467,12 +467,14 @@ class VRPConnector
         if(
             isset($_POST['vrpAPI']) && isset($_POST['vrpPluginMode'])
         ) {
-
             update_option('vrpPluginMode', trim($_POST['vrpPluginMode']));
             update_option('vrpAPI', trim($_POST['vrpAPI']));
             $this->api->setAPIKey(trim($_POST['vrpAPI']));
-            $this->setPluginNotification('success', 'Success', 'Your settings have been updated!');
-
+            if(!$this->api->available) {
+                $this->setPluginNotification('warning', 'Warning', 'To connect to the VRPc API, please provide a valid production key.');
+            } else {
+                $this->setPluginNotification('success', 'Success', 'Your settings have been updated!');
+            }
             return true;
         }
         return false;

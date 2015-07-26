@@ -13,28 +13,22 @@ class VRPApi
     public $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
     public $debug = [];                       // Container for debug data
 
-    /**
-     * Class Construct
-     */
-    public function __construct()
-    {
-        $this->apiKey = get_option('vrpAPI');
-
-        if ($this->apiKey !== '') {
-            $apiAvailable = (json_decode($this->call("testAPI"))->Status === 'Online' ? true : false);
-            $this->available = $apiAvailable;
-            return $this->available;
-        }
-
-        $this->available = false;
-
-        return false;
-    }
-
     public function setAPIKey($apiKey)
     {
         $this->apiKey = $apiKey;
-        $this->available = (json_decode($this->call("testAPI"))->Status === 'Online' ? true : false);
+
+        if($this->apiKey !== '') {
+//            var_dump($this->apiKey);
+            $res = json_decode($this->call("testAPI"));
+//            var_dump($this->apiURL . $this->apiKey . "/" . "testAPI");
+//            var_dump($res);
+            $this->available = ($res->Status === 'Online' ? true : false);
+//            var_dump($this->available);
+        } else {
+            $this->available = false;
+        }
+
+        return $this->available;
     }
 
     /* VRPConnector Plugin API Call methods
@@ -52,9 +46,6 @@ class VRPApi
      */
     public function call($call, $params = [])
     {
-        echo "<PRE>";
-        print_r($this->apiURL . $this->apiKey . "/" . $call); echo "<BR/>";
-        echo "</PRE>";
         $cache_key = md5($call . json_encode($params));
         $results = wp_cache_get($cache_key, 'vrp');
         if ( $results == false ) {
@@ -68,7 +59,6 @@ class VRPApi
             curl_close($ch);
             wp_cache_set($cache_key, $results, 'vrp', 300); // 5 Minutes.
         }
-
         return $results;
     }
 

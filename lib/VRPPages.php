@@ -514,7 +514,7 @@ class VRPPages
         exit;
     }
 
-    private function prepareSearchResults($data)
+    public function prepareSearchResults($data)
     {
         foreach ($data->results as $key => $unit) {
             if (strlen($unit->Thumb) == 0) {
