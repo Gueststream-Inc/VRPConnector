@@ -162,7 +162,7 @@ jQuery(document).ready(function(){
             }
         }
     });
-
+    console.log(url_paths);
     var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
         minDate: 2,
         showOn: "both",
