@@ -162,7 +162,7 @@ jQuery(document).ready(function(){
             }
         }
     });
-    console.log(url_paths);
+
     var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
         minDate: 2,
         showOn: "both",
@@ -334,7 +334,7 @@ jQuery(document).ready(function(){
         jQuery(".badfields").removeClass("badfields");
         jQuery("#comments").val(jQuery("#comments").val());
         jQuery.post("/?vrpjax=1&act=processbooking",jQuery(this).serialize(),function(data){
-            //console.log(data);
+
             var obj=jQuery.parseJSON(data);
             //alert(obj.Bad);
             if (obj.Bad.length != 0){
@@ -406,7 +406,7 @@ jQuery(document).ready(function(){
 
     if(jQuery('.vrp-favorite-button').length) {
         jQuery.getJSON('/vrp/favorites/json').done(function (data) {
-            //console.log(data);
+
             jQuery('.vrp-favorite-button').each(function () {
                 var fav_button = jQuery(this);
                 var unit_id = fav_button.data('unit');
@@ -459,7 +459,7 @@ function checkavailability(){
     jQuery("#loadingicons").show();
     jQuery.get("/?vrpjax=1&act=checkavailability&par=1",jQuery("#bookingform").serialize(),function(data){
         var obj=jQuery.parseJSON(data);
-        //console.log(obj);
+
         if (!obj.Error){
             jQuery("#loadingicons").hide();
             //jQuery("#totalcost").html(obj.TotalWithoutInsurance);
@@ -480,7 +480,7 @@ function checkavailability(){
 }
 function ratebreakdown(obj) {
     var tbl = jQuery("#ratebreakdown");
-    //console.log(obj);
+
     tbl.empty();
     for (var i in obj.Charges) {
         var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount.toFixed(2) + "</td></tr>";
