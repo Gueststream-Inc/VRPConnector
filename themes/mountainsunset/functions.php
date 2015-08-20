@@ -522,3 +522,15 @@ function vrpCalendar($r, $totalMonths = 3) {
 
     return "" . $ret . $theKey;
 }
+
+function vrpUnitSelect() {
+    ob_start();
+    if (file_exists(get_stylesheet_directory() . "/vrp/vrpUnitSelect.php")) {
+        include STYLESHEETPATH . "/vrp/vrpUnitSelect.php";
+    } else {
+        include plugin_dir_path( __FILE__ ) . '/vrpUnitSelect.php';
+    }
+    return ob_get_clean();
+}
+
+add_shortcode("vrpUnitSelect","vrpUnitSelect");
