@@ -371,6 +371,13 @@ jQuery(document).ready(function(){
 
     jQuery(".dpinquiry").datepicker();
 
+    jQuery("#selectCondo").change(function(){
+        var theval=jQuery(this).val();
+        if (theval != ''){
+        window.location="/vrp/unit/" + theval;
+        }
+    });
+
     jQuery(".vrp-pagination li a,.dobutton").button();
 
     // Unit Compare
