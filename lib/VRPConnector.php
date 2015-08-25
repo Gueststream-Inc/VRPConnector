@@ -1347,13 +1347,16 @@ class VRPConnector
     public function registerSettings()
     {
         register_setting('VRPConnector', 'vrpAPI');
+        register_setting('VRPConnector', 'vrpUser');
+        register_setting('VRPConnector', 'vrpPass');
         register_setting('VRPConnector', 'vrpTheme');
         add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
         add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
-        add_settings_section('vrpTheme', 'VRP Theme Selection', [$this, 'vrpThemeSettingTitleCallback'],
-            'VRPConnector');
-        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'vrpThemeSettingCallback'], 'VRPConnector',
-            'vrpTheme');
+        add_settings_section('vrpLoginCreds', 'VRP Login', [$this, 'vrpLoginSettingTitleCallback'], 'VRPConnector');
+        add_settings_field('vrpUser', 'VRP Username', [$this, 'vrpUserCallback'], 'VRPConnector', 'vrpLoginCreds');
+        add_settings_field('vrpPass', 'VRP Password', [$this, 'vrpPasswordCallback'], 'VRPConnector', 'vrpLoginCreds');
+        add_settings_section('vrpTheme', 'VRP Theme Selection', [$this, 'vrpThemeSettingTitleCallback'], 'VRPConnector');
+        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'vrpThemeSettingCallback'], 'VRPConnector', 'vrpTheme');
     }
 
     public function apiKeySettingTitleCallback()
@@ -1368,9 +1371,26 @@ class VRPConnector
         echo '<input type="text" name="vrpAPI" value="' . esc_attr(get_option('vrpAPI')) . '" style="width:400px;"/>';
     }
 
+    public function vrpLoginSettingTitleCallback()
+    {
+    }
+
+    public function vrpUserCallback()
+    {
+        echo '<input type="text" name="vrpUser" value="' . esc_attr(get_option('vrpUser')) .'" style="width:400px;"/>';
+    }
+
+    public function vrpPasswordSettingTitleCallback()
+    {
+    }
+
+    public function vrpPasswordCallback()
+    {
+        echo '<input type="password" name="vrpPass" value="' . esc_attr(get_option('vrpPass')) . '" style="width:400px;"/>';
+    }
+
     public function vrpThemeSettingTitleCallback()
     {
-
     }
 
     public function vrpThemeSettingCallback()
