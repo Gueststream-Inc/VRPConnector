@@ -26,7 +26,7 @@ HomeAway (HASP), ISILink, Entech, V12, First Resort Software (FRS), Property Plu
 ### Does the VRP Connector require an account with Gueststream.net? ###
 
 Yes, Gueststream, Inc. provides the back-end service of interfacing with many property management software APIs 
-that allows you to seamlessly connect your website to your property management software data.
+that allows you to seamlessly connect your website to your property management software data.  The Vacation Rental Platform is a Software as a Service (SaaS) that requires a monthly subscription.  
 
 ## Shortcodes, Theming and more... ##
 can be found in the wiki attached to this repo.
