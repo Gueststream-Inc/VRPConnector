@@ -812,12 +812,20 @@ class VRPConnector
     /**
      * Get available search options.
      *
-     * Example: minbeds, maxbeds, minbaths, maxbaths, minsleeps, maxsleeps, types (hotel, villa), cities, areas, views, attributes, locations
+     * With no arguments, will show search options against all active units.
+     *
+     * With filters argument it will pull back search options based on units that meet the filtered requirements
+     * $filters = ['City' => 'Denver','View' => 'Mountains']
      *
      * @return mixed
      */
-    public function searchoptions()
+    public function searchoptions(array $filters = null)
     {
+        if(is_array($filters)) {
+            $queryString = http_build_query(['filters' => $filters]);
+            return json_decode($this->call("searchoptions",$queryString));
+        }
+
         return json_decode($this->call("searchoptions"));
     }
 
