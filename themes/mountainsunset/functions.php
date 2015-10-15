@@ -332,7 +332,6 @@ function vrpsortlinks($unit)
     $show = ( !empty($_GET['show']) ? esc_attr($_GET['show']) : 10 );
     foreach ($sortoptions as $s) {
 
-        $s = $show;
         $pageurl = esc_attr($pageurl);
         $order = esc_attr($order);
 
