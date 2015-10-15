@@ -815,7 +815,7 @@ class VRPConnector
      * With no arguments, will show search options against all active units.
      *
      * With filters argument it will pull back search options based on units that meet the filtered requirements
-     * $filters = ['City' => 'Denver','View' => 'Ocean']
+     * $filters = ['City' => 'Denver','View' => 'Mountains']
      *
      * @return mixed
      */
