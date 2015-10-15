@@ -48,6 +48,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.0.6 =
+* Search options now supports filters.
+
 = 1.0.5 =
 * Fixed Parse Error for PHP 5.2 and enhanced PHP version notice.
 
