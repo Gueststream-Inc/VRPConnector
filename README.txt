@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.2.2
+Tested up to: 4.3.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -48,6 +48,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.0.6 =
+* Search options now support filters.
+
 = 1.0.5 =
 * Fixed Parse Error for PHP 5.2 and enhanced PHP version notice.
 

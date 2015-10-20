@@ -183,6 +183,8 @@ jQuery(document).ready(function(){
             }
         }
     });
+    
+    jQuery('.hasDatepicker').attr("autocomplete", "off").attr("readonly", "readonly");
 
     if (jQuery("#featuredimg").length > 0){
         jQuery.getJSON('/?featuredunit=1', function(data) {
