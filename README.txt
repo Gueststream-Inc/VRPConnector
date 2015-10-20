@@ -49,6 +49,9 @@ you to seamlessly connect your website to your property management software data
 
 == Changelog ==
 = 1.0.6 =
+* Automatically login to gueststream.net from settings page
+
+= 1.0.6 =
 * Search options now support filters.
 
 = 1.0.5 =
