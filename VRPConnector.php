@@ -4,7 +4,7 @@
  * Plugin URI: http://www.gueststream.com/apps-and-tools/vrpconnector/
  * Description: Vacation Rental Platform Connector.
  * Author: Gueststream
- * Version: 1.0.6
+ * Version: 1.0.7
  * Author URI: http://www.gueststream.com/
  */
 
