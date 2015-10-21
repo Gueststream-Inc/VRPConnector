@@ -294,27 +294,22 @@ function vrp_pagination2($totalpages, $page = 1)
 
 function vrpsortlinks($unit)
 {
+    $queryVars = ['search' => $_GET['search']];
+    $order = "low";
+    $sort = "";
 
-    if (isset($_GET['search']['order'])) {
+    if(isset($queryVars['search']['sort'])) {
+        $sort = $_GET['search']['sort'];
+        unset($queryVars['search']['sort']);
+    }
+
+    if(isset($queryVars['search']['order'])) {
         $order = $_GET['search']['order'];
-    } else {
-        $order = "low";
+        unset($queryVars['search']['order']);
     }
 
-    $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
-        if ($key == 'sort') {
-            continue;
-        }
-        if ($key == 'order') {
-            continue;
-        }
-        $fields_string .= 'search[' . $key . ']=' . $value . '&';
-    }
-    rtrim($fields_string, '&');
-    $pageurl = $fields_string;
 
-
+    $pageurl = http_build_query($queryVars);
     $sortoptions = array("Bedrooms");
 
     if (isset($unit->Rate)) {
@@ -324,16 +319,8 @@ function vrpsortlinks($unit)
     echo "<select class='vrpsorter'>";
     echo "<option value=''>Sort By</option>";
 
-    if (isset($_GET['search']['sort'])) {
-        $sort = $_GET['search']['sort'];
-    } else {
-        $sort = "";
-    }
-    $show = ( !empty($_GET['show']) ? esc_attr($_GET['show']) : 10 );
+    $show = (!empty($_GET['show']) ? esc_attr($_GET['show']) : 10 );
     foreach ($sortoptions as $s) {
-
-        $pageurl = esc_attr($pageurl);
-        $order = esc_attr($order);
 
         if ($sort == $s) {
             if ($order == "low") {
@@ -357,6 +344,14 @@ function vrpsortlinks($unit)
 
 function vrpsortlinks2($unit)
 {
+    $queryVars = ['search' => $_GET['search']];
+    if(isset($queryVars['search']['sort'])) {
+        unset($queryVars['search']['sort']);
+    }
+
+    if(isset($queryVars['search']['order'])) {
+        unset($queryVars['search']['order']);
+    }
 
     if (isset($_GET['search']['order'])) {
         $order = $_GET['search']['order'];
@@ -364,30 +359,14 @@ function vrpsortlinks2($unit)
         $order = "low";
     }
 
-    $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
-        if ($key == 'sort') {
-            continue;
-        }
-        if ($key == 'order') {
-            continue;
-        }
-        $fields_string .= 'search[' . $key . ']=' . $value . '&';
-    }
-    rtrim($fields_string, '&');
-    $pageurl = $fields_string;
-    if (isset($_GET['beds'])) {
-        $pageurl .= "beds=" . $_GET['beds'] . "&";
-    }
+    $pageurl = http_build_query($queryVars);
 
-    if (isset($_GET['minbed'])) {
-        $pageurl .= "minbed=" . $_GET['minbed'] . "&maxbed=" . $_GET['maxbed'] . "&";
-    }
     $sortoptions = array("Bedrooms" => "Bedrooms", "minrate" => "Minimum Rate", "maxrate" => "Maximum Rate");
 
     if (isset($unit->Rate)) {
-        $sortoptions[] = "Rate";
+        array_push($sortoptions,"Rate");
     }
+
     echo "<select class='vrpsorter ui-widget ui-state-default' style='font-size:11px;'>";
     if (isset($_GET['search']['sort'])) {
         $sort = $_GET['search']['sort'];
@@ -399,6 +378,7 @@ function vrpsortlinks2($unit)
     } else {
         $show = 10;
     }
+
     foreach ($sortoptions as $s => $val) {
 
         if ($sort == $s) {
@@ -423,13 +403,7 @@ function vrpsortlinks2($unit)
 
 function vrp_resultsperpage()
 {
-    $fields_string = "";
-    foreach ($_GET['search'] as $key => $value) {
-        $fields_string .= 'search[' . $key . ']=' . $value . '&';
-    }
-
-    $fields_string = rtrim($fields_string, '&');
-    $pageurl = $fields_string;
+    $pageurl = http_build_query(['search' => $_GET['search']]);
 
     if (isset($_GET['show'])) {
         $show = (int) $_GET['show'];

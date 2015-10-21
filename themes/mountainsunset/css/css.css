@@ -6,6 +6,10 @@
     border:none !important;
 }
 
+ul.advancedlist {
+    list-style-type: none;
+}
+
 /**********************************
  BOOTSTRAP GRID & TYPOGRPAHY RESET
  **********************************
@@ -125,7 +129,6 @@
 #vrp optgroup,
 #vrp select,
 #vrp textarea {
-    color: inherit;
     font: inherit;
     margin: 0;
 }
