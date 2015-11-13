@@ -1583,33 +1583,6 @@ animated buttons - animate the text inside prev and next buttons
     transform: translateX(-50%) rotate(180deg) translateY(50px);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /**********************************
  ********** ITEM STYLING **********
  **********************************/
@@ -1686,9 +1659,7 @@ animated buttons - animate the text inside prev and next buttons
     background:#BDBDBD;
 }
 
-#vrp .vrp-vrp-favorite-button {
-    display: none;
-}
+
 
 /**********************************
  CALENDAR STYLING
@@ -1741,10 +1712,6 @@ animated buttons - animate the text inside prev and next buttons
         -moz-box-shadow: inset 0px 0px 0px 2px rgba(225,174,127,1);
         box-shadow: inset 0px 0px 0px 2px rgba(225,174,127,1);
     }
-
-
-
-
 
 /**********************************
  OVERLAY & MAP STYLING
@@ -1810,4 +1777,41 @@ animated buttons - animate the text inside prev and next buttons
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
 
+}
+
+#vrp .ui-widget-content {
+    border: none;
+}
+
+/* Unit Page Review List */
+
+#vrp .title-row {
+    margin: 3em 0 0 -.5em;
+}
+
+#vrp .review-title {
+    font-size: 1.1em;
+    font-weight: bold;
+}
+
+#vrp .review-author {
+    font-size:.87em;
+}
+
+#vrp .manager-response {
+    border: 1px solid rgba(204,204,204,0.2);
+    background-color: rgba(204,204,204,0.1);
+    padding: 1em 3em 1em 1em;
+    margin: 1em 0 1em 6em;
+}
+
+#vrp .rating-row {
+    border: 1px solid rgba(221,221,221,0.4);
+    background-color: rgba(238,238,238,0.4);
+    margin: .3em 0 .3em 0;
+    padding-left: 10px;
+}
+
+#vrp .rating-row i {
+    color: gold;
 }

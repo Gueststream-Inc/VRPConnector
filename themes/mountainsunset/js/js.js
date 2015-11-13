@@ -84,7 +84,7 @@
 jQuery(document).ready(function(){
 
     // Unit Page Tabs
-    unitTabs = jQuery("#tabs").tabs();
+    unitTabs = jQuery("#vrp-unit-tabs").tabs();
 
     // Allow outside links to open tabs
     jQuery('.open-tab').click(function (event) {

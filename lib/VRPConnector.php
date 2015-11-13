@@ -283,8 +283,7 @@ class VRPConnector
                 } else {
                     $content = $this->loadTheme("unit", $data);
                 }
-
-
+                
                 break;
 
             case "complex": // If Complex Page.
