@@ -66,7 +66,7 @@
 
                         </div>
                     </div>
-                    <div class="vrp-thumbnail text-center" style="background-image:url(<?php echo $unit->Thumb; ?>);">
+                    <div class="vrp-thumbnail text-center" style="background-image:url('<?php echo $unit->Thumb; ?>');">
                         <div class="vrp-actions">
                             <a href="#" data-unit="<?php echo $unit->id; ?>" class="vrp-favorite-button vrp-btn purple text-center">
                                 <i class="fa fa-fw fa-lg fa-heart"></i>
