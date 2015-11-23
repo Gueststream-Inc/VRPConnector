@@ -100,6 +100,10 @@ jQuery(document).ready(function(){
         jQuery("#photo "+showImage).show();
     });
 
+    //
+    //  Inquiries
+    //
+
     var inquireopen=false;
 
     jQuery("#inline").click(function(){
@@ -128,6 +132,36 @@ jQuery(document).ready(function(){
                 }
                 jQuery("#iqbtn").removeAttr("disabled");
             }
+        });
+        return false;
+    });
+
+    //
+    //  Reviews
+    //
+
+    jQuery('#vrp-show-review-form').on('click', function() {
+        jQuery(this).hide();
+        jQuery('#vrp-add-review-form').show();
+    });
+
+    jQuery('#review_check_in').datepicker({});
+
+    jQuery("#vrp-add-review-form").submit(function(){
+        jQuery("#vrp-btn-add-review").attr("disabled","disabled");
+        jQuery.post("/?vrpjax=1&act=addReview",jQuery(this).serialize(),function(response) {
+            var data=jQuery.parseJSON(response);
+            if(data.success == true) {
+                jQuery("#vrp-add-review-success").show();
+                jQuery("#vrp-add-review-form").hide();
+            }
+            if(data.success == false) {
+                data.errors.forEach(function (element, index, array) {
+                    alert(element);
+                });
+                jQuery("#vrp-btn-add-review").attr("disabled",false);
+            }
+            console.log(data);
         });
         return false;
     });

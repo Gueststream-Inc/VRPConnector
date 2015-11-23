@@ -283,6 +283,77 @@ if (!isset($_SESSION['depart'])) {
                     </div>
                 <?php endforeach; ?>
             <?php } ?>
+
+            <button id="vrp-show-review-form">Review This Property</button>
+
+            <p id="vrp-add-review-success" style="display:none;">Thank you for submitting your review.  It will be processed shortly!</p>
+
+            <form id="vrp-add-review-form" style="display:none;">
+                <input type="hidden" name="source" value="website">
+                <input type="hidden" name="prop_id" value="<?= $data->id; ?>">
+
+                <div class="flex_column av_one_third first">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_title">Title <abbr class="required" title="required">*</abbr></label>
+                        <input id="review_title" name="title" class="text_input is_empty" type="text" data-mini="true" required="" pattern="[a-zA-Z0-9_- ]+" style="">
+                    </p>
+                </div>
+                <div class="flex_column av_one_third">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_display_name">Guests Name <abbr class="required" title="required">*</abbr></label>
+                        <input id="review_display_name" name="name" class="text_input is_empty" type="text" data-mini="true" required="" pattern="[a-zA-Z0-9_- ]+">
+                    </p>
+                </div>
+
+                <div class="flex_column av_one_full">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_guest_email">Email Address <abbr class="required" title="required">*</abbr></label>
+                        <input id="review_guest_email" name="email" class="text_input is_empty" type="email" data-mini="true" required="" style="">
+                    </p>
+                </div>
+
+                <div class="flex_column av_one_third first">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_check_in">Check In Date <abbr class="required" title="required">*</abbr></label>
+                        <input id="review_check_in" name="checkin_date" data-mini="true" type="text" required="" pattern="^(((0?[1-9]|1[012])/(0?[1-9]|1\d|2[0-8])|(0?[13456789]|1[012])/(29|30)|(0?[13578]|1[02])/31)/(19|[2-9]\d)\d{2}|0?2/29/((19|[2-9]\d)(0[48]|[2468][048]|[13579][26])|(([2468][048]|[3579][26])00)))$">
+                    </p>
+                </div>
+                <div class="flex_column av_one_third">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_nights">Nights Stayed</label>
+                        <input id="review_nights" name="nights" data-mini="true" type="text">
+                    </p>
+                </div>
+
+                <div class="flex_column av_one_full">
+                    <p class="first_form form_element form_fullwidth">
+                        <label for="review_rating">Your Rating</label>
+                        <select id="review_rating" name="rating">
+                            <option value="0" selected="selected">Select Rating</option>
+                            <option value="5">5</option>
+                            <option value="4">4</option>
+                            <option value="3">3</option>
+                            <option value="2">2</option>
+                            <option value="1">1</option>
+                        </select>
+                    </p>
+                </div>
+
+                <p class="first_form form_element form_fullwidth" style="clear: both; margin-top: 1em;">
+                    <label for="review_review" class="textare_label">Message <abbr class="required" title="required">*</abbr></label>
+                    <textarea id="review_review" name="review" class="text_area is_empty" cols="40" rows="7" data-mini="true" required="" pattern="[a-zA-Z]+"></textarea>
+                    <small class="error">Review is required</small>
+                </p>
+
+                <p class="form_element">
+                    <input id="vrp-btn-add-review"
+                           type="submit"
+                           value="Submit"
+                           class="button"
+                           data-sending-label="Sending">
+                </p>
+
+            </form>
         </div>
 
     </div>

@@ -9,7 +9,7 @@ namespace Gueststream;
 class VRPConnector
 {
     private $apiKey;                                // Gueststream.net API Key
-    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
+    private $apiURL = "http://10.2.2.2/api/v1/";     // Gueststream.net API Endpoint
     private $allowCache = true;                     // @todo - Remove this.
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
@@ -39,31 +39,6 @@ class VRPConnector
         $this->setTheme();
         $this->actions();
         $this->themeActions();
-    }
-
-    /**
-     * Class Destruct w/basic debugging.
-     */
-    public function __destruct()
-    {
-        if (!isset($_GET['showdebug'])) {
-            return false;
-        }
-
-        if (!$this->is_vrp_page()) {
-            return false;
-        }
-
-        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
-        echo "GET VARIABLES:<br><pre>";
-        print_r($_GET);
-        echo "</pre>";
-        echo "Debug VARIABLES:<br><pre>";
-        print_r($this->debug);
-        echo "</pre>";
-        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
-        echo "</div>";
     }
 
     /**
@@ -156,6 +131,7 @@ class VRPConnector
         if (!isset($query->query_vars['action'])) {
             return $query;
         }
+
         $query->is_page = true;
         $query->is_home = false;
 
@@ -200,7 +176,6 @@ class VRPConnector
         add_rewrite_tag('%action%', '([^&]+)');
         add_rewrite_tag('%slug%', '([^&]+)');
         add_rewrite_rule('^vrp/([^/]*)/([^/]*)/?', 'index.php?action=$matches[1]&slug=$matches[2]', 'top');
-
     }
 
     function flush_rewrites($old, $new)
@@ -601,14 +576,17 @@ class VRPConnector
 
     public function ajax()
     {
-        if (!isset($_GET['vrpjax'])) {
+        if (!isset($_GET['vrpjax']) || !isset($_GET['act'])) {
             return false;
         }
+
         $act = $_GET['act'];
-        $par = $_GET['par'];
+        $par = (isset($_GET['par'])) ? $_GET['par'] : false;
+
         if (method_exists($this, $act)) {
             $this->$act($par);
         }
+
         exit;
     }
 
@@ -856,23 +834,6 @@ class VRPConnector
         return json_decode($this->call("allspecials"));
     }
 
-    /**
-     * Get flipkey reviews for a given unit.
-     *
-     * @ajax
-     */
-    public function getflipkey()
-    {
-        $id = $_GET['slug'];
-        $call = "getflipkey/?unit_id=$id";
-        $data = $this->customcall($call);
-        echo "<!DOCTYPE html><html>";
-        echo "<body>";
-        echo wp_kses_post($data);
-        echo "</body></html>";
-        exit;
-    }
-
     //
     //  VRP Favorites/Compare
     //
@@ -995,6 +956,36 @@ class VRPConnector
         $this->favorites = [];
 
         return;
+    }
+
+    //
+    //  Reviews
+    //
+
+    private function addReview()
+    {
+        $review = $_POST;
+        $params = [];
+        $params['review'] = json_encode($review);
+        $results = $this->call('addReview', $params);
+        echo $results;
+    }
+
+    /**
+     * Get flipkey reviews for a given unit.
+     *
+     * @ajax
+     */
+    public function getflipkey()
+    {
+        $id = $_GET['slug'];
+        $call = "getflipkey/?unit_id=$id";
+        $data = $this->customcall($call);
+        echo "<!DOCTYPE html><html>";
+        echo "<body>";
+        echo wp_kses_post($data);
+        echo "</body></html>";
+        exit;
     }
 
     //
