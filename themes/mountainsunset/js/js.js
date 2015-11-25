@@ -460,6 +460,7 @@ function checkavailability(){
     jQuery("#booklink").hide();
     jQuery("#loadingicons").show();
     jQuery.get("/?vrpjax=1&act=checkavailability&par=1",jQuery("#bookingform").serialize(),function(data){
+
         var obj=jQuery.parseJSON(data);
 
         if (!obj.Error){
@@ -482,7 +483,7 @@ function checkavailability(){
 }
 function ratebreakdown(obj) {
     var tbl = jQuery("#ratebreakdown");
-
+    console.log(obj.TotalCost);
     tbl.empty();
     for (var i in obj.Charges) {
         var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount.toFixed(2) + "</td></tr>";
@@ -493,6 +494,7 @@ function ratebreakdown(obj) {
         tbl.append(row);
     }
     var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
+    var total = 0;
     var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost.toFixed(2) + "</b></td></tr>";
     var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday.toFixed(2) + "</b></td></tr>";
 

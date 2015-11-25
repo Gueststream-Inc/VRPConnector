@@ -268,7 +268,7 @@ if (!isset($_SESSION['depart'])) {
     }
 
     function codeAddress() {
-        var query = "<?php echo esc_js( $data->Address ) . " " . esc_js( $data->Address2 ) . " " . esc_js( $data->City ) . " " . esc_js( $data->State ) . " " . esc_js( $data->PostalCode ); ?>";
+        var query = "<?php echo esc_js( $data->Address1 ) . " " . esc_js( $data->Address2 ) . " " . esc_js( $data->City ) . " " . esc_js( $data->State ) . " " . esc_js( $data->PostalCode ); ?>";
         var address = query;
         geocoder.geocode({'address': address}, function (results, status) {
                 if (status == google.maps.GeocoderStatus.OK) {

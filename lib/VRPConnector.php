@@ -9,7 +9,7 @@ namespace Gueststream;
 class VRPConnector
 {
     private $apiKey;                                // Gueststream.net API Key
-    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
+    private $apiURL = "http://10.2.2.2/api/v1/";     // Gueststream.net API Endpoint
     private $allowCache = true;                     // @todo - Remove this.
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
@@ -284,7 +284,6 @@ class VRPConnector
                     $content = $this->loadTheme("unit", $data);
                 }
 
-
                 break;
 
             case "complex": // If Complex Page.
@@ -429,6 +428,14 @@ class VRPConnector
                 $pagetitle = "";
                 break;
         }
+
+        add_filter('template_redirect',function () {
+            include get_stylesheet_directory() . "/page.php";
+            exit;
+        });
+        add_filter('the_content',function () use ($content) {
+            return $content;
+        });
 
         return [new DummyResult(0, $pagetitle, $content, $pagedescription)];
     }
