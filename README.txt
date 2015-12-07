@@ -51,6 +51,7 @@ you to seamlessly connect your website to your property management software data
 = 1.0.8 =
 * Fixed unit permalink on Featured Unit shortcode templates.
 * Added single quotes to unit thumbnail photos in the result listing to allow URLs with spaces to function properly.
+* Added support for the 'Unit Page Views' module.
 
 = 1.0.7 =
 * Automatically login to gueststream.net from settings page

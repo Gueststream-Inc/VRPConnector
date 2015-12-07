@@ -56,7 +56,7 @@ if (!isset($_SESSION['depart'])) {
                                      src="<?php echo $v->url; ?>"
                                      style="width:100%; <?php echo esc_attr($style); ?>"/>
                                 <?php
-                                $count ++;
+                                $count++;
                             }
                             ?>
                         </div>
@@ -196,7 +196,7 @@ if (!isset($_SESSION['depart'])) {
 
                     <div id="rates">
                         <?php
-                        $r = array();
+                        $r = [];
                         foreach ($data->rates as $v) {
                             $start = date("m/d/Y", strtotime($v->start_date));
                             $end = date("m/d/Y", strtotime($v->end_date));
@@ -260,7 +260,7 @@ if (!isset($_SESSION['depart'])) {
             center: new google.maps.LatLng(<?php echo esc_js( $data->lat ); ?>, <?php echo esc_js( $data->long ); ?>),
             <?php } ?>
             mapTypeId: google.maps.MapTypeId.ROADMAP
-        }
+        };
         map = new google.maps.Map(document.getElementById("map"), myOptions);
         <?php if ( strlen( $data->lat ) == 0 || strlen( $data->long ) == 0 ) { ?>
         codeAddress();
@@ -274,22 +274,27 @@ if (!isset($_SESSION['depart'])) {
                 if (status == google.maps.GeocoderStatus.OK) {
                     map.setCenter(results[0].geometry.location);
                     var marker = new google.maps.Marker({
-                                map: map,
-                                position: results[0].geometry.location,
-                                //icon: image
-                            });
+                        map: map,
+                        position: results[0].geometry.location,
+                        //icon: image
+                    });
                 } else {
                     //alert("Geocode was not successful for the following reason: " + status);
                 }
             }
         )
         ;
+
     }
+
     jQuery(document).ready(function () {
         jQuery("#gmaplink").on('click', function () {
             initialize();
         });
     });
 
+    if (<?php echo (isset($data->pageViews)) ? "true" : "false"; ?>) {
+        jQuery.get(url_paths.site_url, {vrpjax: true, act: "saveUnitPageView", par:<?php echo $data->id;?>, cache:Math.random()});
+    }
 </script>
 
