@@ -9,7 +9,7 @@ namespace Gueststream;
 class VRPConnector
 {
     private $apiKey;                                // Gueststream.net API Key
-    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
+    private $apiURL = "http://192.168.1.114/api/v1/";     // Gueststream.net API Endpoint
     private $allowCache = true;                     // @todo - Remove this.
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
@@ -600,16 +600,28 @@ class VRPConnector
         return $content;
     }
 
+    /**
+     * VRP Ajax request handling
+     *
+     * @return bool
+     */
     public function ajax()
     {
-        if (!isset($_GET['vrpjax'])) {
+        if (!isset($_GET['vrpjax']) || !isset($_GET['act'])) {
             return false;
         }
+
         $act = $_GET['act'];
-        $par = $_GET['par'];
+
         if (method_exists($this, $act)) {
-            $this->$act($par);
+            if(isset($_GET['par'])) {
+                $this->$act($_GET['par']);
+                exit;
+            }
+
+            $this->$act();
         }
+
         exit;
     }
 
@@ -872,6 +884,21 @@ class VRPConnector
         echo wp_kses_post($data);
         echo "</body></html>";
         exit;
+    }
+
+    public function saveUnitPageView($unit_id = false)
+    {
+        if(!$unit_id) {
+            return false;
+        }
+
+        $params['params'] = json_encode([
+            'unit_id' => $unit_id,
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+        ]);
+
+        $this->call('customAction/unitpageviews/saveUnitPageView',$params);
+        return true;
     }
 
     //
