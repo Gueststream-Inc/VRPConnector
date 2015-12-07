@@ -9,7 +9,7 @@ namespace Gueststream;
 class VRPConnector
 {
     private $apiKey;                                // Gueststream.net API Key
-    private $apiURL = "http://192.168.1.114/api/v1/";     // Gueststream.net API Endpoint
+    private $apiURL = "https://www.gueststream.net/api/v1/";     // Gueststream.net API Endpoint
     private $allowCache = true;                     // @todo - Remove this.
     public $theme = "";                            // Full path to plugin theme folder
     public $themename = "";                        // Plugin theme name.
