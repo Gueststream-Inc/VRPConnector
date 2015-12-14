@@ -407,7 +407,7 @@ jQuery(document).ready(function(){
     });
 
     if(jQuery('.vrp-favorite-button').length) {
-        jQuery.getJSON('/vrp/favorites/json').done(function (data) {
+        jQuery.getJSON(url_paths.site_url + '/vrp/favorites/json').done(function (data) {
 
             jQuery('.vrp-favorite-button').each(function () {
                 var fav_button = jQuery(this);
@@ -431,24 +431,20 @@ jQuery(document).ready(function(){
             var unit_id = fav_button.data('unit');
             if(fav_button.data('isFavorite') == true) {
                 // Remove existing favorite
-                jQuery.get('/vrp/favorites/remove',{unit: unit_id}).done(function () {
+                jQuery.get(url_paths.site_url + '/vrp/favorites/remove',{unit: unit_id}).done(function () {
                     fav_button.html('Add to Favorites');
                     fav_button.data('isFavorite',false);
                     jQuery('#favorite_'+unit_id).hide();
                 });
             } else {
                 // Add unit to favorites.
-                jQuery.get('/vrp/favorites/add',{unit: unit_id}).done(function () {
+                jQuery.get(url_paths.site_url + '/vrp/favorites/add',{unit: unit_id}).done(function () {
                     fav_button.html('Remove from Favorites');
                     fav_button.data('isFavorite',true);
                 });
             }
         });
     }
-
-    //alert(url_paths.site_url);
-    //alert(url_paths.stylesheet_dir_url);
-    //alert(url_paths.plugin_url);
 });
 
 function checkavailability(){
