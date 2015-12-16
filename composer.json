@@ -1,6 +1,7 @@
 {
     "require": {
-	"erusev/parsedown": "dev-master"
+	"erusev/parsedown": "dev-master",
+        "eluceo/ical": "^0.9.0"
     },
     "autoload": {
 	"psr-4": { "Gueststream\\": "lib/"}

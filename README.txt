@@ -48,6 +48,10 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.0 =
+* Added iCal unit availability calendar support. /vrp/ical/unit_page_slug
+* Fixed XML site map output.
+
 = 1.0.8 =
 * Fixed unit permalink on Featured Unit shortcode templates.
 * Added single quotes to unit thumbnail photos in the result listing to allow URLs with spaces to function properly.
