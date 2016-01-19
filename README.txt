@@ -48,8 +48,18 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
-= 1.0.8 =
+= 1.1.1 =
 * Adding multiple checkbox items for Locations and Areas on default advanced search form.
+
+= 1.1.0 =
+* Added iCal unit availability calendar support. /vrp/ical/unit_page_slug
+* Fixed XML site map output.
+
+= 1.0.8 =
+* Fixed unit permalink on Featured Unit shortcode templates.
+* Added single quotes to unit thumbnail photos in the result listing to allow URLs with spaces to function properly.
+* Added support for the 'Unit Page Views' module.
+* Fixed url path bug in JS causing favorites to not work when the site is installed in a sub directory.
 
 = 1.0.7 =
 * Automatically login to gueststream.net from settings page

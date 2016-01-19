@@ -229,10 +229,10 @@ class VRPConnector
      */
     public function router($query)
     {
-
         if (!isset($query->query_vars['action'])) {
             return false;
         }
+
         if ($query->query_vars['action'] == 'xml') {
             $this->xmlexport();
         }
@@ -240,6 +240,14 @@ class VRPConnector
         if ($query->query_vars['action'] == 'flipkey') {
             $this->getflipkey();
         }
+
+        if ($query->query_vars['action'] == 'ical') {
+            if(!isset($query->query_vars['slug'])) {
+                return false;
+            }
+            $this->displayIcal($query->query_vars['slug']);
+        }
+
         add_filter('the_posts', [$this, "filterPosts"], 1, 2);
     }
 
@@ -600,16 +608,28 @@ class VRPConnector
         return $content;
     }
 
+    /**
+     * VRP Ajax request handling
+     *
+     * @return bool
+     */
     public function ajax()
     {
-        if (!isset($_GET['vrpjax'])) {
+        if (!isset($_GET['vrpjax']) || !isset($_GET['act'])) {
             return false;
         }
+
         $act = $_GET['act'];
-        $par = $_GET['par'];
+
         if (method_exists($this, $act)) {
-            $this->$act($par);
+            if(isset($_GET['par'])) {
+                $this->$act($_GET['par']);
+                exit;
+            }
+
+            $this->$act();
         }
+
         exit;
     }
 
@@ -723,14 +743,40 @@ class VRPConnector
         include "xml.php";
         $content = ob_get_contents();
         ob_end_clean();
-        echo wp_kses_post($content);
+        echo $content;
         exit;
     }
 
     public function xmlexport()
     {
         header("Content-type: text/xml");
-        echo wp_kses($this->customcall("generatexml"));
+        $this->customcall("generatexml");
+        exit;
+    }
+
+    public function displayIcal($unitSlug)
+    {
+        $unitData = json_decode(
+            $this->call("getunit/" . $unitSlug)
+        );
+
+        $vCalendar = new \Eluceo\iCal\Component\Calendar(site_url('/vrp/ical/' . $unitSlug));
+
+        foreach($unitData->avail as $bookedDate) {
+            $vEvent = new \Eluceo\iCal\Component\Event();
+            $vEvent
+                ->setDtStart(new \DateTime($bookedDate->start_date))
+                ->setDtEnd(new \DateTime($bookedDate->end_date))
+                ->setNoTime(true)
+                ->setSummary('Booked')
+            ;
+            $vCalendar->addComponent($vEvent);
+        }
+
+        header('Content-Type: text/calendar; charset=utf-8');
+        header('Content-Disposition: attachment; filename="cal.ics"');
+        echo $vCalendar->render();
+
         exit;
     }
 
@@ -788,7 +834,7 @@ class VRPConnector
 
     public function customcall($call)
     {
-        echo wp_kses($this->call("customcall/$call"));
+        echo $this->call("customcall/$call");
     }
 
     public function custompost($call)
@@ -801,7 +847,7 @@ class VRPConnector
         $search['search'] = json_encode($obj);
         $results = $this->call($call, $search);
         $this->debug['results'] = $results;
-        echo wp_kses($results);
+        echo $results;
     }
 
     public function bookSettings($propID)
@@ -872,6 +918,21 @@ class VRPConnector
         echo wp_kses_post($data);
         echo "</body></html>";
         exit;
+    }
+
+    public function saveUnitPageView($unit_id = false)
+    {
+        if(!$unit_id) {
+            return false;
+        }
+
+        $params['params'] = json_encode([
+            'unit_id' => $unit_id,
+            'ip_address' => $_SERVER['REMOTE_ADDR'],
+        ]);
+
+        $this->call('customAction/unitpageviews/saveUnitPageView',$params);
+        return true;
     }
 
     //

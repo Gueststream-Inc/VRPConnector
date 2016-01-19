@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a492b9c8955348550855e03f2e26b097",
+    "hash": "f10bbe81af84619a2b832ea19d2ddd9a",
+    "content-hash": "5750d93b90dcb523fbce9e21a1fb3021",
     "packages": [
+        {
+            "name": "eluceo/ical",
+            "version": "0.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/markuspoerschke/iCal.git",
+                "reference": "7492b9e4e0f8425192600b6c5d2cde381f8c71f1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/markuspoerschke/iCal/zipball/7492b9e4e0f8425192600b6c5d2cde381f8c71f1",
+                "reference": "7492b9e4e0f8425192600b6c5d2cde381f8c71f1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Eluceo\\iCal": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Maciej Łebkowski",
+                    "email": "m.lebkowski@gmail.com",
+                    "role": "Contributor"
+                },
+                {
+                    "name": "Markus Poerschke",
+                    "email": "markus@eluceo.de",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The eluceo/iCal package offers a abstraction layer for creating iCalendars. You can easily create iCal files by using PHP object instead of typing your *.ics file by hand. The output will follow RFC 2445 as best as possible.",
+            "homepage": "https://github.com/markuspoerschke/iCal",
+            "keywords": [
+                "calendar",
+                "iCalendar",
+                "ical",
+                "ics",
+                "php calendar"
+            ],
+            "time": "2015-11-13 22:33:54"
+        },
         {
             "name": "erusev/parsedown",
             "version": "dev-master",
@@ -16,8 +70,8 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/erusev/parsedown/zipball/3ebbd730b5c2cf5ce78bc1bf64071407fc6674b7",
-                "reference": "3ebbd730b5c2cf5ce78bc1bf64071407fc6674b7",
+                "url": "https://api.github.com/repos/erusev/parsedown/zipball/0f974bf34fdc420c3a7dc0a6c5c5fc620fa9dd89",
+                "reference": "790066e9a7dbac9b1441005b902531ec9de0ed00",
                 "shasum": ""
             },
             "type": "library",

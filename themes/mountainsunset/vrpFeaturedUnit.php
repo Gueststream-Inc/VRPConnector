@@ -17,15 +17,17 @@
  * $data['Photo']
  * $data['Thumb']
  */
-if(is_array($data)) {
-    foreach($data as $unit) {
-        ?>
-        <a href="/vrp/unit/<?php echo $unit->page_slug; ?>"
-           Title="<?php echo $unit->Name; ?>"
-            >
+?>
+<?php if(is_array($data)) : ?>
+    <?php foreach($data as $unit) : ?>
+        <a href="<?php echo site_url("/vrp/unit/" . $unit->page_slug); ?>"
+           Title="<?php echo $unit->Name; ?>">
             <img src="<?php echo $unit->Photo; ?>">
         </a>
-    <?php
-    }
-}
-?>
+    <?php endforeach; ?>
+    <?php elseif (is_object($data)) : ?>
+    <a href="<?php echo site_url("/vrp/unit/" . $data->page_slug); ?>"
+       Title="<?php echo $data->Name; ?>">
+        <img src="<?php echo $data->Photo; ?>">
+    </a>
+<?php endif; ?>
