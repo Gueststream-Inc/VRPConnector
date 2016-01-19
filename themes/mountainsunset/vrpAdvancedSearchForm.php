@@ -8,13 +8,11 @@
 global $vrp;
 $searchoptions = $vrp->searchoptions();
 ?>
-<h2>Advanced Search</h2>
+<div id="vrp">
+    <form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET">
 
-<form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET">
-    <div class="large-3 columns">
-        <div class="ui-widget-header ui-corner-all">
-            <h4>Search Options</h4>
-        </div>
+        <h4>Search Options</h4>
+
         <table cellspacing="10">
             <tr>
                 <td>Arrival:</td>
@@ -30,8 +28,8 @@ $searchoptions = $vrp->searchoptions();
                     <select name="search[Adults]">
                         <option selected="selected" value="">Any</option>
                         <?php foreach (range(1, $searchoptions->maxsleeps) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>
+                            <option value="<?php echo $v; ?>">
+                                <?php echo $v; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -44,8 +42,8 @@ $searchoptions = $vrp->searchoptions();
                     <select name="search[Children]">
                         <option value="">Any</option>
                         <?php foreach (range(1, 10) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>
+                            <option value="<?php echo $v; ?>">
+                                <?php echo $v; ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -60,8 +58,8 @@ $searchoptions = $vrp->searchoptions();
                     <select name="search[bedrooms]" style="width:90px;">
                         <option selected="selected" value="">Any</option>
                         <?php foreach (range($searchoptions->minbaths, $searchoptions->maxbaths) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>+
+                            <option value="<?php echo $v; ?>">
+                                <?php echo $v; ?>+
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -95,52 +93,50 @@ $searchoptions = $vrp->searchoptions();
                 </td>
             </tr>
         </table>
-    </div>
-    <div class="large-9 columns">
-        <div class="ui-widget-header ui-corner-all">
-            <h4>Locations</h4>
-        </div>
-        <div style="padding:10px;">
-            <ul class="advancedlist">
-                <!-- search[location][] - is an array of all the locations a guest wants to limit their search to -->
-                <?php foreach ($searchoptions->locations as $v) : ?>
-                    <li>
-                        <label>
-                            <input type="checkbox" name="search[location][]" id="location_<?php echo $v; ?>"
-                                   value="<?php echo esc_attr($v); ?>"/>
-                            <?php echo esc_html($v); ?>
-                        </label>
-                    </li>
-                <?php endforeach; ?>
 
-            </ul>
-        </div>
-        <br style="clear:both;"><br>
 
-        <div class="ui-widget-header ui-corner-all">
-            <h4>Amenities</h4>
-        </div>
-        <div style="padding:10px;">
-            <ul class="advancedlist">
-                <?php foreach ($searchoptions->attrs as $v) : ?>
-                    <li>
-                        <input type="checkbox" name="search[attrs][]" value="<?php echo esc_attr($v); ?>"/>
-                        <label><?php echo esc_html($v); ?></label>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
-    </div>
-    <br style="clear:both;">
+        <h4>Locations</h4>
+        <ul class="advancedlist">
+            <?php foreach ($searchoptions->locations as $v) : ?>
+                <li>
+                    <label>
+                        <input type="checkbox" name="search[location][]" id="location_<?php echo $v; ?>"
+                               value="<?php echo esc_attr($v); ?>"/>
+                        <?php echo esc_html($v); ?>
+                    </label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
 
-    <!-- show -- sets the default number of results to show -->
-    <input type="hidden" name="show" value="20">
+        <h4>Areas</h4>
+        <ul class="advancedlist">
+            <?php foreach ($searchoptions->areas as $v) : ?>
+                <li>
+                    <input type="checkbox" name="search[area][]" value="<?php echo esc_attr($v); ?>"/>
+                    <label><?php echo esc_html($v); ?></label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
 
-    <!-- search[showmax] - Will display results that are equal to or greater then the number of
-    bedrooms/bathrooms/occupancy totals selected by the guest.  If this is removed and a guest selects
-    4 bedrooms then only 4 bedroom units will show.  If this is set to true and a guest selects 4 bedrooms
-    then all units with 4+ bedrooms will show in the result set -->
-    <input type="hidden" name="search[showmax]" value="true"/>
+        <h4>Amenities</h4>
+        <ul class="advancedlist">
+            <?php foreach ($searchoptions->attrs as $v) : ?>
+                <li>
+                    <input type="checkbox" name="search[attrs][]" value="<?php echo esc_attr($v); ?>"/>
+                    <label><?php echo esc_html($v); ?></label>
+                </li>
+            <?php endforeach; ?>
+        </ul>
 
-    <input type="submit" name="propSearch" class="ButtonView" value="Search">
-</form>
+        <!-- show -- sets the default number of results to show -->
+        <input type="hidden" name="show" value="20">
+
+        <!-- search[showmax] - Will display results that are equal to or greater then the number of
+        bedrooms/bathrooms/occupancy totals selected by the guest.  If this is removed and a guest selects
+        4 bedrooms then only 4 bedroom units will show.  If this is set to true and a guest selects 4 bedrooms
+        then all units with 4+ bedrooms will show in the result set -->
+        <input type="hidden" name="search[showmax]" value="true"/>
+        <input type="submit" name="propSearch" value="Search">
+    </form>
+
+</div>

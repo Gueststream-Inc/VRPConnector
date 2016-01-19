@@ -48,6 +48,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.1 =
+* Adding multiple checkbox items for Locations and Areas on default advanced search form.
+
 = 1.1.0 =
 * Added iCal unit availability calendar support. /vrp/ical/unit_page_slug
 * Fixed XML site map output.
