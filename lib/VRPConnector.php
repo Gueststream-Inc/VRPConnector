@@ -297,6 +297,8 @@ class VRPConnector
 
             case "complex": // If Complex Page.
                 $data = json_decode($this->call("getcomplex/" . $slug));
+                
+                $pagetitle = $data->name;
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
