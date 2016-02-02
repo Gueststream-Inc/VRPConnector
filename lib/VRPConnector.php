@@ -1014,6 +1014,7 @@ class VRPConnector
                 $url_string .= "&favorites[]=" . $unit_id;
             }
             header("Location: " . $url_string);
+            exit;
         }
 
         $compare = $_GET['favorites'];
