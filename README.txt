@@ -48,6 +48,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.1 =
+* Fixed favorites display bug that resulted in some sites always showing 'no favorites saved yet' page even if favorites were saved.
+
 = 1.1.0 =
 * Added iCal unit availability calendar support. /vrp/ical/unit_page_slug
 * Fixed XML site map output.
