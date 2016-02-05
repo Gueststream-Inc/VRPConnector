@@ -1185,6 +1185,15 @@ class VRPConnector
      */
     public function vrpSearch($arr = [])
     {
+        foreach($arr as $key => $value) {
+            // WP makes all keys lower case.  We should try and set most keys with ucfirst()
+            if($key == "featured") {
+                unset($arr['featured']);
+                // the value of Featured -must- be 1.
+                $arr['Featured'] = 1;
+            }
+        }
+
         $_GET['search'] = $arr;
         $_GET['search']['showall'] = 1;
         $data = $this->search();

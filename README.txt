@@ -19,6 +19,7 @@ allowing potential guests to search, sort, compare and book your rental properti
 * http://www.mauihawaiivacations.com
 * http://www.tellurideluxury.com
 * http://www.columbiatelluride.com
+* http://www.rangeprop.com
 
 == Installation ==
 1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
@@ -48,6 +49,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.2 =
+* Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
+
 = 1.1.1 =
 * Fixed favorites display bug that resulted in some sites always showing 'no favorites saved yet' page even if favorites were saved.
 
