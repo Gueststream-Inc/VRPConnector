@@ -196,15 +196,12 @@ function vrp_pagination($totalPages, $curPage = 1)
 
     $list['Prev'] = ['pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage - 1), 'class' => 'button', 'disabled' => ($curPage !== 1 ? false : true)];
 
-    $list[$curPage] = ['pageurl' => $pageurl, 'show' => $show, 'page' => $curPage];
-
-
     foreach (range($startRange, $totalRange) as $incPage) {
 
         $incPage = (int) esc_attr($incPage);
 
         if($curPage === $incPage) {
-            $list[$incPage]['selected'] = ($curPage === $incPage ? true : false);
+            $list[$curPage] = ['pageurl' => $pageurl, 'show' => $show, 'page' => $curPage, 'selected' => true];
             continue;
         }
 
