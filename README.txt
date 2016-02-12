@@ -51,6 +51,7 @@ you to seamlessly connect your website to your property management software data
 == Changelog ==
 = 1.1.2 =
 * Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
+* Fixed pagination function so the current page is no longer listed outside the list of pages.
 
 = 1.1.1 =
 * Fixed favorites display bug that resulted in some sites always showing 'no favorites saved yet' page even if favorites were saved.
