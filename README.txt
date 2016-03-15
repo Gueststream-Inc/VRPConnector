@@ -49,6 +49,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.3 =
+* Fixed default sort order for [vrpUnits] short code.
+
 = 1.1.2 =
 * Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
 * Fixed pagination function so the current page is no longer listed outside the list of pages.

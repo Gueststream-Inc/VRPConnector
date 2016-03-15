@@ -1142,6 +1142,14 @@ class VRPConnector
             }
         }
 
+        if(!isset($obj->sort)) {
+            $obj->sort = "Name";
+        }
+
+        if(!isset($obj->order)) {
+            $obj->order = "low";
+        }
+
         $search['search'] = json_encode($obj);
         $results = $this->call('allunits', $search);
         $results = json_decode($results);
