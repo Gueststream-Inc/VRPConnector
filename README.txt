@@ -51,6 +51,8 @@ you to seamlessly connect your website to your property management software data
 == Changelog ==
 = 1.1.3 =
 * Fixed default sort order for [vrpUnits] short code.
+* changing travel insurance acceptance default to 'no'
+* Added travel insurance ID for better Escapia support.
 
 = 1.1.2 =
 * Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
