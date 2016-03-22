@@ -259,7 +259,7 @@ class VRPConnector
     public function filterPosts($posts, $query)
     {
         if (!isset($query->query_vars['action'])) {
-            return false;
+            return $posts;
         }
 
         $content = "";
@@ -1140,6 +1140,14 @@ class VRPConnector
             foreach ($items as $k => $v) {
                 $obj->$k = $v;
             }
+        }
+
+        if(!isset($obj->sort)) {
+            $obj->sort = "Name";
+        }
+
+        if(!isset($obj->order)) {
+            $obj->order = "low";
         }
 
         $search['search'] = json_encode($obj);

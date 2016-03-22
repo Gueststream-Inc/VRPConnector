@@ -136,14 +136,16 @@ global $vrp;
 
             <div class="padit" style="text-align:center;font-size:13px;">
 
-                Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount,
-                    2)); ?>) <br> Would
+                Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br> Would
                 you like to purchase the optional travel insurance? <br>
-                <br> <input type="radio" name="booking[acceptinsurance]" value="1" checked> Yes <input type="radio"
-                                                                                                       name="booking[acceptinsurance]"
-                                                                                                       value="0"/> No
+                <br>
+                <input type="radio" name="booking[acceptinsurance]" value="1" > Yes
+                <input type="radio" name="booking[acceptinsurance]" value="0" checked/> No
                 <input type="hidden" name="booking[InsuranceAmount]"
                        value="<?php echo esc_attr($data->InsuranceAmount); ?>">
+                <?php if(isset($data->InsuranceID)) { ?>
+                    <input type="hidden" name="booking[InsuranceID]" value="<?= $data->InsuranceID; ?>" />
+                <?php } ?>
             </div>
         </div>
     <?php else : ?>
