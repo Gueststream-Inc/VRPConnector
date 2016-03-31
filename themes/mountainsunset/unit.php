@@ -259,6 +259,7 @@ if (!isset($_SESSION['depart'])) {
             <?php if ( strlen( $data->lat ) > 0 && strlen( $data->long ) > 0 ) { ?>
             center: new google.maps.LatLng(<?php echo esc_js( $data->lat ); ?>, <?php echo esc_js( $data->long ); ?>),
             <?php } ?>
+            scrollwheel: false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
         map = new google.maps.Map(document.getElementById("map"), myOptions);

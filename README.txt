@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.3.3
+Tested up to: 4.4
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -55,6 +55,7 @@ you to seamlessly connect your website to your property management software data
 * Added travel insurance ID for better Escapia support.
 * Fixed use of address field 1 on unit page for map geolocating.
 * Stopped VRP pages from overwriting the posts so widgets and other items can list posts on VRP pages.
+* Disable the default behavior of scrolling zoom on the unit page map.
 
 = 1.1.2 =
 * Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
