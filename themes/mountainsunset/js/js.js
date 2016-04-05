@@ -183,6 +183,33 @@ jQuery(document).ready(function(){
             }
         }
     });
+    //TODO remove above datepicker calls
+
+    var dates = jQuery("input[name='search[arrival]'], input[name='search[departure]']").datepicker({
+        minDate: 2,
+        onSelect: function( selectedDate ) {
+            jQuery('#nodates').remove();
+            var option = this.id == "arrival" ? "minDate" : "30",
+                instance = jQuery( this ).data( "datepicker" ),
+                date = jQuery.datepicker.parseDate(
+                    instance.settings.dateFormat ||
+                    jQuery.datepicker._defaults.dateFormat,
+                    selectedDate, instance.settings );
+            dates.not( this ).datepicker( "option", option, date );
+            if (jQuery("#depart").val() != ''){
+                var arrivalDate=jQuery("input[name='search[arrival]']").datepicker("getDate");
+                var departureDate=jQuery("input[name='search[departure]']").datepicker("getDate");
+                var oneDay = 1000*60*60*24;
+
+                var difference = Math.ceil((arrivalDate.getTime() - departureDate.getTime()) / oneDay);
+                //alert(difference);
+                difference=-difference;
+
+                jQuery("#nights").val(difference);
+                jQuery("#tn").val(difference);
+            }
+        }
+    });
     
     jQuery('.hasDatepicker').attr("autocomplete", "off").attr("readonly", "readonly");
 

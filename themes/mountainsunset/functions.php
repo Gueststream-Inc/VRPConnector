@@ -518,3 +518,59 @@ function vrpCalendar($r, $totalMonths = 3) {
 
     return "" . $ret . $theKey;
 }
+
+function vrpMasterCalendar($r, $totalMonths = 3) {
+
+ $datelist = array();
+    $arrivals = array();
+    $departs = array();
+    foreach ($r as $v) {
+        $from_date = $v->start_date;
+        $arrivals[] = $from_date;
+        $to_date = $v->end_date;
+        $departs[] = $to_date;
+        $num = daysTo($from_date, $to_date);
+        $datelist[] = dateSeries($from_date, $num);
+    }
+
+    $final_date = array();
+    foreach ($datelist as $v) {
+        foreach ($v as $v2) {
+            $final_date[] = $v2;
+        }
+    }
+    //echo "<pre>";
+    //print_r($final_date);
+    //echo "</pre>";
+    $today = strtotime(date("Y") . "-" . date("m") . "-01");
+    $calendar = new \Gueststream\MasterCalendar(date('Y-m-d'));
+    $calendar->link_days = 0;
+    $calendar->highlighted_dates = $final_date;
+    $calendar->arrival_dates=$arrivals;
+    $calendar->depart_dates=$departs;
+    /*  $nextyear = date("Y", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
+      $nextmonth = date("m", mktime(0, 0, 0, date("m") + 1, date("d"), date("Y")));
+      $nextyear2 = date("Y", mktime(0, 0, 0, date("m") + 2, date("d"), date("Y")));
+      $nextmonth2 = date("m", mktime(0, 0, 0, date("m") + 2, date("d"), date("Y")));
+     * 
+     */
+    $theKey = "<div class=\"calkey\" style=\"float:left;\"><span style=\"float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Available</span> <span style=\"float:left;display:block;width:15px;height:15px;;margin-left:10px;border:1px solid #404040;\" class=\"notavailable highlighted\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Unavailable</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable dDate\"></span><span style=\"float:left;\">&nbsp; Check-In Only</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable aDate\"></span><span style=\"float:left;\">&nbsp; Check-Out Only</span><br style=\"clear:both;\" /></div><br style=\"clear:both;\" />";
+    $ret = "";
+    $x = 0;
+    $curYear = date('Y');
+    for ($i = 0; $i <= $totalMonths; $i++) {
+
+        $nextyear = date("Y", mktime(0, 0, 0, date("m", $today) + $i, date("d", $today), date("Y", $today)));
+        $nextmonth = date("m", mktime(0, 0, 0, date("m", $today) + $i, date("d", $today), date("Y", $today)));
+
+        $ret.=$calendar->output_calendar($nextyear, $nextmonth);
+        if ($x == 3) {
+            $ret.="";
+            $x = -1;
+        }
+        $x++;
+    }
+
+
+    return "" . $ret . $theKey;
+}
