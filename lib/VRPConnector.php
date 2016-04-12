@@ -297,7 +297,7 @@ class VRPConnector
 
             case "complex": // If Complex Page.
                 $data = json_decode($this->call("getcomplex/" . $slug));
-                
+
                 $pagetitle = $data->name;
 
                 if (isset($data->Error)) {
@@ -531,9 +531,12 @@ class VRPConnector
             if ($obj->arrival == 'Not Sure') {
                 $obj->arrival = '';
                 $obj->depart = '';
+                $obj->showall = 1;
             } else {
                 $obj->arrival = date("m/d/Y", strtotime($obj->arrival));
             }
+        } else {
+            $obj->showall = 1;
         }
 
         $search['search'] = json_encode($obj);
@@ -1193,13 +1196,17 @@ class VRPConnector
      */
     public function vrpSearch($arr = [])
     {
-        foreach($arr as $key => $value) {
-            // WP makes all keys lower case.  We should try and set most keys with ucfirst()
-            if($key == "featured") {
-                unset($arr['featured']);
-                // the value of Featured -must- be 1.
-                $arr['Featured'] = 1;
+        if(is_array($arr) && count($arr) > 0) {
+            foreach($arr as $key => $value) {
+                // WP makes all keys lower case.  We should try and set most keys with ucfirst()
+                if($key == "featured") {
+                    unset($arr['featured']);
+                    // the value of Featured -must- be 1.
+                    $arr['Featured'] = 1;
+                }
             }
+        } else {
+            $arr = [];
         }
 
         $_GET['search'] = $arr;

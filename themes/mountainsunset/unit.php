@@ -102,23 +102,61 @@ if (!isset($_SESSION['depart'])) {
                 </table>
             </div>
 
-            <!-- REVIEWS TAB -->
-            <div id="reviews">
-                <?php if (isset($data->reviews[0])) { ?>
-                    <table class="amenTable" cellspacing="0">
-                        <tr>
-                            <td colspan="2" class="heading"><h4>Reviews</h4></td>
-                        </tr>
-                        <?php foreach ($data->reviews as $review): ?>
+            <?php if (isset($data->reviews[0])) { ?>
+                <div id="reviews">
+                    <section id="reviews">
+                        <h2 >Guest Reviews of <span class="fn"><?= strtolower($data->Name); ?></span></h2>
+                        <span class="address serif"><?= $data->Address2; ?> <?= $data->City; ?>,&nbsp;<?= $data->State; ?></span>
 
-                            <tr>
-                                <td class="first"><b><?php echo esc_html($amen->name); ?></b>:</td>
-                                <td> <?php echo esc_html($amen->value); ?></td>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?></table>
-                <?php } ?>
-            </div>
+                        <?php
+                        $total = 0;
+                        $rat   = 0;
+                        foreach ($data->reviews as $v) {
+                            $rat += $v->rating;
+                            $total ++;
+                        }
+                        $av = round($rat / $total, 2);
+                        ?>
+
+                        <div class="hreview-aggregate" style="font-size:11px;">
+                            <hr>
+                            <div class="item vcard">
+                                <a href="http://www.flipkey.com/" target="_blank" style="font-size: 1.2em;">Vacation&nbsp;Rental Reviews&nbsp;by <img class="flipkey" style="height: 1.7em; vertical-align: text-top;" src="https://www.flipkey.com/img/marketing/logos/FlipKey-Logo.png"></a>
+
+                                <div style="float:right;text-align:center;" class="serif one-third">
+                                    <span class="rating">
+                                        <span class="average"><?= $av; ?></span>&nbsp;out&nbsp;of&nbsp;<span class="best">5</span></span>&nbsp;stars
+                                    based&nbsp;on
+                                    <span class="count"><?= $total; ?></span>&nbsp;user&nbsp;reviews
+                                </div>
+                            </div>
+                        </div>
+
+                        <?php foreach ($data->reviews as $review): ?>
+                            <div class="review-post">
+                                <div class="hreview">
+                                    <h3 class="title" style="margin-bottom:12px;"><?= $review->title; ?></h3>
+
+                                    <?php if(!empty($review->name)) : ?>
+                                        <b class="reviewer vcard">Review by <span class="fn"><?= $review->name; ?></span></b>
+                                    <?php endif; ?>
+
+                                    <div class="description item vcard">
+                                        <span class="serif"><?= strip_tags($review->review); ?></span><br>
+                                        <b class="rating"><?= $review->rating; ?> out of 5 stars</b>
+                                    </div>
+                                </div>
+                                <?php if (!empty($review->response)) { ?>
+                                    <div class="reviewresponse" style="margin-top:1em;padding-top:1em;border-top:1px solid #dadada;">
+                                        <h5 class="title" > Manager Response:</h5>
+                                        <?= $review->response; ?>
+                                    </div>
+                                <?php } ?>
+                            </div>
+
+                        <?php endforeach; ?>
+                </div>
+            <?php } ?>
 
             <!-- CALENDAR TAB -->
             <div id="calendar">
