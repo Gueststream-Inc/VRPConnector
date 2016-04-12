@@ -56,6 +56,8 @@ you to seamlessly connect your website to your property management software data
 * Fixed use of address field 1 on unit page for map geolocating.
 * Stopped VRP pages from overwriting the posts so widgets and other items can list posts on VRP pages.
 * Disable the default behavior of scrolling zoom on the unit page map.
+* Fixed reviews to display in default theme.
+* Fixed PHP Warning when using [vrpSearch] shortcode with no attributes.
 
 = 1.1.2 =
 * Fixed bug to allow using 'Featured=true' in vrpSearch shortcode to display only units that are set as featured.
