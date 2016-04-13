@@ -2,7 +2,6 @@
 /**
  *
  */
-
 global $vrp;
 ?>
 <form
@@ -118,11 +117,11 @@ global $vrp;
                         <th>Adults:</th>
                         <td>
                             <input type="hidden" name="booking[adults]"
-                                   value="<?php echo esc_attr($adults); ?>"/>
+                                   value="<?php echo esc_attr($vrp->search->adults); ?>"/>
                             <?php echo esc_html($vrp->search->adults); ?>
                             <input type="hidden"
-                                   name="booking['children']"
-                                   value="<?php echo esc_attr($children_count); ?>"/>
+                                   name="booking[children]"
+                                   value="0"/>
                         </td>
                     </tr>
                 </table>
@@ -261,11 +260,14 @@ global $vrp;
                    value="<?php echo esc_attr($data->TotalCost - $data->TotalTax); ?>">
             <input type="hidden" name="booking[TotalTax]" value="<?php echo esc_attr($data->TotalTax); ?>">
 
+            <?php if(!empty($_GET['obj']['Pets'])) : ?>
+                <input type="hidden" name="booking[Pets]" value="<?php echo $_GET['obj']['Pets']; ?>">
+            <?php endif; ?>
+
             <?php if (isset($data->InsuranceAmount)) : ?>
                 <?php $data->TotalCost = $data->TotalCost - $data->InsuranceAmount; ?>
             <?php endif; ?>
 
-            <input type="hidden" name="booking[TotalCost]" value="<?php echo esc_attr($data->DueToday); ?>">
             <?php if (isset($data->booksettings->HasPackages)
                 && (isset($data->package->items) && count($data->package->items) != 0)
             ) { ?>

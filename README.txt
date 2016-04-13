@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.4
+Tested up to: 4.5
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -20,6 +20,7 @@ allowing potential guests to search, sort, compare and book your rental properti
 * http://www.tellurideluxury.com
 * http://www.columbiatelluride.com
 * http://www.rangeprop.com
+* http://www.vailinternational.com
 
 == Installation ==
 1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
@@ -49,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.1.4 =
+* Adding support to book with Pets using the Escapia Property Management System
+
 = 1.1.3 =
 * Fixed default sort order for [vrpUnits] short code.
 * changing travel insurance acceptance default to 'no'
