@@ -188,6 +188,26 @@ if (!isset($_SESSION['depart'])) {
                                                        value="<?php echo esc_attr($_SESSION['depart']); ?>">
                                             </td>
                                         </tr>
+
+                                        <?php if ($data->manager->Name == "Escapia" && !empty($data->additonal->PetsPolicy)) :?>
+                                            <!-- Escapia PMS - Booking w/Pets -->
+                                            <?php if($data->additonal->PetsPolicy == 2) : ?>
+                                                <?php $petsType = "Dog"; ?>
+                                            <?php elseif ($data->additonal->PetsPolicy == 1) : ?>
+                                                <?php $petsType = "Cat"; ?>
+                                            <?php endif; ?>
+
+                                            <tr>
+                                                <td>Pets:</td>
+                                                <td>
+                                                    <select name="obj[Pets]">
+                                                        <option value="">None</option>
+                                                        <option value="<?=$data->additonal->PetsPolicy?>"><?=$petsType?>(s)</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                        <?php endif; ?>
+
                                         <tr id="errormsg">
                                             <td colspan="2">
                                                 <div></div>
