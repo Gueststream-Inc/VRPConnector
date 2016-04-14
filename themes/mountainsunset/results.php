@@ -12,7 +12,7 @@
             </div>
 
         <?php else: ?>
-        <!-- Total number of results found -->
+
         <div class="vrp-row">
             <!-- vrp-wrapper-presentation-actions-->
             <div class="vrp-col-md-10">
@@ -34,18 +34,31 @@
                     </a>
                 </div>
             </div>
-
         </div>
 
         <div class="vrp-row">
             <div class="vrp-col-xs-12"><hr /></div>
         </div>
+
         <div class="vrp-row">
+            <div id="vrp-result-list-map" class="vrp-col-md-12" style="height:300px;width:100%"></div>
+        </div>
+
+        <div class="vrp-row">
+            <div class="vrp-col-xs-12"><hr /></div>
+        </div>
+
+        <div class="vrp-row">
+
         <?php foreach($data->results as $index => $unit) : ?>
+
             <div class="vrp-col-md-4 vrp-col-xs-12 vrp-col-sm-6 vrp-item-wrap vrp-grid">
                 <div class="vrp-item"
                      data-vrp-processed="false"
-                     data-vrp-address="<?php echo $unit->Address1;?> <?php echo $unit->City;?>, <?php echo $unit->State;?>">
+                     data-vrp-address="<?php echo $unit->Address1;?> <?php echo $unit->City;?>, <?php echo $unit->State;?>"
+                     data-vrp-name="<?php echo esc_html($unit->Name); ?>"
+                     data-vrp-url="<?php echo site_url() . "/vrp/unit/" . $unit->page_slug;?>"
+                     data-vrp-thumbnail="<?php echo $unit->Thumb; ?>">
                     <div class="vrp-overlay">
                         <div class="vrp-overlay-map-container">
 
