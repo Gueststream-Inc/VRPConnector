@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.2.0 =
+* Added search result map with pins on the map for all results.
+
 = 1.1.4 =
 * Adding support to book with Pets using the Escapia Property Management System
 

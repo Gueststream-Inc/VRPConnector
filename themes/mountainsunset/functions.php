@@ -67,15 +67,12 @@ class mountainsunset
             wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)), array( 'jquery' ) );
         }
 
-
-        global $wp_query;
-
-
-
-//      if (isset($wp_query->query_vars['action'])) {
-//          if ('unit' == $wp_query->query_vars['action']){
-//          }
-//      }
+        // Result List Map
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.resultListMap.js')) {
+            wp_enqueue_script('VRPResultMap', get_stylesheet_directory_uri() . '/vrp/js/vrp.resultListMap.js', array( 'jquery','googleMap' ) );
+        } else {
+            wp_enqueue_script('VRPResultMap', plugins_url('/mountainsunset/js/vrp.resultListMap.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
+        }
 
         $script_vars = [
             'site_url' => site_url(),
