@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.2.1 =
+* Making bathrooms search value session stored
+
 = 1.2.0 =
 * Added search result map with pins on the map for all results.
 
@@ -85,7 +88,6 @@ you to seamlessly connect your website to your property management software data
 
 = 1.0.7 =
 * Automatically login to gueststream.net from settings page
-* Making bathrooms search value session stored
 
 = 1.0.6 =
 * Search options now support filters.
