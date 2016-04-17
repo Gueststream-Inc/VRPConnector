@@ -1675,6 +1675,17 @@ class VRPConnector
             $this->search->bedrooms = false;
         }
 
+        // Bathrooms
+        if (isset($_GET['search']['bathrooms'])) {
+            $_SESSION['bathrooms'] = $_GET['search']['bathrooms'];
+        }
+
+        if (isset($_SESSION['bathrooms'])) {
+            $this->search->bathrooms = $_SESSION['bathrooms'];
+        } else {
+            $this->search->bathrooms = false;
+        }
+
         // Adults
         if (isset($_GET['search']['adults'])) {
             $_SESSION['adults'] = (int) $_GET['search']['adults'];

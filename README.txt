@@ -85,6 +85,7 @@ you to seamlessly connect your website to your property management software data
 
 = 1.0.7 =
 * Automatically login to gueststream.net from settings page
+* Making bathrooms search value session stored
 
 = 1.0.6 =
 * Search options now support filters.
