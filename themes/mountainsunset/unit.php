@@ -6,7 +6,7 @@ if (!isset($_SESSION['depart'])) {
     $_SESSION['depart'] = '';
 }
 ?>
-<div class="" id="vrpcontainer">
+<div class="" id="vrp">
     <div class="row">
         <div class="col-md-8">
             <div class="row">

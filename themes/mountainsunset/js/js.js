@@ -132,14 +132,8 @@ jQuery(document).ready(function(){
         return false;
     });
 
-    var oldcolor="";
-
     var dates = jQuery( "#arrival, #depart" ).datepicker({
         minDate: 2,
-        //showOn: "both",
-        //buttonImage: "/wp-content/plugins/VRPAPI/themes/mountainsunset/images/cal.jpg",
-        //buttonImageOnly: true,
-
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
@@ -152,11 +146,8 @@ jQuery(document).ready(function(){
                 var arrivalDate=jQuery("#arrival").datepicker("getDate");
                 var departureDate=jQuery("#depart").datepicker("getDate");
                 var oneDay = 1000*60*60*24;
-
                 var difference = Math.ceil((arrivalDate.getTime() - departureDate.getTime()) / oneDay);
-                //alert(difference);
                 difference=-difference;
-
                 jQuery("#nights").val(difference);
                 jQuery("#tn").val(difference);
             }
@@ -165,9 +156,6 @@ jQuery(document).ready(function(){
 
     var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
         minDate: 2,
-        showOn: "both",
-        buttonImage: url_paths.plugin_url + "/themes/mountainsunset/images/cal.jpg",
-        buttonImageOnly: true,
         onSelect: function( selectedDate ) {
             var option = this.id == "arrival2" ? "minDate" : "30",
                 instance = jQuery( this ).data( "datepicker" ),
@@ -448,7 +436,7 @@ jQuery(document).ready(function(){
 });
 
 function checkavailability(){
-    if (jQuery("#arrival2").val() == ''){
+    if (jQuery("#arrival2").val() == '' || jQuery("#arrival2").val() == 'Not Sure'){
         return false;
     }
     jQuery("#ures").fadeIn();
