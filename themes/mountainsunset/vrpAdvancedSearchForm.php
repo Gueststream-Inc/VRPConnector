@@ -10,7 +10,7 @@ $searchoptions = $vrp->searchoptions();
 ?>
 <h2>Advanced Search</h2>
 
-<form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET">
+<form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET" id="vrp-advanced-search-form">
     <div class="large-3 columns">
         <div class="ui-widget-header ui-corner-all">
             <h4>Search Options</h4>
@@ -18,11 +18,11 @@ $searchoptions = $vrp->searchoptions();
         <table cellspacing="10">
             <tr>
                 <td>Arrival:</td>
-                <td><input type="text" name="search[arrival]" id="arrival2" style="width:90px;" value="Not Sure"></td>
+                <td><input type="text" name="search[arrival]" id="arrival2" value="Not Sure"></td>
             </tr>
             <tr>
                 <td>Departure:</td>
-                <td><input type="text" name="search[departure]" id="depart2" style="width:90px;" value="Not Sure"></td>
+                <td><input type="text" name="search[departure]" id="depart2" value="Not Sure"></td>
             </tr>
             <tr>
                 <td>Adults:</td>
