@@ -957,6 +957,7 @@ class VRPConnector
         $unit_id = $_GET['unit'];
         if (!in_array($unit_id, $_SESSION['favorites'])) {
             array_push($_SESSION['favorites'], $unit_id);
+            $this->setFavoriteCookie($_SESSION['favorites']);
         }
 
         exit;
@@ -974,10 +975,15 @@ class VRPConnector
         foreach ($this->favorites as $key => $unit_id) {
             if ($unit == $unit_id) {
                 unset($this->favorites[$key]);
+                $this->setFavoriteCookie($this->favorites);
             }
         }
         $_SESSION['favorites'] = $this->favorites;
         exit;
+    }
+
+    private function setFavoriteCookie($favorites) {
+        setcookie('vrpFavorites', serialize($favorites),  time()+60*60*24*30);
     }
 
     public function savecompare()
@@ -1052,6 +1058,10 @@ class VRPConnector
 
     private function setFavorites()
     {
+        if (isset($_COOKIE['vrpFavorites']) && !isset($_SESSION['favorites'])) {
+            $_SESSION['favorites'] = unserialize($_COOKIE['vrpFavorites']);
+        }
+
         if (isset($_SESSION['favorites'])) {
             foreach ($_SESSION['favorites'] as $unit_id) {
                 $this->favorites[] = (int) $unit_id;
