@@ -53,6 +53,7 @@ you to seamlessly connect your website to your property management software data
 = 1.2.1 =
 * Making bathrooms search value session stored
 * Added calendar icons to arrival & departure input fields.
+* Storing user favorites in Cookies as well as php session to persist favorites for 30 days.
 
 = 1.2.0 =
 * Added search result map with pins on the map for all results.
