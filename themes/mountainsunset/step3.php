@@ -138,8 +138,8 @@ global $vrp;
                 Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br> Would
                 you like to purchase the optional travel insurance? <br>
                 <br>
-                <input type="radio" name="booking[acceptinsurance]" value="1" > Yes
-                <input type="radio" name="booking[acceptinsurance]" value="0" checked/> No
+                <input type="radio" name="booking[acceptinsurance]" value="1" required /> Yes
+                <input type="radio" name="booking[acceptinsurance]" value="0" /> No
                 <input type="hidden" name="booking[InsuranceAmount]"
                        value="<?php echo esc_attr($data->InsuranceAmount); ?>">
                 <?php if(isset($data->InsuranceID)) { ?>
@@ -167,14 +167,13 @@ global $vrp;
                 <tr id="ccTypetr">
                     <?php if (isset($data->booksettings->Cards)) { ?>
                         <td><b>Card Type*:</b></td>
-                        <td><select name="booking[ccType]">
-                                <?php
-                                foreach ($data->booksettings->Cards as $k => $v):
-                                    ?>
+                        <td>
+                            <select name="booking[ccType]">
+                                <?php foreach ($data->booksettings->Cards as $k => $v): ?>
                                     <option value="<?php echo esc_attr($k); ?>"><?php echo esc_attr($v); ?></option>
                                 <?php endforeach; ?>
-
-                            </select></td>
+                            </select>
+                        </td>
                     <?php } ?>
                 </tr>
                 <?php if (isset($data->booksettings->Cards)) { ?>
