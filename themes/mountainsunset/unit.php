@@ -304,45 +304,47 @@ if (!isset($_SESSION['depart'])) {
     </div>
 </div>
 
-
-<!-- GOOGLE MAPS SCRIPT -->
-
 <script type="text/javascript">
-    var geocoder, map, value = "<?php echo esc_attr( $data->id ); ?>", image = '<?php bloginfo( 'template_directory' ); ?>/images/mapicon.png';
+    var geocoder, map, value = "<?php echo esc_attr( $data->id ); ?>";
+
+    <?php if ( strlen( $data->lat ) > 0 && strlen( $data->long ) > 0 ) { ?>
+    var unitMapPinLocation = new google.maps.LatLng(<?php echo esc_js( $data->lat ); ?>, <?php echo esc_js( $data->long ); ?>);
+    <?php } ?>
 
     function initialize() {
         geocoder = new google.maps.Geocoder();
         var myOptions = {
             zoom: 13,
             <?php if ( strlen( $data->lat ) > 0 && strlen( $data->long ) > 0 ) { ?>
-            center: new google.maps.LatLng(<?php echo esc_js( $data->lat ); ?>, <?php echo esc_js( $data->long ); ?>),
+            center: unitMapPinLocation,
             <?php } ?>
             scrollwheel: false,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         };
+
         map = new google.maps.Map(document.getElementById("map"), myOptions);
         <?php if ( strlen( $data->lat ) == 0 || strlen( $data->long ) == 0 ) { ?>
         codeAddress();
+        <?php } else { ?>
+        new google.maps.Marker({
+            map: map,
+            position: unitMapPinLocation
+        });
         <?php } ?>
     }
 
     function codeAddress() {
-        var query = "<?php echo esc_js( $data->Address1 ) . " " . esc_js( $data->Address2 ) . " " . esc_js( $data->City ) . " " . esc_js( $data->State ) . " " . esc_js( $data->PostalCode ); ?>";
-        var address = query;
+        var address = "<?php echo esc_js( $data->Address1 ) . " " . esc_js( $data->Address2 ) . " " . esc_js( $data->City ) . " " . esc_js( $data->State ) . " " . esc_js( $data->PostalCode ); ?>";
+
         geocoder.geocode({'address': address}, function (results, status) {
-                if (status == google.maps.GeocoderStatus.OK) {
-                    map.setCenter(results[0].geometry.location);
-                    var marker = new google.maps.Marker({
-                        map: map,
-                        position: results[0].geometry.location,
-                        //icon: image
-                    });
-                } else {
-                    //alert("Geocode was not successful for the following reason: " + status);
-                }
+            if (status == google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
             }
-        )
-        ;
+        });
 
     }
 
@@ -356,4 +358,3 @@ if (!isset($_SESSION['depart'])) {
         jQuery.get(url_paths.site_url, {vrpjax: true, act: "saveUnitPageView", par:<?php echo $data->id;?>, cache:Math.random()});
     }
 </script>
-
