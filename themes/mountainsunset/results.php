@@ -23,12 +23,6 @@
             </div>
             <div class="vrp-col-md-2 vrp-layout-action">
                 <div class="vrp-pull-right">
-                    <a href="#" id="vrp-list" class="vrp-btn">
-                        <i class="fa fa-fw fa-lg fa-th-list"></i>
-                    </a>
-                    <a href="#" id="vrp-grid" class="vrp-btn">
-                        <i class="fa fa-fw fa-lg fa-th"></i>
-                    </a>
                     <a href="<?php echo site_url() . "/vrp/favorites/show";?>" id="vrp-favorites" class="vrp-btn turquoise">
                         <i class="fa fa-fw fa-lg fa-heart"></i>
                     </a>
