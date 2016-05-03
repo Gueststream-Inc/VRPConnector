@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.5
+Tested up to: 4.5.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -50,6 +50,15 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+
+= 1.2.2 =
+* Unit Page availability check now displays rate breakdown next to 'book now' link.
+* Unit page styling cleaned up to better use namespaced bootstrap classes.
+* Unit page rate table now displays daily, weekly and monthly rates for all listed rate seasons (Previously only daily rates were displayed).
+* Added support for checking availability of a unit using a promo code to see the resulting rate change.
+* Result list 'add to favorites' button fixed to no longer incorrectly scroll the page up.
+* Purged a lot of depreciated/unused JavaScript.
+
 = 1.2.1 =
 * Making bathrooms search value session stored
 * Added calendar icons to arrival & departure input fields.
