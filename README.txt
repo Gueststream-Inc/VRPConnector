@@ -55,6 +55,7 @@ you to seamlessly connect your website to your property management software data
 * Added calendar icons to arrival & departure input fields.
 * Storing user favorites in Cookies as well as php session to persist favorites for 30 days.
 * Travel Insurance option (if present) requires user to select yes or not rather than defaulting to one or the other.
+* Unit page google map now pins units based on latitude and longitude if the data is present otherwise it pins the units geocoded address.
 
 = 1.2.0 =
 * Added search result map with pins on the map for all results.
