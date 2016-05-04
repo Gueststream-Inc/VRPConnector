@@ -174,64 +174,10 @@ jQuery(document).ready(function(){
     
     jQuery('.hasDatepicker').attr("autocomplete", "off").attr("readonly", "readonly");
 
-    if (jQuery("#featuredimg").length > 0){
-        jQuery.getJSON('/?featuredunit=1', function(data) {
-
-            var href="/vrp/unit/" + data.page_slug + "/";
-            jQuery("#featuredhref").attr("href",href);
-            jQuery("#featuredimg").attr("src",data.Photo);
-            jQuery("#featuredName").html(data.Name);
-            jQuery("#loadingimg").fadeOut(500,function(){
-                jQuery("#featuredunit").fadeIn(500);
-            });
-        });
-    }
-
-    jQuery(".nextfeatured").click(function(){
-        jQuery("#featuredunit").fadeOut(500,function(){
-            jQuery("#loadingimg").fadeIn(500);
-        });
-
-        jQuery.getJSON('/?featuredunit=1', function(data) {
-            var href="/vrp/unit/" + data.page_slug + "/";
-            jQuery("#featuredimg").attr("src",data.Photo);
-            jQuery("#featuredhref").attr("href",href);
-            jQuery("#featuredName").html(data.Name);
-            jQuery("#loadingimg").fadeOut(500,function(){
-                jQuery("#featuredunit").fadeIn(500);
-            });
-
-        });
-        return false;
-    });
-
     jQuery("#bookmsg").hide();
 
     jQuery("#checkbutton").click(function (){
         checkavailability();
-    });
-
-    if (jQuery("#datespicked").length > 0){
-        checkavailability();
-    }
-
-    jQuery("#selectnewdates").click(function(){
-        jQuery("#datespicked,#orselect").slideUp();
-        jQuery("#checkavailbox").slideDown();
-        return false;
-    });
-
-    jQuery("#showchange").click(function(){
-        jQuery("#emailbox").show();
-        jQuery("#emailaddress,#changelink").hide();
-        jQuery("#passwordbox").slideDown();
-        return false;
-    });
-
-    jQuery("#newuserbox").height(jQuery("#returnbox").height());
-
-    jQuery("#packagesform").submit(function(){
-        return false;
     });
 
     if (jQuery("#unitsincomplex").length > 0){
@@ -251,7 +197,6 @@ jQuery(document).ready(function(){
             return false;
         });
 
-
         jQuery("#showallofthem").click(function(){
             jQuery.get("/?vrpjax=1&act=searchjax",jQuery("#jaxform2").serialize(),function(data){
                 jQuery("#unitsincomplex").hide().html(data).slideDown(1000);
@@ -260,36 +205,8 @@ jQuery(document).ready(function(){
         });
     }
 
-    if (jQuery("#packagesform").length > 0){
-        jQuery.get("/?vrpjax=1&act=addtopackage",jQuery("#packagesform").serialize(),function(data){
-            var obj=jQuery.parseJSON(data);
-            jQuery("#packageinfo,.addontotal").html(obj.packagecost).fadeIn(1000);
-            jQuery("#TotalCost").html(obj.TotalCost).fadeIn(1000);
-            jQuery("#TotalCost2").html(obj.TotalCost).fadeIn(1000);
-        });
-    }
 
-    jQuery("#packagesform").submit(function(){
-        jQuery.get("/?vrpjax=1&act=addtopackage",jQuery(this).serialize(),function(data){
-            var obj=jQuery.parseJSON(data);
-            jQuery("#packageinfo,.addontotal").html(obj.packagecost).fadeIn(1000);
-            jQuery("#TotalCost").html(obj.TotalCost).fadeIn(1000);
-            jQuery("#TotalCost2").html(obj.TotalCost).fadeIn(1000);
-        });
-        return false;
-    });
-
-    jQuery(".continuebtn").click(function(){
-        jQuery.get("/?vrpjax=1&act=addtopackage",jQuery("#packagesform").serialize(),function(data){
-            var obj=jQuery.parseJSON(data);
-            jQuery("#packageinfo,.addontotal").html(obj.packagecost).fadeIn(1000);
-            jQuery("#TotalCost").html(obj.TotalCost).fadeIn(1000);
-            window.location=jQuery(".continuebtn").attr('href');
-        });
-
-        return false;
-    });
-
+    /** Step3.php **/
     jQuery("#country").change(function(){
         if (jQuery(this).val() == 'CA' || jQuery(this).val() == 'US' || jQuery(this).val() == 'other'){
             if (jQuery(this).val() == 'CA'){
@@ -326,7 +243,6 @@ jQuery(document).ready(function(){
         jQuery.post("/?vrpjax=1&act=processbooking",jQuery(this).serialize(),function(data){
 
             var obj=jQuery.parseJSON(data);
-            //alert(obj.Bad);
             if (obj.Bad.length != 0){
                 jQuery("#bookingbuttonvrp").show();
                 jQuery("#vrploadinggif").hide();
@@ -359,40 +275,21 @@ jQuery(document).ready(function(){
         return false;
     });
 
+    jQuery("#showContract").on('click', function(event) {
+        event.preventDefault();
+        jQuery('#theContract').show();
+    });
+
+    jQuery('#closeContract').on('click', function(event) {
+        event.preventDefault();
+        jQuery('#theContract').hide();
+    });
+
+
+    /** OTHER **/
     jQuery(".dpinquiry").datepicker();
 
     jQuery(".vrp-pagination li a,.dobutton").button();
-
-    // Unit Compare
-
-    jQuery(".compareit").click(function(){
-        var id=jQuery(this).attr("rel");
-        jQuery("#comparison").load("/?addcompare=1&id=" + id,function(){
-            jQuery("#comparecount").load("/?comparecount=1");
-        });
-        jQuery("#cpr_" + id).show();
-        jQuery("#cpc_" + id).hide();
-        return false;
-    });
-
-    jQuery(".compareremove").click(function(){
-        var id=jQuery(this).attr("rel");
-
-        jQuery("#comparison").load("/?addcompare=1&remove=1&id=" + id,function(){
-            jQuery("#comparecount").load("/?comparecount=1");
-        });
-        jQuery("#cpc_" + id).show();
-        jQuery("#cpr_" + id).hide();
-
-        return false;
-    });
-
-    jQuery("#sharethecompare").click(function(){
-        jQuery('#sharingcompare').load("/?savecompare=1",function(d){
-            jQuery(this).slideDown();
-        });
-        return false;
-    });
 
     if(jQuery('.vrp-favorite-button').length) {
         jQuery.getJSON(url_paths.site_url + '/vrp/favorites/json').done(function (data) {
@@ -414,7 +311,8 @@ jQuery(document).ready(function(){
             });
         });
 
-        jQuery('.vrp-favorite-button').on('click',function () {
+        jQuery('.vrp-favorite-button').on('click',function (event) {
+            event.preventDefault();
             var fav_button = jQuery(this);
             var unit_id = fav_button.data('unit');
             if(fav_button.data('isFavorite') == true) {
@@ -439,10 +337,10 @@ function checkavailability(){
     if (jQuery("#arrival2").val() == '' || jQuery("#arrival2").val() == 'Not Sure'){
         return false;
     }
-    jQuery("#ures").fadeIn();
     jQuery("#errormsg").html('');
     jQuery("#booklink").hide();
     jQuery("#loadingicons").show();
+    jQuery("#ratebreakdown").empty();
     jQuery.get("/?vrpjax=1&act=checkavailability&par=1",jQuery("#bookingform").serialize(),function(data){
         var obj=jQuery.parseJSON(data);
 
@@ -461,24 +359,24 @@ function checkavailability(){
             jQuery("#loadingicons").hide();
             var theerror='<div class="alert alert-error">' + obj.Error + '</div>';
             jQuery("#errormsg").html(theerror);
+
         }
     });
 }
+
 function ratebreakdown(obj) {
     var tbl = jQuery("#ratebreakdown");
-
-    tbl.empty();
     for (var i in obj.Charges) {
-        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount.toFixed(2) + "</td></tr>";
+        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
         tbl.append(row);
     }
     if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount.toFixed(2) + "</td></tr>";
+        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
         tbl.append(row);
     }
     var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
-    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost.toFixed(2) + "</b></td></tr>";
-    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday.toFixed(2) + "</b></td></tr>";
+    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
+    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
 
     tbl.append(tax);
     tbl.append(total);

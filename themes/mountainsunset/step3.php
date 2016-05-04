@@ -225,10 +225,10 @@ global $vrp;
     </div>
     <div class="" style="margin-top:20px; text-align:center">
         <div style="margin:0 auto;width:80%">
-            By clicking the "Book This Property Now" you are agreeing to the <a href="/reservation-policies/"
-                                                                                target="_blank"><b>terms and
-                    conditions</b></a>.
+            By clicking the "Book This Property Now" you are agreeing to the
+            <a href="#thecontract" id="showContract"><b>terms and conditions</b></a>.
             <br><br>
+
             <?php if (isset($data->ratecalc)) { ?>
                 <input type="hidden" name="booking[ratecalc]" value="1">
                 <?php
@@ -259,6 +259,11 @@ global $vrp;
                    value="<?php echo esc_attr($data->TotalCost - $data->TotalTax); ?>">
             <input type="hidden" name="booking[TotalTax]" value="<?php echo esc_attr($data->TotalTax); ?>">
 
+            <?php if(!empty($_GET['obj']['PromoCode']) || !empty($data->promocode)) : ?>
+                <?php $promoCode = (!empty($_GET['obj']['PromoCode'])) ? $_GET['obj']['PromoCode'] : $data->promocode; ?>
+                <input type="hidden" name="booking[PromoCode]" value="<?php echo $promoCode ?>">
+            <?php endif; ?>
+
             <?php if(!empty($_GET['obj']['Pets'])) : ?>
                 <input type="hidden" name="booking[Pets]" value="<?php echo $_GET['obj']['Pets']; ?>">
             <?php endif; ?>
@@ -274,35 +279,26 @@ global $vrp;
                        value="<?php echo esc_attr(base64_encode(serialize($data->package))); ?>">
             <?php } ?>
 
-            <?php if (isset($data->promocode)) : ?>
-                <input type="hidden" name="booking[strPromotionCode]" value="<?php echo esc_attr($data->promocode); ?>">
-            <?php endif; ?>
-
             <div id="vrploadinggif" style="display:none"><b>Processing Your Booking...</b></div>
             <input type="submit" value="Book This Property Now" class="vrp-btn vrp-btn-success " id="bookingbuttonvrp">
-            <br><br>
-            Only click the "Book This Property Now" button once or you may be charged twice.
         </div>
     </div>
 </form>
 
-<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="theContract" aria-hidden="true">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h3>Rental Agreement</h3>
     </div>
     <div class="modal-body">
         <?php echo wp_kses_post(nl2br($data->booksettings->Contract)); ?>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
+        <a href="#" id="closeContract" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
     </div>
 </div>
 
 </div>
 
 <style>
-    .booktable th {
-        text-align: right;
-    }
+
 </style>

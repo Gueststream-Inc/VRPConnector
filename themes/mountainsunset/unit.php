@@ -1,28 +1,22 @@
-<?php
-if (!isset($_SESSION['arrival'])) {
-    $_SESSION['arrival'] = '';
-}
-if (!isset($_SESSION['depart'])) {
-    $_SESSION['depart'] = '';
-}
-?>
-<div class="" id="vrp">
-    <div class="row">
-        <div class="col-md-8">
-            <div class="row">
-                <?php echo esc_html($data->Name); ?>
+<div id="vrp">
+    <div class="vrp-container-fluid">
+        <div class="vrp-row">
+            <div class="vrp-col-md-9">
+                <div class="vrp-row">
+                    <?php echo esc_html($data->Name); ?>
+                </div>
+                <div class="vrp-row">
+                    <?php echo esc_html($data->Bedrooms); ?> Bedroom(s) | <?php echo esc_html($data->Bathrooms); ?>
+                    Bathroom(s) | Sleeps <?php echo esc_html($data->Sleeps); ?>
+                </div>
             </div>
-            <div class="row">
-                <?php echo esc_html($data->Bedrooms); ?> Bedroom(s) | <?php echo esc_html($data->Bathrooms); ?>
-                Bathroom(s) | Sleeps <?php echo esc_html($data->Sleeps); ?>
+            <div class="vrp-col-md-3">
+                <button class="vrp-favorite-button vrp-btn" data-unit="<?php echo $data->id ?>"></button>
             </div>
-        </div>
-        <div class="col-md-2">
-            <button class="vrp-favorite-button" data-unit="<?php echo $data->id ?>"></button>
         </div>
     </div>
 
-    <div class="row">
+    <div class="vrp-row">
         <div id="tabs">
             <ul>
                 <li><a href="#overview">Overview</a></li>
@@ -39,8 +33,8 @@ if (!isset($_SESSION['depart'])) {
 
             <!-- OVERVIEW TAB -->
             <div id="overview">
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="vrp-row">
+                    <div class="vrp-col-md-12">
                         <!-- Photo Gallery -->
                         <div id="photo">
                             <?php
@@ -74,8 +68,8 @@ if (!isset($_SESSION['depart'])) {
                         <br style="clear:both;" class="clearfix">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="vrp-row">
+                    <div class="vrp-col-md-12">
                         <div id="description">
                             <p><?php echo wp_kses_post(nl2br($data->Description)); ?></p>
                         </div>
@@ -160,8 +154,8 @@ if (!isset($_SESSION['depart'])) {
 
             <!-- CALENDAR TAB -->
             <div id="calendar">
-                <div class="row">
-                    <div class="col-md-6">
+                <div class="vrp-row">
+                    <div class="vrp-col-md-12">
                         <div id="checkavailbox">
                             <h1 class="bookheading">Book Your Stay!</h1><br>
 
@@ -190,7 +184,7 @@ if (!isset($_SESSION['depart'])) {
                                         </tr>
 
                                         <?php if ($data->manager->Name == "Escapia" && !empty($data->additonal->PetsPolicy)) :?>
-                                            <!-- Escapia PMS - Booking w/Pets -->
+                                            <?php //<!-- Escapia PMS ONLY - Booking w/Pets --> ?>
                                             <?php if($data->additonal->PetsPolicy == 2) : ?>
                                                 <?php $petsType = "Dog"; ?>
                                             <?php elseif ($data->additonal->PetsPolicy == 1) : ?>
@@ -208,28 +202,37 @@ if (!isset($_SESSION['depart'])) {
                                             </tr>
                                         <?php endif; ?>
 
-                                        <tr id="errormsg">
-                                            <td colspan="2">
-                                                <div></div>
-                                                &nbsp;
+                                        <tr>
+                                            <?php // Promo Codes work with Escapia/RNS/Barefoot & ISILink Powered Software ?>
+                                            <td>Promo Code</td>
+                                            <td>
+                                                <input type="text" name="obj[PromoCode]" value="" placeholder="Promo Code">
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td colspan="2" id="errormsg">
                                             </td>
                                         </tr>
                                         <tr>
                                             <td colspan="2">
-                                                <div id="ratebreakdown"></div>
+                                                <table id="ratebreakdown"></table>
                                             </td>
                                         </tr>
+
                                         <tr>
-                                            <td colspan="2">
+                                            <td>
                                                 <input type="hidden" name="obj[PropID]"
                                                        value="<?php echo esc_attr($data->id); ?>">
-                                                <input type="button" value="Check Availability"
-                                                       class="bookingbutton rounded" id="checkbutton">
+                                                <input type="button"
+                                                       value="Check Availability"
+                                                       class="bookingbutton vrp-btn"
+                                                       id="checkbutton">
                                             </td>
-                                        </tr>
-                                        <tr>
-                                            <td align="right" colspan="2">
-                                                <input type="submit" value="Book Now!" id="booklink" class=""
+                                            <td>
+                                                <input type="submit" value="Book Now!"
+                                                       id="booklink"
+                                                       class="vrp-btn"
                                                        style="display:none;"/>
                                             </td>
                                         </tr>
@@ -240,7 +243,7 @@ if (!isset($_SESSION['depart'])) {
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="vrp-col-md-12">
                         <div id="availability" style="">
                             <?php echo wp_kses_post(vrpCalendar($data->avail)); ?>
                         </div>
@@ -254,41 +257,39 @@ if (!isset($_SESSION['depart'])) {
 
                     <div id="rates">
                         <?php
-                        $r = [];
+                        $rateSeasons = [];
                         foreach ($data->rates as $v) {
                             $start = date("m/d/Y", strtotime($v->start_date));
                             $end = date("m/d/Y", strtotime($v->end_date));
-                            $r[$start . " - " . $end] = new \stdClass();
+                            $rateSeasons[$start . " - " . $end] = new \stdClass();
 
                             if ($v->chargebasis == 'Monthly') {
-                                $r[$start . " - " . $end]->monthly = "$" . $v->amount;
+                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($v->amount,2);
                             }
                             if ($v->chargebasis == 'Daily') {
-                                $r[$start . " - " . $end]->daily = "$" . $v->amount;
+                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($v->amount,2);
                             }
                             if ($v->chargebasis == 'Weekly') {
-                                $r[$start . " - " . $end]->weekly = "$" . $v->amount;
+                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($v->amount,2);
                             }
                         }
                         ?>
 
-                        <table cellpadding="3">
+                        <table class="rate">
                             <tr>
                                 <th>Date Range</th>
-                                <th>Rate</th>
+                                <th>Daily</th>
+                                <th>Weekly</th>
+                                <th>Monthly</th>
                             </tr>
-                            <?php
-                            foreach ($r as $k => $v) {
-                                if (isset($v->daily)) {
-                                    ?>
-                                    <tr>
-                                        <td>
-                                            <?php echo esc_html($k); ?>
-                                        </td>
-                                        <td><?php echo esc_html($v->daily); ?>/nt</td>
-                                    </tr>
-                                <?php }
-                            } ?>
+                            <?php foreach ($rateSeasons as $dateRange => $rates) { ?>
+                                <tr>
+                                    <td><?php echo $dateRange; ?></td>
+                                    <td><?php echo (!empty($rates->daily)) ? $rates->daily : 'N/A'; ?></td>
+                                    <td><?php echo (!empty($rates->weekly)) ? $rates->weekly : 'N/A'; ?></td>
+                                    <td><?php echo (!empty($rates->monthly)) ? $rates->monthly : 'N/A'; ?></td>
+                                </tr>
+                            <?php } ?>
                         </table>
                         * Seasonal rates are only estimates and do not reflect taxes or additional fees.
                     </div>
