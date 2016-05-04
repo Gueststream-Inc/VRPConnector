@@ -184,7 +184,7 @@
                                         </tr>
 
                                         <?php if ($data->manager->Name == "Escapia" && !empty($data->additonal->PetsPolicy)) :?>
-                                            <!-- Escapia PMS - Booking w/Pets -->
+                                            <?php //<!-- Escapia PMS ONLY - Booking w/Pets --> ?>
                                             <?php if($data->additonal->PetsPolicy == 2) : ?>
                                                 <?php $petsType = "Dog"; ?>
                                             <?php elseif ($data->additonal->PetsPolicy == 1) : ?>
@@ -203,9 +203,10 @@
                                         <?php endif; ?>
 
                                         <tr>
+                                            <?php // Promo Codes work with Escapia/RNS/Barefoot & ISILink Powered Software ?>
                                             <td>Promo Code</td>
                                             <td>
-                                                <input type="text" name="obj[strPromotionCode]" value="" placeholder="Promo Code">
+                                                <input type="text" name="obj[PromoCode]" value="" placeholder="Promo Code">
                                             </td>
                                         </tr>
 

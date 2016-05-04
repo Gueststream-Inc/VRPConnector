@@ -58,6 +58,7 @@ you to seamlessly connect your website to your property management software data
 * Added support for checking availability of a unit using a promo code to see the resulting rate change.
 * Result list 'add to favorites' button fixed to no longer incorrectly scroll the page up.
 * Purged a lot of depreciated/unused JavaScript.
+* Set 'terms and conditions' link on checkout to open modal with rental agreement.
 
 = 1.2.1 =
 * Making bathrooms search value session stored

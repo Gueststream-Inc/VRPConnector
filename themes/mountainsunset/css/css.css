@@ -1820,3 +1820,24 @@ animated buttons - animate the text inside prev and next buttons
     background-position: 95% 50%;
     background-repeat: no-repeat;
 }
+
+/* Step3.php */
+
+.booktable th {
+    text-align: right;
+}
+
+#theContract {
+    display:none;
+    z-index:2;
+    margin:auto;
+    width:50%;
+    position:fixed;
+    top:25%;
+    right:25%;
+    background-color:#FFF;
+    border: 3px solid grey;
+    padding: 10px;
+    overflow-y:auto;
+    height: 250px;
+}

@@ -205,6 +205,8 @@ jQuery(document).ready(function(){
         });
     }
 
+
+    /** Step3.php **/
     jQuery("#country").change(function(){
         if (jQuery(this).val() == 'CA' || jQuery(this).val() == 'US' || jQuery(this).val() == 'other'){
             if (jQuery(this).val() == 'CA'){
@@ -273,6 +275,18 @@ jQuery(document).ready(function(){
         return false;
     });
 
+    jQuery("#showContract").on('click', function(event) {
+        event.preventDefault();
+        jQuery('#theContract').show();
+    });
+
+    jQuery('#closeContract').on('click', function(event) {
+        event.preventDefault();
+        jQuery('#theContract').hide();
+    });
+
+
+    /** OTHER **/
     jQuery(".dpinquiry").datepicker();
 
     jQuery(".vrp-pagination li a,.dobutton").button();
