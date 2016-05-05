@@ -37,32 +37,30 @@
                     <div class="vrp-col-md-12">
                         <!-- Photo Gallery -->
                         <div id="photo">
-                            <?php
-                            $count = 0;
-                            foreach ($data->photos as $k => $v) {
-                                $style = "";
-                                if ($count > 0) {
-                                    $style = "display:none;";
-                                }
-                                ?>
-                                <img id="full<?php echo esc_attr($v->id); ?>"
-                                     alt="<?php echo esc_attr($v->caption); ?>"
-                                     src="<?php echo $v->url; ?>"
-                                     style="width:100%; <?php echo esc_attr($style); ?>"/>
-                                <?php
-                                $count++;
-                            }
-                            ?>
+                            <?php foreach ($data->photos as $index => $photo) : ?>
+                                <?php $style = ($index > 0) ? "display:none;" : ""; ?>
+                                <div id="vrp-photo-full-<?php echo $photo->id; ?>"
+                                     class="vrp-photo-container"
+                                     style="<?php echo esc_attr($style); ?>">
+                                    <img alt="<?php echo esc_attr($photo->caption); ?>"
+                                         src="<?php echo $photo->url; ?>"
+                                         style="width:100%;"/>
+                                    <?php if (!empty($photo->caption)) : ?>
+                                        <div id="caption_<?php echo $photo->id; ?>" class="caption">
+                                            <?php echo esc_html($photo->caption); ?>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
                         </div>
 
                         <div id="gallery">
-                            <?php foreach ($data->photos as $k => $v) : ?>
-                                <?php $v->thumb_url = $v->url; ?>
+                            <?php foreach ($data->photos as $photo) : ?>
+                                <?php $photo->thumb_url = (empty($photo->thumb_url)) ? $photo->url : $photo->thumb_url; ?>
                                 <img class="thumb"
-                                     id="<?php echo esc_attr($v->id); ?>"
-                                     alt="<?php echo esc_attr($v->caption); ?>"
-                                     src="<?php echo $v->thumb_url; ?>"
-                                     style="height:60px; float:left; margin: 3px;"/>
+                                     id="<?php echo $photo->id; ?>"
+                                     alt="<?php echo esc_attr($photo->caption); ?>"
+                                     src="<?php echo $photo->thumb_url; ?>" />
                             <?php endforeach; ?>
                         </div>
                         <br style="clear:both;" class="clearfix">
@@ -105,8 +103,8 @@
                         <?php
                         $total = 0;
                         $rat   = 0;
-                        foreach ($data->reviews as $v) {
-                            $rat += $v->rating;
+                        foreach ($data->reviews as $photo) {
+                            $rat += $photo->rating;
                             $total ++;
                         }
                         $av = round($rat / $total, 2);
@@ -258,19 +256,19 @@
                     <div id="rates">
                         <?php
                         $rateSeasons = [];
-                        foreach ($data->rates as $v) {
-                            $start = date("m/d/Y", strtotime($v->start_date));
-                            $end = date("m/d/Y", strtotime($v->end_date));
+                        foreach ($data->rates as $photo) {
+                            $start = date("m/d/Y", strtotime($photo->start_date));
+                            $end = date("m/d/Y", strtotime($photo->end_date));
                             $rateSeasons[$start . " - " . $end] = new \stdClass();
 
-                            if ($v->chargebasis == 'Monthly') {
-                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($v->amount,2);
+                            if ($photo->chargebasis == 'Monthly') {
+                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($photo->amount,2);
                             }
-                            if ($v->chargebasis == 'Daily') {
-                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($v->amount,2);
+                            if ($photo->chargebasis == 'Daily') {
+                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($photo->amount,2);
                             }
-                            if ($v->chargebasis == 'Weekly') {
-                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($v->amount,2);
+                            if ($photo->chargebasis == 'Weekly') {
+                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($photo->amount,2);
                             }
                         }
                         ?>

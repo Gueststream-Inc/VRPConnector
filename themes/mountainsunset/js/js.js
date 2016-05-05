@@ -95,8 +95,8 @@ jQuery(document).ready(function(){
     // Unit Page photo gallery
     jQuery('#gallery .thumb').click(function () {
         var photoid = jQuery(this).attr('id');
-        var showImage = "#full"+photoid;
-        jQuery("#photo img").hide();
+        var showImage = "#vrp-photo-full-"+photoid;
+        jQuery("#photo .vrp-photo-container").hide();
         jQuery("#photo "+showImage).show();
     });
 

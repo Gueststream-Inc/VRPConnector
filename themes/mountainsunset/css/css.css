@@ -1691,6 +1691,26 @@ animated buttons - animate the text inside prev and next buttons
 }
 
 /**********************************
+ Unit Page Styles
+ **********************************/
+
+.vrp-photo-container .caption {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 5px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+#vrp .thumb {
+    height:60px;
+    float:left;
+    margin: 3px;
+}
+
+
+/**********************************
  CALENDAR STYLING
  **********************************/
 .calendar tbody, .calkey .isavailable {
