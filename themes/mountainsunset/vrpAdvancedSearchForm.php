@@ -84,11 +84,11 @@ $searchoptions = $vrp->searchoptions();
                 <td>Type:</td>
                 <td>
                     <!-- search[type] - is the single unit type a guest wants to limit their search to -->
-                    <select name="search[type]">
+                    <select name="search[Type]">
                         <option value="">Any</option>
                         <?php foreach ($searchoptions->types as $type) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>+
+                            <option value="<?php echo esc_attr($type); ?>">
+                                <?php echo esc_attr($type); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>

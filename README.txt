@@ -60,6 +60,7 @@ you to seamlessly connect your website to your property management software data
 * Result list 'add to favorites' button fixed to no longer incorrectly scroll the page up.
 * Purged a lot of depreciated/unused JavaScript.
 * Set 'terms and conditions' link on checkout to open modal with rental agreement.
+* Fixed unit type drop down selection on advanced search form.
 
 = 1.2.1 =
 * Making bathrooms search value session stored
