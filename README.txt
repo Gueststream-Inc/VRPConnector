@@ -54,6 +54,7 @@ you to seamlessly connect your website to your property management software data
 = 1.2.2 =
 * Unit Page availability check now displays rate breakdown next to 'book now' link.
 * Unit page styling cleaned up to better use namespaced bootstrap classes.
+* Added captions to unit page photos.
 * Unit page rate table now displays daily, weekly and monthly rates for all listed rate seasons (Previously only daily rates were displayed).
 * Added support for checking availability of a unit using a promo code to see the resulting rate change.
 * Result list 'add to favorites' button fixed to no longer incorrectly scroll the page up.
