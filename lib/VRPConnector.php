@@ -42,31 +42,6 @@ class VRPConnector
     }
 
     /**
-     * Class Destruct w/basic debugging.
-     */
-    public function __destruct()
-    {
-        if (!isset($_GET['showdebug'])) {
-            return false;
-        }
-
-        if (!$this->is_vrp_page()) {
-            return false;
-        }
-
-        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
-        echo "GET VARIABLES:<br><pre>";
-        print_r($_GET);
-        echo "</pre>";
-        echo "Debug VARIABLES:<br><pre>";
-        print_r($this->debug);
-        echo "</pre>";
-        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
-        echo "</div>";
-    }
-
-    /**
      * Use the demo API key.
      */
     function __load_demo_key()
