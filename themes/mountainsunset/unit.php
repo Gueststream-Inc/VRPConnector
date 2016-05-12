@@ -103,8 +103,8 @@
                         <?php
                         $total = 0;
                         $rat   = 0;
-                        foreach ($data->reviews as $photo) {
-                            $rat += $photo->rating;
+                        foreach ($data->reviews as $review) {
+                            $rat += $review->rating;
                             $total ++;
                         }
                         $av = round($rat / $total, 2);
@@ -255,20 +255,24 @@
 
                     <div id="rates">
                         <?php
-                        $rateSeasons = [];
-                        foreach ($data->rates as $photo) {
-                            $start = date("m/d/Y", strtotime($photo->start_date));
-                            $end = date("m/d/Y", strtotime($photo->end_date));
-                            $rateSeasons[$start . " - " . $end] = new \stdClass();
 
-                            if ($photo->chargebasis == 'Monthly') {
-                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($photo->amount,2);
+                        $rateSeasons = [];
+                        foreach ($data->rates as $rate) {
+                            $start = date("m/d/Y", strtotime($rate->start_date));
+                            $end = date("m/d/Y", strtotime($rate->end_date));
+
+                            if(empty($rateSeasons[$start . " - " . $end])) {
+                                $rateSeasons[$start . " - " . $end] = new \stdClass();
                             }
-                            if ($photo->chargebasis == 'Daily') {
-                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($photo->amount,2);
+
+                            if ($rate->chargebasis == 'Monthly') {
+                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($rate->amount,2);
                             }
-                            if ($photo->chargebasis == 'Weekly') {
-                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($photo->amount,2);
+                            if ($rate->chargebasis == 'Daily') {
+                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($rate->amount,2);
+                            }
+                            if ($rate->chargebasis == 'Weekly') {
+                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($rate->amount,2);
                             }
                         }
                         ?>
