@@ -1834,7 +1834,7 @@ animated buttons - animate the text inside prev and next buttons
 
 /* Adding Calendar icon Datepicker Fields */
 .vrpsidebar .hasDatepicker,
-#vrp-advanced-search-from .hasDatepicker,
+#vrp-advanced-search-form .hasDatepicker,
 #vrp .hasDatepicker {
     background-image: url('../images/cal.jpg');
     background-position: 95% 50%;
