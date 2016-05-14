@@ -1,13 +1,12 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Josh Houghtelin <josh@findsomehelp.com>
- * Date: 10/23/14
- * Time: 1:35 PM
+ * VRPConnector Advanced Search Template
  */
+
 global $vrp;
 $searchoptions = $vrp->searchoptions();
 ?>
+
 <h2>Advanced Search</h2>
 
 <form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET" id="vrp-advanced-search-form">
@@ -29,9 +28,9 @@ $searchoptions = $vrp->searchoptions();
                 <td>
                     <select name="search[Adults]">
                         <option selected="selected" value="">Any</option>
-                        <?php foreach (range(1, $searchoptions->maxsleeps) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>
+                        <?php foreach (range(1, $searchoptions->maxsleeps) as $sleepCount) : ?>
+                            <option value="<?php echo esc_attr($sleepCount); ?>">
+                                <?php echo esc_attr($sleepCount); ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -59,9 +58,9 @@ $searchoptions = $vrp->searchoptions();
                     will set the exact number of rooms a unit may have. -->
                     <select name="search[bedrooms]" style="width:90px;">
                         <option selected="selected" value="">Any</option>
-                        <?php foreach (range($searchoptions->minbaths, $searchoptions->maxbaths) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>+
+                        <?php foreach (range($searchoptions->minbeds, $searchoptions->maxbeds) as $bedroomCount) : ?>
+                            <option value="<?php echo esc_attr($bedroomCount); ?>">
+                                <?php echo esc_attr($bedroomCount); ?>+
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -72,9 +71,9 @@ $searchoptions = $vrp->searchoptions();
                 <td>
                     <select name="search[bathrooms]" style="width:90px;">
                         <option selected="selected" value="">Any</option>
-                        <?php foreach (range($searchoptions->minbaths, $searchoptions->maxbaths) as $v) : ?>
-                            <option value="<?php echo esc_attr($v); ?>">
-                                <?php echo esc_attr($v); ?>+
+                        <?php foreach (range($searchoptions->minbaths, $searchoptions->maxbaths) as $bathroomCount) : ?>
+                            <option value="<?php echo esc_attr($bathroomCount); ?>">
+                                <?php echo esc_attr($bathroomCount); ?>+
                             </option>
                         <?php endforeach; ?>
                     </select>
@@ -101,14 +100,14 @@ $searchoptions = $vrp->searchoptions();
             <h4>Locations</h4>
         </div>
         <div style="padding:10px;">
-            <ul class="advancedlist">
+            <ul class="">
                 <!-- search[location][] - is an array of all the locations a guest wants to limit their search to -->
-                <?php foreach ($searchoptions->locations as $v) : ?>
+                <?php foreach ($searchoptions->locations as $location) : ?>
                     <li>
                         <label>
-                            <input type="checkbox" name="search[location][]" id="location_<?php echo $v; ?>"
-                                   value="<?php echo esc_attr($v); ?>"/>
-                            <?php echo esc_html($v); ?>
+                            <input type="checkbox" name="search[location][]" id="location_<?php echo $location; ?>"
+                                   value="<?php echo esc_attr($location); ?>"/>
+                            <?php echo esc_html($location); ?>
                         </label>
                     </li>
                 <?php endforeach; ?>
@@ -117,19 +116,22 @@ $searchoptions = $vrp->searchoptions();
         </div>
         <br style="clear:both;"><br>
 
-        <div class="ui-widget-header ui-corner-all">
-            <h4>Amenities</h4>
-        </div>
-        <div style="padding:10px;">
-            <ul class="advancedlist">
-                <?php foreach ($searchoptions->attrs as $v) : ?>
-                    <li>
-                        <input type="checkbox" name="search[attrs][]" value="<?php echo esc_attr($v); ?>"/>
-                        <label><?php echo esc_html($v); ?></label>
-                    </li>
-                <?php endforeach; ?>
-            </ul>
-        </div>
+        <?php if (!empty($searchoptions->attrs)) : ?>
+            <div class="ui-widget-header ui-corner-all">
+                <h4>Amenities</h4>
+            </div>
+            <div style="padding:10px;">
+                <ul class="advancedlist">
+                    <?php foreach ($searchoptions->attrs as $amenity) : ?>
+                        <li>
+                            <input type="checkbox" name="search[attrs][]" value="<?php echo esc_attr($amenity); ?>"/>
+                            <label><?php echo esc_html($amenity); ?></label>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        <?php endif; ?>
+
     </div>
     <br style="clear:both;">
 
