@@ -877,7 +877,11 @@ class VRPConnector
             return json_decode($this->call("searchoptions",$queryString));
         }
 
-        return json_decode($this->call("searchoptions"));
+        $searchOptions = json_decode($this->call("searchoptions"));
+
+        $searchOptions->minbaths = (empty($searchOptions->minbaths)) ? 1 : $searchOptions->minbaths;
+
+        return $searchOptions;
     }
 
     /**
