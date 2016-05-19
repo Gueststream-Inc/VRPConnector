@@ -1,6 +1,17 @@
 <div id="vrp">
     <div class="vrp-container-fluid">
-        <div class="vrp-row">
+        <div class="vrp-row" id="unit-data"
+             data-unit-id="<?php echo $data->id; ?>"
+             data-unit-slug="<?php echo $data->page_slug; ?>"
+             data-unit-address1="<?php echo $data->Address1; ?>"
+             data-unit-address2="<?php echo $data->Address2; ?>"
+             data-unit-city="<?php echo $data->City; ?>"
+             data-unit-state="<?php echo $data->State; ?>"
+             data-unit-zip="<?php echo $data->PostalCode; ?>"
+             data-unit-latitude="<?php echo $data->lat; ?>"
+             data-unit-longitude="<?php echo $data->long; ?>"
+             data-display-pageviews="<?php echo (isset($data->pageViews)) ? "true" : "false"; ?>"
+            >
             <div class="vrp-col-md-9">
                 <div class="vrp-row">
                     <?php echo esc_html($data->Name); ?>
@@ -60,7 +71,7 @@
                                 <img class="thumb"
                                      id="<?php echo $photo->id; ?>"
                                      alt="<?php echo esc_attr($photo->caption); ?>"
-                                     src="<?php echo $photo->thumb_url; ?>" />
+                                     src="<?php echo $photo->thumb_url; ?>"/>
                             <?php endforeach; ?>
                         </div>
                         <br style="clear:both;" class="clearfix">
@@ -97,15 +108,16 @@
             <?php if (isset($data->reviews[0])) { ?>
                 <div id="reviews">
                     <section id="reviews">
-                        <h2 >Guest Reviews of <span class="fn"><?= strtolower($data->Name); ?></span></h2>
-                        <span class="address serif"><?= $data->Address2; ?> <?= $data->City; ?>,&nbsp;<?= $data->State; ?></span>
+                        <h2>Guest Reviews of <span class="fn"><?= strtolower($data->Name); ?></span></h2>
+                        <span class="address serif"><?= $data->Address2; ?> <?= $data->City; ?>
+                            ,&nbsp;<?= $data->State; ?></span>
 
                         <?php
                         $total = 0;
-                        $rat   = 0;
+                        $rat = 0;
                         foreach ($data->reviews as $review) {
                             $rat += $review->rating;
-                            $total ++;
+                            $total++;
                         }
                         $av = round($rat / $total, 2);
                         ?>
@@ -113,11 +125,15 @@
                         <div class="hreview-aggregate" style="font-size:11px;">
                             <hr>
                             <div class="item vcard">
-                                <a href="http://www.flipkey.com/" target="_blank" style="font-size: 1.2em;">Vacation&nbsp;Rental Reviews&nbsp;by <img class="flipkey" style="height: 1.7em; vertical-align: text-top;" src="https://www.flipkey.com/img/marketing/logos/FlipKey-Logo.png"></a>
+                                <a href="http://www.flipkey.com/" target="_blank" style="font-size: 1.2em;">Vacation&nbsp;Rental
+                                    Reviews&nbsp;by <img class="flipkey"
+                                                         style="height: 1.7em; vertical-align: text-top;"
+                                                         src="https://www.flipkey.com/img/marketing/logos/FlipKey-Logo.png"></a>
 
                                 <div style="float:right;text-align:center;" class="serif one-third">
                                     <span class="rating">
-                                        <span class="average"><?= $av; ?></span>&nbsp;out&nbsp;of&nbsp;<span class="best">5</span></span>&nbsp;stars
+                                        <span class="average"><?= $av; ?></span>&nbsp;out&nbsp;of&nbsp;<span
+                                            class="best">5</span></span>&nbsp;stars
                                     based&nbsp;on
                                     <span class="count"><?= $total; ?></span>&nbsp;user&nbsp;reviews
                                 </div>
@@ -129,8 +145,9 @@
                                 <div class="hreview">
                                     <h3 class="title" style="margin-bottom:12px;"><?= $review->title; ?></h3>
 
-                                    <?php if(!empty($review->name)) : ?>
-                                        <b class="reviewer vcard">Review by <span class="fn"><?= $review->name; ?></span></b>
+                                    <?php if (!empty($review->name)) : ?>
+                                        <b class="reviewer vcard">Review by <span
+                                                class="fn"><?= $review->name; ?></span></b>
                                     <?php endif; ?>
 
                                     <div class="description item vcard">
@@ -139,8 +156,9 @@
                                     </div>
                                 </div>
                                 <?php if (!empty($review->response)) { ?>
-                                    <div class="reviewresponse" style="margin-top:1em;padding-top:1em;border-top:1px solid #dadada;">
-                                        <h5 class="title" > Manager Response:</h5>
+                                    <div class="reviewresponse"
+                                         style="margin-top:1em;padding-top:1em;border-top:1px solid #dadada;">
+                                        <h5 class="title"> Manager Response:</h5>
                                         <?= $review->response; ?>
                                     </div>
                                 <?php } ?>
@@ -167,7 +185,8 @@
                                         <tr>
                                             <td width="40%">Arrival:</td>
                                             <td>
-                                                <input type="text" id="arrival2" name="obj[Arrival]"
+                                                <input type="text" id="check-availability-arrival-date"
+                                                       name="obj[Arrival]"
                                                        class="input unitsearch"
                                                        value="<?php echo esc_attr($_SESSION['arrival']); ?>">
                                             </td>
@@ -175,15 +194,16 @@
                                         <tr>
                                             <td>Departure:</td>
                                             <td>
-                                                <input type="text" id="depart2" name="obj[Departure]"
+                                                <input type="text" id="check-availability-departure-date"
+                                                       name="obj[Departure]"
                                                        class="input unitsearch"
                                                        value="<?php echo esc_attr($_SESSION['depart']); ?>">
                                             </td>
                                         </tr>
 
-                                        <?php if ($data->manager->Name == "Escapia" && !empty($data->additonal->PetsPolicy)) :?>
+                                        <?php if ($data->manager->Name == "Escapia" && !empty($data->additonal->PetsPolicy)) : ?>
                                             <?php //<!-- Escapia PMS ONLY - Booking w/Pets --> ?>
-                                            <?php if($data->additonal->PetsPolicy == 2) : ?>
+                                            <?php if ($data->additonal->PetsPolicy == 2) : ?>
                                                 <?php $petsType = "Dog"; ?>
                                             <?php elseif ($data->additonal->PetsPolicy == 1) : ?>
                                                 <?php $petsType = "Cat"; ?>
@@ -194,7 +214,10 @@
                                                 <td>
                                                     <select name="obj[Pets]">
                                                         <option value="">None</option>
-                                                        <option value="<?=$data->additonal->PetsPolicy?>"><?=$petsType?>(s)</option>
+                                                        <option
+                                                            value="<?= $data->additonal->PetsPolicy ?>"><?= $petsType ?>
+                                                            (s)
+                                                        </option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -204,7 +227,8 @@
                                             <?php // Promo Codes work with Escapia/RNS/Barefoot & ISILink Powered Software ?>
                                             <td>Promo Code</td>
                                             <td>
-                                                <input type="text" name="obj[PromoCode]" value="" placeholder="Promo Code">
+                                                <input type="text" name="obj[PromoCode]" value=""
+                                                       placeholder="Promo Code">
                                             </td>
                                         </tr>
 
@@ -261,18 +285,18 @@
                             $start = date("m/d/Y", strtotime($rate->start_date));
                             $end = date("m/d/Y", strtotime($rate->end_date));
 
-                            if(empty($rateSeasons[$start . " - " . $end])) {
+                            if (empty($rateSeasons[$start . " - " . $end])) {
                                 $rateSeasons[$start . " - " . $end] = new \stdClass();
                             }
 
                             if ($rate->chargebasis == 'Monthly') {
-                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($rate->amount,2);
+                                $rateSeasons[$start . " - " . $end]->monthly = "$" . number_format($rate->amount, 2);
                             }
                             if ($rate->chargebasis == 'Daily') {
-                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($rate->amount,2);
+                                $rateSeasons[$start . " - " . $end]->daily = "$" . number_format($rate->amount, 2);
                             }
                             if ($rate->chargebasis == 'Weekly') {
-                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($rate->amount,2);
+                                $rateSeasons[$start . " - " . $end]->weekly = "$" . number_format($rate->amount, 2);
                             }
                         }
                         ?>
@@ -302,62 +326,6 @@
                 <div id="map" style="width:100%;height:500px;"></div>
             </div>
 
-
         </div>
     </div>
 </div>
-
-<script type="text/javascript">
-    var geocoder, map, value = "<?php echo esc_attr( $data->id ); ?>";
-
-    <?php if ( strlen( $data->lat ) > 0 && strlen( $data->long ) > 0 ) { ?>
-    var unitMapPinLocation = new google.maps.LatLng(<?php echo esc_js( $data->lat ); ?>, <?php echo esc_js( $data->long ); ?>);
-    <?php } ?>
-
-    function initialize() {
-        geocoder = new google.maps.Geocoder();
-        var myOptions = {
-            zoom: 13,
-            <?php if ( strlen( $data->lat ) > 0 && strlen( $data->long ) > 0 ) { ?>
-            center: unitMapPinLocation,
-            <?php } ?>
-            scrollwheel: false,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
-        };
-
-        map = new google.maps.Map(document.getElementById("map"), myOptions);
-        <?php if ( strlen( $data->lat ) == 0 || strlen( $data->long ) == 0 ) { ?>
-        codeAddress();
-        <?php } else { ?>
-        new google.maps.Marker({
-            map: map,
-            position: unitMapPinLocation
-        });
-        <?php } ?>
-    }
-
-    function codeAddress() {
-        var address = "<?php echo esc_js( $data->Address1 ) . " " . esc_js( $data->Address2 ) . " " . esc_js( $data->City ) . " " . esc_js( $data->State ) . " " . esc_js( $data->PostalCode ); ?>";
-
-        geocoder.geocode({'address': address}, function (results, status) {
-            if (status == google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-            }
-        });
-
-    }
-
-    jQuery(document).ready(function () {
-        jQuery("#gmaplink").on('click', function () {
-            initialize();
-        });
-    });
-
-    if (<?php echo (isset($data->pageViews)) ? "true" : "false"; ?>) {
-        jQuery.get(url_paths.site_url, {vrpjax: true, act: "saveUnitPageView", par:<?php echo $data->id;?>, cache:Math.random()});
-    }
-</script>

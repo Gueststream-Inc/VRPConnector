@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.2.3 =
+* Added datepicker functionality on unit page availability check & pricing request to make booked dates un-selectable.
+* Beginning to compartmentalize javascripts breaking them down by theme file starting with the unit page theme file.
 
 = 1.2.2 =
 * Unit Page availability check now displays rate breakdown next to 'book now' link.
