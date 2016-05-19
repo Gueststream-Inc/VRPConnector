@@ -288,11 +288,10 @@ class VRPConnector
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
-                } else {
-                    $content = $this->loadTheme("unit", $data);
+                    break;
                 }
 
-
+                $content = $this->loadTheme("unit", $data);
                 break;
 
             case "complex": // If Complex Page.
@@ -783,6 +782,33 @@ class VRPConnector
         echo $vCalendar->render();
 
         exit;
+    }
+
+    public function getUnitBookedDates($unitSlug)
+    {
+        $unitDataJson = $this->call("getunit/" . (string) $unitSlug);
+        $unitData = json_decode($unitDataJson);
+
+        $unitBookedDates = [
+            'bookedDates' => [],
+            'noCheckin' => []
+        ];
+
+
+        foreach ($unitData->avail as $v) {
+
+            $fromDateTS = strtotime("+1 Day", strtotime($v->start_date));
+            $toDateTS = strtotime($v->end_date);
+
+            array_push($unitBookedDates['noCheckin'],date("n-j-Y", strtotime($v->start_date)));
+
+            for ($currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24)) {
+                $currentDateStr = date("n-j-Y", $currentDateTS);
+                array_push($unitBookedDates['bookedDates'],$currentDateStr);
+            }
+        }
+
+        echo json_encode($unitBookedDates);
     }
 
     //

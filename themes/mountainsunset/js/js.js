@@ -154,31 +154,9 @@ jQuery(document).ready(function(){
         }
     });
 
-    var dates2 = jQuery( "#arrival2, #depart2" ).datepicker({
-        minDate: 2,
-        onSelect: function( selectedDate ) {
-            var option = this.id == "arrival2" ? "minDate" : "30",
-                instance = jQuery( this ).data( "datepicker" ),
-                date = jQuery.datepicker.parseDate(
-                    instance.settings.dateFormat ||
-                    jQuery.datepicker._defaults.dateFormat,
-                    selectedDate, instance.settings );
-            dates2.not( this ).datepicker( "option", option, date );
-            if (jQuery("#depart2").val() != ''){
-                var arrivalDate=jQuery("#arrival2").datepicker("getDate");
-                var departureDate=jQuery("#depart2").datepicker("getDate");
-                var oneDay = 1000*60*60*24;
-            }
-        }
-    });
-    
     jQuery('.hasDatepicker').attr("autocomplete", "off").attr("readonly", "readonly");
 
     jQuery("#bookmsg").hide();
-
-    jQuery("#checkbutton").click(function (){
-        checkavailability();
-    });
 
     if (jQuery("#unitsincomplex").length > 0){
         if (jQuery("#hassession").length > 0){
@@ -333,52 +311,3 @@ jQuery(document).ready(function(){
     }
 });
 
-function checkavailability(){
-    if (jQuery("#arrival2").val() == '' || jQuery("#arrival2").val() == 'Not Sure'){
-        return false;
-    }
-    jQuery("#errormsg").html('');
-    jQuery("#booklink").hide();
-    jQuery("#loadingicons").show();
-    jQuery("#ratebreakdown").empty();
-    jQuery.get("/?vrpjax=1&act=checkavailability&par=1",jQuery("#bookingform").serialize(),function(data){
-        var obj=jQuery.parseJSON(data);
-
-        if (!obj.Error){
-            jQuery("#loadingicons").hide();
-            //jQuery("#totalcost").html(obj.TotalWithoutInsurance);
-            jQuery("#thetotal,#booklink").fadeIn();
-            ratebreakdown(obj);
-            jQuery("#checkbutton").fadeTo(500,0.5);
-            jQuery(".unitsearch").change(function(){
-                //jQuery("#booklink").hide();
-                jQuery("#errormsg").html('').hide();
-                jQuery("#checkbutton").fadeTo(500,1);
-            });
-        }else{
-            jQuery("#loadingicons").hide();
-            var theerror='<div class="alert alert-error">' + obj.Error + '</div>';
-            jQuery("#errormsg").html(theerror);
-
-        }
-    });
-}
-
-function ratebreakdown(obj) {
-    var tbl = jQuery("#ratebreakdown");
-    for (var i in obj.Charges) {
-        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
-        tbl.append(row);
-    }
-    if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
-        tbl.append(row);
-    }
-    var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
-    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
-    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
-
-    tbl.append(tax);
-    tbl.append(total);
-    tbl.append(totaldue);
-}
