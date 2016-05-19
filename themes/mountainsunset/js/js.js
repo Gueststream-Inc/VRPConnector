@@ -82,56 +82,6 @@
 }(jQuery, window));
 
 jQuery(document).ready(function(){
-
-    // Unit Page Tabs
-    unitTabs = jQuery("#tabs").tabs();
-
-    // Allow outside links to open tabs
-    jQuery('.open-tab').click(function (event) {
-        var tab = jQuery(this).attr('href');
-        unitTabs.tabs("load",2);
-    });
-
-    // Unit Page photo gallery
-    jQuery('#gallery .thumb').click(function () {
-        var photoid = jQuery(this).attr('id');
-        var showImage = "#vrp-photo-full-"+photoid;
-        jQuery("#photo .vrp-photo-container").hide();
-        jQuery("#photo "+showImage).show();
-    });
-
-    var inquireopen=false;
-
-    jQuery("#inline").click(function(){
-        if (inquireopen == false){
-            jQuery("#pinquire").slideDown();
-            inquireopen=true;
-        }else{
-            jQuery("#pinquire").slideUp();
-            inquireopen=false;
-        }
-    });
-
-    jQuery("#vrpinquire").submit(function(){
-        jQuery("#iqbtn").attr("disabled","disabled");
-        jQuery.post("/?vrpjax=1&act=custompost&par=addinquiry",jQuery(this).serialize(),function(data){
-            var obj=jQuery.parseJSON(data);
-            if (obj.success){
-                jQuery("#vrpinquire").replaceWith("Thank you for your inquiry!");
-            }else{
-                var item;
-                var thetotal=obj.err.length - 1;
-                for(i=0;i<=thetotal;i++){
-                    item=obj.err[i];
-                    /// alert(item.name);
-                    jQuery("#i" + item.name).append("<span class='errormsg'>" + item.msg + "</span>");
-                }
-                jQuery("#iqbtn").removeAttr("disabled");
-            }
-        });
-        return false;
-    });
-
     var dates = jQuery( "#arrival, #depart" ).datepicker({
         minDate: 2,
         onSelect: function( selectedDate ) {
