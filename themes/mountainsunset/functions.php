@@ -66,6 +66,13 @@ class mountainsunset
             wp_enqueue_script('VRPResultMap', plugins_url('/mountainsunset/js/vrp.resultListMap.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
         }
 
+        // Unit Page
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.unit.js')) {
+            wp_enqueue_script('VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js', array( 'jquery','googleMap' ) );
+        } else {
+            wp_enqueue_script('VRPUnitPage', plugins_url('/mountainsunset/js/vrp.unit.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
+        }
+
         $script_vars = [
             'site_url' => site_url(),
             'stylesheet_dir_url' => get_stylesheet_directory_uri(),

@@ -52,6 +52,8 @@ you to seamlessly connect your website to your property management software data
 == Changelog ==
 = 1.2.3 =
 * Removed popup map and unit description from result list.
+* Added datepicker functionality on unit page availability check & pricing request to make booked dates un-selectable.
+* Beginning to compartmentalize javascripts breaking them down by theme file starting with the unit page theme file.
 
 = 1.2.2 =
 * Unit Page availability check now displays rate breakdown next to 'book now' link.
