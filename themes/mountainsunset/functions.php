@@ -92,9 +92,6 @@ class mountainsunset
 
     function add_my_stylesheet()
     {
-
-
-
          if (file_exists(get_stylesheet_directory() . '/vrp/css/font-awesome.css')) {
             wp_enqueue_style('FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css');
         } else {
