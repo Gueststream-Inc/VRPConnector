@@ -46,33 +46,13 @@
 
         <?php foreach($data->results as $index => $unit) : ?>
 
-            <div class="vrp-col-md-4 vrp-col-xs-12 vrp-col-sm-6 vrp-item-wrap vrp-grid">
+            <div class="vrp-col-md-6 vrp-col-xs-12 vrp-col-sm-6 vrp-item-wrap vrp-grid">
                 <div class="vrp-item"
-                     data-vrp-processed="false"
                      data-vrp-address="<?php echo $unit->Address1;?> <?php echo $unit->City;?>, <?php echo $unit->State;?>"
                      data-vrp-name="<?php echo esc_html($unit->Name); ?>"
                      data-vrp-url="<?php echo site_url() . "/vrp/unit/" . $unit->page_slug;?>"
                      data-vrp-thumbnail="<?php echo $unit->Thumb; ?>">
-                    <div class="vrp-overlay">
-                        <div class="vrp-overlay-map-container">
 
-                        </div>
-                        <div class="vrp-overlay-description">
-                            <div class="vrp-detailed">
-                                <div class="vrp-row">
-                                    <div class="vrp-col-xs-12">
-                                        <h4 class="vrp-pull-left"><?php echo esc_html($unit->Name); ?></h4>
-                                    </div>
-                                </div>
-                                <div class="vrp-row">
-                                    <div class="vrp-col-xs-12">
-                                        <p><?php echo esc_html($unit->Description);?></p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
                     <div class="vrp-thumbnail text-center" style="background-image:url('<?php echo $unit->Thumb; ?>');">
                         <div class="vrp-actions">
                             <a href="#" data-unit="<?php echo $unit->id; ?>" class="vrp-favorite-button vrp-btn purple text-center">
