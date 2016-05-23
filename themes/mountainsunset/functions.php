@@ -25,14 +25,6 @@ class mountainsunset
         wp_enqueue_script('vrpNamespace');
 
 
-        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.map.js')) {
-            wp_register_script('vrpMapModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.map.js', array( 'jquery' ) );
-        } else {
-            wp_register_script('vrpMapModule', plugins_url('/mountainsunset/js/vrp.map.js', dirname(__FILE__)), array( 'jquery' ) );
-        }
-        wp_enqueue_script('vrpMapModule');
-
-
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.mRespond.js')) {
             wp_register_script('vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js', array( 'jquery' ) );
         } else {
@@ -74,6 +66,13 @@ class mountainsunset
             wp_enqueue_script('VRPResultMap', plugins_url('/mountainsunset/js/vrp.resultListMap.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
         }
 
+        // Unit Page
+        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.unit.js')) {
+            wp_enqueue_script('VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js', array( 'jquery','googleMap' ) );
+        } else {
+            wp_enqueue_script('VRPUnitPage', plugins_url('/mountainsunset/js/vrp.unit.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
+        }
+
         $script_vars = [
             'site_url' => site_url(),
             'stylesheet_dir_url' => get_stylesheet_directory_uri(),
@@ -85,9 +84,6 @@ class mountainsunset
 
     function add_my_stylesheet()
     {
-
-
-
          if (file_exists(get_stylesheet_directory() . '/vrp/css/font-awesome.css')) {
             wp_enqueue_style('FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css');
         } else {

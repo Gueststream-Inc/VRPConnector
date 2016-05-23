@@ -289,11 +289,10 @@ class VRPConnector
 
                 if (isset($data->Error)) {
                     $content = $this->loadTheme("error", $data);
-                } else {
-                    $content = $this->loadTheme("unit", $data);
+                    break;
                 }
 
-
+                $content = $this->loadTheme("unit", $data);
                 break;
 
             case "complex": // If Complex Page.
@@ -628,20 +627,21 @@ class VRPConnector
         $act = $_GET['act'];
 
         if (method_exists($this, $act)) {
+            header('Content-Type: application/json');
             if(isset($_GET['par'])) {
                 $this->$act($_GET['par']);
-                exit;
+                die();
             }
 
             $this->$act();
         }
 
-        exit;
+        die();
     }
 
     public function checkavailability($par = false, $ret = false)
     {
-        set_time_limit(50);
+        set_time_limit(30);
 
         $fields_string = "obj=" . json_encode($_GET['obj']);
         $results = $this->call('checkavail', $fields_string);
@@ -654,9 +654,9 @@ class VRPConnector
 
         if ($par != false) {
             $_SESSION['bookingresults'] = $results;
-            echo wp_kses_post($results);
+            echo $results;
 
-            return false;
+            return true;
         }
 
         $res = json_decode($results);
@@ -681,7 +681,9 @@ class VRPConnector
         if (isset($res->Results)) {
             $_SESSION['bresults'] = json_encode($res->Results);
         }
-        echo wp_kses_post($results);
+
+        echo $results;
+        return;
     }
 
     public function addtopackage()
@@ -786,6 +788,7 @@ class VRPConnector
         exit;
     }
 
+
     private function addReview()
     {
         $review = $_POST;
@@ -793,6 +796,33 @@ class VRPConnector
         $params['review'] = json_encode($review);
         $results = $this->call('addReview', $params);
         echo $results;
+    }
+
+    public function getUnitBookedDates($unitSlug)
+    {
+        $unitDataJson = $this->call("getunit/" . (string) $unitSlug);
+        $unitData = json_decode($unitDataJson);
+
+        $unitBookedDates = [
+            'bookedDates' => [],
+            'noCheckin' => []
+        ];
+
+
+        foreach ($unitData->avail as $v) {
+
+            $fromDateTS = strtotime("+1 Day", strtotime($v->start_date));
+            $toDateTS = strtotime($v->end_date);
+
+            array_push($unitBookedDates['noCheckin'],date("n-j-Y", strtotime($v->start_date)));
+
+            for ($currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24)) {
+                $currentDateStr = date("n-j-Y", $currentDateTS);
+                array_push($unitBookedDates['bookedDates'],$currentDateStr);
+            }
+        }
+
+        echo json_encode($unitBookedDates);
     }
 
     //
