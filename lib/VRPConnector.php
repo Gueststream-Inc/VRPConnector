@@ -786,6 +786,15 @@ class VRPConnector
         exit;
     }
 
+    private function addReview()
+    {
+        $review = $_POST;
+        $params = [];
+        $params['review'] = json_encode($review);
+        $results = $this->call('addReview', $params);
+        echo $results;
+    }
+
     //
     // Wordpress Filters
     //
