@@ -115,6 +115,7 @@ class VRPConnector
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpshort", [$this, "vrpShort"]);
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
+        add_shortcode("vrpSubmitReview",[$this,"vrpSubmitReview"]);
 
         add_filter('widget_text', 'do_shortcode');
     }
@@ -916,7 +917,7 @@ class VRPConnector
     /**
      * List out property names. Useful in listing names for propery select box.
      */
-    function proplist()
+    public function proplist()
     {
         $data = $this->call("namelist");
 
@@ -1454,6 +1455,14 @@ class VRPConnector
             return $this->loadTheme("vrpFeaturedUnit", $data);
         }
 
+    }
+
+    public function vrpSubmitReview()
+    {
+        $data = [];
+        $data['allUnits'] = $this->proplist();
+
+        return $this->loadTheme('vrpSubmitReview',$data);
     }
 
     //
