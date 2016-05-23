@@ -116,8 +116,6 @@
 
 <div id="vrp">
 
-    <h1>Submit a Review</h1>
-
     <p id="vrp-add-review-success" style="display:none;">Thank you for submitting your review.  It will be processed shortly!</p>
 
     <form id="vrpSubmitReviewForm">
