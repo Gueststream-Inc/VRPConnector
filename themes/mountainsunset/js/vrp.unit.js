@@ -1,14 +1,14 @@
 /**
  * Unit Availability Check & Pricing Request/Breakdown
  */
-var disabledDays;
+var disabledDays, unitDataSource;
 
 jQuery(document).ready(function () {
 
     /**
      * JavaScript applied to the unit.php VRPConnector theme file
      */
-    var unitDataSource = jQuery("#unit-data");
+    unitDataSource = jQuery("#unit-data");
 
     /**
      * Determine if Unit Page Views module is enabled & log the page view if it is.
@@ -26,7 +26,7 @@ jQuery(document).ready(function () {
 
     var unitSlug = unitDataSource.data('unit-slug');
     jQuery.get("/?vrpjax=1&act=getUnitBookedDates&par=" + unitSlug, function (data) {
-        disabledDays = jQuery.parseJSON(data);
+        disabledDays = data;
     });
 
     var checkAvailArrival, checkAvailDeparture;
@@ -128,9 +128,10 @@ function ratebreakdown(obj) {
 /**
  * Google Map
  */
-
-jQuery("#gmaplink").on('click', function () {
-    initializeGoogleMap();
+jQuery(document).ready(function() {
+    jQuery("#gmaplink").on('click', function () {
+        initializeGoogleMap();
+    });
 });
 
 function initializeGoogleMap() {
