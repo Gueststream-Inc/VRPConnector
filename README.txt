@@ -40,7 +40,7 @@ More detailed instructions for using shortcodes, theming the VRP pages and using
 == Frequently Asked Questions ==
 = What property management software(s) does the VRP Connector support? =
 
-HomeAway, ISILink, Escapia, Barefoot, RNS.
+HomeAway, ISILink (First Resort, Property Plus, V12), Escapia, Barefoot, RNS, Streamline VRS, vOffice, VRMGR, and more!
 
 = Does the VRP Connector require an account with Gueststream.net? =
 Yes, Gueststream.net provides the back-end service of interfacing with many property management software APIs that allows
