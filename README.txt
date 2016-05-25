@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.2.4 =
+* Hotfix for backward compatibility breaking issue introduced in version 1.2.3 - setting header application/json.
+
 = 1.2.3 =
 * Added datepicker functionality on unit page availability check & pricing request to make booked dates un-selectable.
 * Beginning to compartmentalize javascripts breaking them down by theme file starting with the unit page theme file.
