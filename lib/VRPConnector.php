@@ -626,7 +626,7 @@ class VRPConnector
         $act = $_GET['act'];
 
         if (method_exists($this, $act)) {
-            header('Content-Type: application/json');
+
             if(isset($_GET['par'])) {
                 $this->$act($_GET['par']);
                 die();
