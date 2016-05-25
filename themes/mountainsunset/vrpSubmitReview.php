@@ -182,7 +182,7 @@
 
         <div class="vrp-col-md-12">
             Where I Live <i>(City, State/Region, Country)</i>
-            <input type="text" name="guest_location" required="" />
+            <input type="text" name="location" required="" />
         </div>
 
         <div class="vrp-col-md-12 review-submit">
@@ -348,7 +348,9 @@
         });
 
         jQuery(document).ready(function () {
-            jQuery('#review_check_in').datepicker({});
+            jQuery('#review_check_in').datepicker({
+                dateFormat: 'yy-mm-dd'
+            });
 
             jQuery("#vrpSubmitReviewForm").submit(function(event){
                 event.preventDefault();

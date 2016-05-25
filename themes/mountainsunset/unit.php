@@ -1,4 +1,4 @@
-<div id="vrp">
+<div id="vrp" itemscope itemtype="http://schema.org/Place">
     <div class="vrp-container-fluid">
         <div class="vrp-row" id="unit-data"
              data-unit-id="<?php echo $data->id; ?>"
@@ -14,7 +14,7 @@
             >
             <div class="vrp-col-md-9">
                 <div class="vrp-row">
-                    <?php echo esc_html($data->Name); ?>
+                    <span itemprop="name"><?php echo esc_html($data->Name); ?></span>
                 </div>
                 <div class="vrp-row">
                     <?php echo esc_html($data->Bedrooms); ?> Bedroom(s) | <?php echo esc_html($data->Bathrooms); ?>
@@ -80,7 +80,7 @@
                 <div class="vrp-row">
                     <div class="vrp-col-md-12">
                         <div id="description">
-                            <p><?php echo wp_kses_post(nl2br($data->Description)); ?></p>
+                            <p itemprop="description"><?php echo wp_kses_post(nl2br($data->Description)); ?></p>
                         </div>
                     </div>
                 </div>
@@ -105,68 +105,72 @@
                 </table>
             </div>
 
-            <?php if (isset($data->reviews[0])) { ?>
+            <?php if (!empty($data->reviews)) : ?>
+                <?php
+                $totalReviews = 0;
+                $ratingSum = 0;
+                foreach ($data->reviews as $review) {
+                    $ratingSum += $review->rating;
+                    $totalReviews++;
+                }
+                $average = round($ratingSum / $totalReviews, 2);
+                ?>
+
                 <div id="reviews">
                     <section id="reviews">
-                        <h2>Guest Reviews of <span class="fn"><?= strtolower($data->Name); ?></span></h2>
-                        <span class="address serif"><?= $data->Address2; ?> <?= $data->City; ?>
-                            ,&nbsp;<?= $data->State; ?></span>
-
-                        <?php
-                        $total = 0;
-                        $rat = 0;
-                        foreach ($data->reviews as $review) {
-                            $rat += $review->rating;
-                            $total++;
-                        }
-                        $av = round($rat / $total, 2);
-                        ?>
-
-                        <div class="hreview-aggregate" style="font-size:11px;">
-                            <hr>
-                            <div class="item vcard">
-                                <a href="http://www.flipkey.com/" target="_blank" style="font-size: 1.2em;">Vacation&nbsp;Rental
-                                    Reviews&nbsp;by <img class="flipkey"
-                                                         style="height: 1.7em; vertical-align: text-top;"
-                                                         src="https://www.flipkey.com/img/marketing/logos/FlipKey-Logo.png"></a>
-
-                                <div style="float:right;text-align:center;" class="serif one-third">
-                                    <span class="rating">
-                                        <span class="average"><?= $av; ?></span>&nbsp;out&nbsp;of&nbsp;<span
-                                            class="best">5</span></span>&nbsp;stars
-                                    based&nbsp;on
-                                    <span class="count"><?= $total; ?></span>&nbsp;user&nbsp;reviews
-                                </div>
-                            </div>
+                        <div itemprop="aggregateRating" itemscope="" itemtype="http://schema.org/AggregateRating">
+                            <meta itemprop="worstRating" content = "1"/>
+                            <b>Average Rating: </b>
+                            <span itemprop="ratingValue"><?php echo $average; ?></span>
+                            out of
+                            <span itemprop="bestRating">5</span> <br />
+                            <b>Based on:</b> <span itemprop="reviewCount"><?php echo $totalReviews; ?></span> review(s)
                         </div>
+
+                        <hr />
 
                         <?php foreach ($data->reviews as $review): ?>
                             <div class="review-post">
-                                <div class="hreview">
-                                    <h3 class="title" style="margin-bottom:12px;"><?= $review->title; ?></h3>
+                                <div itemprop="review" itemscope itemtype="http://schema.org/Review">
+                                    <h4 class="title" itemprop="name"><?= $review->title; ?></h4>
 
                                     <?php if (!empty($review->name)) : ?>
-                                        <b class="reviewer vcard">Review by <span
-                                                class="fn"><?= $review->name; ?></span></b>
+                                        <b class="reviewer vcard">Review by </b>
+                                        <span itemprop="author">
+                                            <?= $review->name; ?>
+                                        </span>
+                                        <br />
                                     <?php endif; ?>
 
-                                    <div class="description item vcard">
-                                        <span class="serif"><?= strip_tags($review->review); ?></span><br>
-                                        <b class="rating"><?= $review->rating; ?> out of 5 stars</b>
-                                    </div>
+                                    <?php if (!empty($review->review_date)) : ?>
+                                        <b>Published On:</b>
+                                        <span itemprop="datePublished" content="<?php echo $review->review_date; ?>">
+                                            <?php echo $review->review_date; ?>
+                                        </span> <br />
+                                    <?php endif; ?>
+
+                                    <b>Rating: </b>
+                                    <meta itemprop="worstRating" content = "1"/>
+                                    <span itemprop="ratingValue"><?= $review->rating; ?></span>
+                                    out of
+                                    <span itemprop="bestRating">5</span>
+                                    <br />
+
+                                    <span itemprop="description">
+                                        <?= strip_tags($review->review); ?>
+                                    </span>
                                 </div>
-                                <?php if (!empty($review->response)) { ?>
-                                    <div class="reviewresponse"
-                                         style="margin-top:1em;padding-top:1em;border-top:1px solid #dadada;">
+                                <?php if (!empty($review->response)) : ?>
+                                    <div class="reviewresponse">
                                         <h5 class="title"> Manager Response:</h5>
                                         <?= $review->response; ?>
                                     </div>
-                                <?php } ?>
+                                <?php endif; ?>
                             </div>
-
+                            <hr />
                         <?php endforeach; ?>
                 </div>
-            <?php } ?>
+            <?php endif; ?>
 
             <!-- CALENDAR TAB -->
             <div id="calendar">
