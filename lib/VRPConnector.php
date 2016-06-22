@@ -90,6 +90,7 @@ class VRPConnector
         //add_shortcode("vrpLinks", array($this, "vrpLinks"));
         add_shortcode("vrpshort", [$this, "vrpShort"]);
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
+	    add_shortcode("vrpCheckUnitAvailabilityForm", [$this,'vrpCheckUnitAvailabilityForm'] );
 
         add_filter('widget_text', 'do_shortcode');
     }
@@ -1395,6 +1396,28 @@ class VRPConnector
 
         return $this->loadTheme('vrpShort', $items);
     }
+
+	public function vrpCheckUnitAvailabilityForm($args)
+	{
+		if(empty($args['unit_slug'])) {
+			return '<span style="color:red;font-size: 1.2em;">unit_slug argument MUST be present when using this shortcode. example: [vrpCheckUnitAvailabilityForm unit_slug="my_awesome_unit"]</span>';
+		}
+
+		global $vrp;
+
+		if(empty($vrp)) {
+			return '<span style="color:red;font-size: 1.2em;">VRPConnector plugin must be enabled in order to use this shortcode.</span>';
+		}
+
+		$jsonUnitData = $vrp->call("getunit/" . $args['unit_slug']);
+		$unitData = json_decode($jsonUnitData);
+
+		if(empty($unitData->id)) {
+			return '<span style="color:red;font-size: 1.2em;">'.$args['unit_slug'].' is an invalid unit page slug.  Unit not found.</span>';
+		}
+
+		return $vrp->loadTheme("vrpCheckUnitAvailabilityForm", $unitData);
+	}
 
     public function vrpFeaturedUnit($params = [])
     {
