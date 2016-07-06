@@ -156,6 +156,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.3.0 =
+* Add Google Analytics E-Commerce Transaction Tracking
+
 = 0.10 =
 * Display Specials by category or individually with the use of shortcodes.
 
