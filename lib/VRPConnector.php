@@ -1464,13 +1464,17 @@ class VRPConnector
         register_setting('VRPConnector', 'vrpUser');
         register_setting('VRPConnector', 'vrpPass');
         register_setting('VRPConnector', 'vrpTheme');
+	    register_setting('VRPConnector', 'vrpGoogleAnalyticsTrackingCode');
+
         add_settings_section('vrpApiKey', 'VRP API Key', [$this, 'apiKeySettingTitleCallback'], 'VRPConnector');
         add_settings_field('vrpApiKey', 'VRP Api Key', [$this, 'apiKeyCallback'], 'VRPConnector', 'vrpApiKey');
         add_settings_section('vrpLoginCreds', 'VRP Login', [$this, 'vrpLoginSettingTitleCallback'], 'VRPConnector');
         add_settings_field('vrpUser', 'VRP Username', [$this, 'vrpUserCallback'], 'VRPConnector', 'vrpLoginCreds');
         add_settings_field('vrpPass', 'VRP Password', [$this, 'vrpPasswordCallback'], 'VRPConnector', 'vrpLoginCreds');
-        add_settings_section('vrpTheme', 'VRP Theme Selection', [$this, 'vrpThemeSettingTitleCallback'], 'VRPConnector');
-        add_settings_field('vrpTheme', 'VRP Theme', [$this, 'vrpThemeSettingCallback'], 'VRPConnector', 'vrpTheme');
+	    add_settings_section('vrpTheme', 'VRP Theme Selection', [$this, 'vrpThemeSettingTitleCallback'], 'VRPConnector');
+	    add_settings_field('vrpTheme', 'VRP Theme', [$this, 'vrpThemeSettingCallback'], 'VRPConnector', 'vrpTheme');
+	    add_settings_section('vrpGoogleAnalyticsTrackingCode', 'Google Analytics Tracking Code', [$this, 'vrpGoogleAnalyticsTrackingCodeSettingTitleCallback'], 'VRPConnector');
+	    add_settings_field('vrpGoogleAnalyticsTrackingCode', 'Google Analytics ID', [$this, 'vrpGoogleAnalyticsTrackingCodeSettingCallback'], 'VRPConnector', 'vrpGoogleAnalyticsTrackingCode');
     }
 
     public function apiKeySettingTitleCallback()
@@ -1503,22 +1507,36 @@ class VRPConnector
         echo '<input type="password" name="vrpPass" value="' . esc_attr(get_option('vrpPass')) . '" style="width:400px;"/>';
     }
 
-    public function vrpThemeSettingTitleCallback()
-    {
-    }
+	public function vrpThemeSettingTitleCallback()
+	{
+	}
 
-    public function vrpThemeSettingCallback()
-    {
-        echo '<select name="vrpTheme">';
-        foreach ($this->available_themes as $name => $displayname) {
-            $sel = "";
-            if ($name == $this->themename) {
-                $sel = "SELECTED";
-            }
-            echo '<option value="' . esc_attr($name) . '" ' . esc_attr($sel) . '>' . esc_attr($displayname) . '</option>';
-        }
-        echo '</select>';
-    }
+	public function vrpThemeSettingCallback()
+	{
+		echo '<select name="vrpTheme">';
+		foreach ($this->available_themes as $name => $displayname) {
+			$sel = "";
+			if ($name == $this->themename) {
+				$sel = "SELECTED";
+			}
+			echo '<option value="' . esc_attr($name) . '" ' . esc_attr($sel) . '>' . esc_attr($displayname) . '</option>';
+		}
+		echo '</select>';
+	}
+
+	public function vrpGoogleAnalyticsTrackingCodeSettingTitleCallback() {
+		echo "<p> This setting is specifically for logging E-Commerce transactions.
+			You will need to use an SEO or Google Analytics plugin for regular page tracking.
+			This stores the bookings (reservation #, total cost and unit name) in your Google
+			Analytics E-Commerce transaction tracking section</p>";
+	}
+
+	public function vrpGoogleAnalyticsTrackingCodeSettingCallback()
+	{
+		echo '<input type="text" name="vrpGoogleAnalyticsTrackingCode" value="' . esc_attr(get_option('vrpGoogleAnalyticsTrackingCode')) .'" placeholder="UA-xxxxxxx-xx" style="width:400px;"/>
+		<p class="description">Enter your Google Analytics ID here to log E-Commerce booking transactions using Google Analytics.</p>
+		';
+	}
 
     /**
      * Displays the 'VRP Login' admin page.
