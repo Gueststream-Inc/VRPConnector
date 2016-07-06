@@ -1,69 +1,69 @@
-<div class="userbox" >
-    <h3>Congratulations!</h3>
-    <div class="padit">
-        <b>Reservation Confirmation Number:</b> <?php echo esc_html($data->thebooking->BookingNumber);?><br><br>
-        You have successfully booked <b><?php echo esc_html($data->Name);?></b> from <b><?php echo esc_html($data->Arrival); ?></b> for <b><?php echo esc_html(floor($data->Nights)); ?></b> nights.
-        <br /><br />
-        You will receive an email confirmation shortly with additional information.
-    </div>
+<div class="userbox">
+	<h3>Congratulations!</h3>
+
+	<div class="padit">
+		<b>Reservation Confirmation Number:</b> <?php echo esc_html( $data->thebooking->BookingNumber ); ?><br><br>
+		You have successfully booked <b><?php echo esc_html( $data->Name ); ?></b> from
+		<b><?php echo esc_html( $data->Arrival ); ?></b> for <b><?php echo esc_html( floor( $data->Nights ) ); ?></b>
+		nights.
+		<br/><br/>
+		You will receive an email confirmation shortly with additional information.
+	</div>
 
 </div>
-<?php echo '
-<script type="text/javascript">
 
-var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+<?php
+/**
+ * Google Analytics E-Commerce Transaction Tracking
+ */
 
-document.write(unescape("%3Cscript src=\'" + gaJsHost + "google-analytics.com/ga.js\' type=\'text/javascript\'%3E%3C/script%3E"));
+$googleAnalyticsID = esc_attr( get_option( 'vrpGoogleAnalyticsTrackingCode' ) );
 
-</script>
-		<script type="text/javascript">
+if ( ! empty( $googleAnalyticsID ) ) :
+	?>
 
-try {
+	<script type="text/javascript">
 
-  var pageTracker = _gat._getTracker("UA-xxxxxxx-xx");
+		var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
 
+		document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
 
-  pageTracker._trackPageview();
+	</script>
 
+	<script type="text/javascript">
 
-  pageTracker._addTrans(
+		try {
 
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
+			var pageTracker = _gat._getTracker("<?php echo $googleAnalyticsID; ?>");
 
-    "",                            // Affiliation
+			pageTracker._trackPageview();
 
-    "' . esc_js($data->TotalCost) . '",                                    // Total
+			pageTracker._addTrans(
+				"<?php echo esc_js($data->thebooking->BookingNumber); ?>",  // Order ID
+				"",                                                         // Affiliation
+				"<?php echo esc_js($data->TotalCost); ?>",                  // Total
+				"",                                                         // Tax
+				"",                                                         // Shipping
+				"",                                                         // City
+				"",                                                         // State
+				""                                                          // Country
+			);
 
-    "",                                     // Tax
+			pageTracker._addItem(
+				"<?php echo esc_js($data->thebooking->BookingNumber); ?>",  // Order ID
+				"",                                                         // SKU
+				"<?php echo esc_js($data->Name); ?>",                       // Product Name
+				"",                                                         // Category
+				"<?php echo esc_js($data->TotalCost); ?>",                  // Price
+				"1"                                                         // Quantity
+			);
 
-    "",                                        // Shipping
+			pageTracker._trackTrans();
+		} catch (err) {
 
-    "",                                 // City
+		}
+	</script>
 
-    "",                               // State
-
-    ""                                       // Country
-
-  );
-
- pageTracker._addItem(
-
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
-
-    "",                                     // SKU
-
-    "' . esc_js($data->Name) . '",                                  // Product Name
-
-    "",                             // Category
-
-    "' . esc_js($data->TotalCost) . '",                                    // Price
-
-    "1"                                         // Quantity
-
-  );
-
-
-
-  pageTracker._trackTrans();
-
-} catch(err) {}</script>';
+<?php
+endif;
+?>
