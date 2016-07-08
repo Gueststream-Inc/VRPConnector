@@ -157,14 +157,19 @@ function generateList($list, $options = [])
 
 }
 
+
 function generateSearchQueryString() {
 
     $fieldString = '';
 
     foreach ($_GET['search'] as $key => $value) {
         if (is_array($value)) {
-            foreach ($value as $v):
-                $fieldString .= 'search[' . $key . '][]=' . $v . '&';
+            foreach ($value as $arrayKey => $v):
+                if(is_string($arrayKey)) {
+                    $fieldString .= 'search[' . $key . '][' .$arrayKey. ']=' . $v . '&';
+                } else {
+                    $fieldString .= 'search[' . $key . '][]=' . $v . '&';
+                }
             endforeach;
         } else {
             $fieldString .= 'search[' . $key . ']=' . $value . '&';
