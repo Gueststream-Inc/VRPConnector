@@ -1,14 +1,14 @@
 /**
  * Unit Availability Check & Pricing Request/Breakdown
  */
-var disabledDays;
+var disabledDays, unitDataSource;
 
 jQuery(document).ready(function () {
 
     /**
      * JavaScript applied to the unit.php VRPConnector theme file
      */
-    var unitDataSource = jQuery("#unit-data");
+    unitDataSource = jQuery("#unit-data");
 
     /**
      * Determine if Unit Page Views module is enabled & log the page view if it is.
@@ -135,10 +135,6 @@ function ratebreakdown(obj) {
  * Google Map
  */
 
-jQuery("#gmaplink").on('click', function () {
-    initializeGoogleMap();
-});
-
 function initializeGoogleMap() {
     var geocoder = new google.maps.Geocoder();
     var map = new google.maps.Map(document.getElementById("map"), {
@@ -233,5 +229,9 @@ jQuery(document).ready(function () {
             }
         });
         return false;
+    });
+
+    jQuery("#gmaplink").on('click', function () {
+        initializeGoogleMap();
     });
 });
