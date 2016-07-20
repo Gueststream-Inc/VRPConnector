@@ -60,7 +60,7 @@
                                 Add to favorites
                             </a>
 
-                            <a href="<?php echo site_url($unit->View);?>" data-unit="<?php echo $unit->id; ?>" class="vrp-btn orange">
+                            <a href="<?php echo site_url('/vrp/unit/' . $unit->page_slug);?>" data-unit="<?php echo $unit->id; ?>" class="vrp-btn orange">
                                 <i class="fa fa-fw fa-lg fa-calendar"></i>
                                 Reserve now
                             </a>
