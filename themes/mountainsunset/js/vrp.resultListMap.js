@@ -24,23 +24,23 @@
 
     function mapAddress(address,unitInfo) {
         geocoder.geocode({'address': address}, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                bounds.extend(results[0].geometry.location);
 
-            bounds.extend(results[0].geometry.location);
-            //map.setCenter(results[0].geometry.location);
+                marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
 
-            marker = new google.maps.Marker({
-                map: map,
-                position: results[0].geometry.location
-            });
+                map.fitBounds(bounds);
 
-            map.fitBounds(bounds);
-
-            google.maps.event.addListener(marker, 'click', (function (marker) {
-                return function () {
-                    infowindow.setContent(unitInfo);
-                    infowindow.open(map, marker);
-                }
-            })(marker));
+                google.maps.event.addListener(marker, 'click', (function (marker) {
+                    return function () {
+                        infowindow.setContent(unitInfo);
+                        infowindow.open(map, marker);
+                    }
+                })(marker));
+            }
         });
     }
 

@@ -4,77 +4,82 @@ class mountainsunset
 {
     function actions()
     {
-        add_action('wp_enqueue_scripts', array($this, 'my_scripts_method'));
-        add_action('wp_print_styles', array($this, 'add_my_stylesheet'));
+        add_action('wp_enqueue_scripts', [$this, 'my_scripts_method']);
+        add_action('wp_print_styles', [$this, 'add_my_stylesheet']);
     }
 
     function my_scripts_method()
     {
         if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js')) {
-            wp_register_script('VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js', array( 'jquery' ) );
+            wp_register_script('VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js', [ 'jquery' ] );
         } else {
-            wp_register_script( 'VRPjQueryUI', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)), array('jquery') );
+            wp_register_script( 'VRPjQueryUI', plugins_url('/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname(__FILE__)), ['jquery'] );
         }
         wp_enqueue_script('VRPjQueryUI');
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.namespace.js')) {
-            wp_register_script('vrpNamespace', get_stylesheet_directory_uri() . '/vrp/js/vrp.namespace.js', array( 'jquery' ) );
+            wp_register_script('vrpNamespace', get_stylesheet_directory_uri() . '/vrp/js/vrp.namespace.js', [ 'jquery' ] );
         } else {
-            wp_register_script('vrpNamespace', plugins_url('/mountainsunset/js/vrp.namespace.js', dirname(__FILE__)), array( 'jquery' ) );
+            wp_register_script('vrpNamespace', plugins_url('/mountainsunset/js/vrp.namespace.js', dirname(__FILE__)), [ 'jquery' ] );
         }
         wp_enqueue_script('vrpNamespace');
 
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.mRespond.js')) {
-            wp_register_script('vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js', array( 'jquery' ) );
+            wp_register_script('vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js', [ 'jquery' ] );
         } else {
-            wp_register_script('vrpMRespondModule', plugins_url('/mountainsunset/js/vrp.mRespond.js', dirname(__FILE__)), array( 'jquery' ) );
+            wp_register_script('vrpMRespondModule', plugins_url('/mountainsunset/js/vrp.mRespond.js', dirname(__FILE__)), [ 'jquery' ] );
         }
         wp_enqueue_script('vrpMRespondModule');
 
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.ui.js')) {
-            wp_register_script('vrpUIModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.ui.js', array( 'jquery' ) );
+            wp_register_script('vrpUIModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.ui.js', [ 'jquery' ] );
         } else {
-            wp_register_script('vrpUIModule', plugins_url('/mountainsunset/js/vrp.ui.js', dirname(__FILE__)), array( 'jquery' ) );
+            wp_register_script('vrpUIModule', plugins_url('/mountainsunset/js/vrp.ui.js', dirname(__FILE__)), [ 'jquery' ] );
         }
         wp_enqueue_script('vrpUIModule');
 
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.queryString.js')) {
-            wp_register_script('vrpQueryStringModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.queryString.js', array( 'jquery' ) );
+            wp_register_script('vrpQueryStringModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.queryString.js', [ 'jquery' ] );
         } else {
-            wp_register_script('vrpQueryStringModule', plugins_url('/mountainsunset/js/vrp.queryString.js', dirname(__FILE__)), array( 'jquery' ));
+            wp_register_script('vrpQueryStringModule', plugins_url('/mountainsunset/js/vrp.queryString.js', dirname(__FILE__)), [ 'jquery' ]);
         }
         wp_enqueue_script('vrpQueryStringModule');
 
 
-        wp_register_script('googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp');
+        wp_register_script('googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp&key=AIzaSyCpXRUdoZuA6RqGNuyi1hZnpb_ygG8ZpOY');
         wp_enqueue_script('googleMap');
 
 
         if (file_exists(get_stylesheet_directory() . '/vrp/js/js.js')) {
-            wp_enqueue_script('VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js', array( 'jquery' ) );
+            wp_enqueue_script('VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js', [ 'jquery' ] );
         } else {
-            wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)), array( 'jquery' ) );
+            wp_enqueue_script('VRPthemeJS', plugins_url('/mountainsunset/js/js.js', dirname(__FILE__)), [ 'jquery' ] );
         }
 
         // Result List Map
         if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.resultListMap.js')) {
-            wp_enqueue_script('VRPResultMap', get_stylesheet_directory_uri() . '/vrp/js/vrp.resultListMap.js', array( 'jquery','googleMap' ) );
+            wp_enqueue_script('VRPResultMap', get_stylesheet_directory_uri() . '/vrp/js/vrp.resultListMap.js', [ 'jquery','googleMap' ] );
         } else {
-            wp_enqueue_script('VRPResultMap', plugins_url('/mountainsunset/js/vrp.resultListMap.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
+            wp_enqueue_script('VRPResultMap', plugins_url('/mountainsunset/js/vrp.resultListMap.js', dirname(__FILE__)), [ 'jquery','googleMap' ] );
         }
 
         // Unit Page
-        if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.unit.js')) {
-            wp_enqueue_script('VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js', array( 'jquery','googleMap' ) );
-        } else {
-            wp_enqueue_script('VRPUnitPage', plugins_url('/mountainsunset/js/vrp.unit.js', dirname(__FILE__)), array( 'jquery','googleMap' ) );
+        global $wp_query;
+        if(!empty($wp_query->query_vars['action']) && $wp_query->query_vars['action'] == "unit") {
+            if (file_exists(get_stylesheet_directory() . '/vrp/js/vrp.unit.js')) {
+                wp_enqueue_script('VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js',
+                    ['jquery', 'googleMap']);
+            } else {
+                wp_enqueue_script('VRPUnitPage', plugins_url('/mountainsunset/js/vrp.unit.js', dirname(__FILE__)),
+                    ['jquery', 'googleMap']);
+            }
         }
 
         $script_vars = [
-            'site_url' => site_url(),
+            'site_url'           => site_url(),
             'stylesheet_dir_url' => get_stylesheet_directory_uri(),
             'plugin_url' => plugins_url('',dirname(dirname(__FILE__)))
         ];
@@ -230,7 +235,7 @@ function vrpsortlinks($unit)
     $pageurl = $fields_string;
 
 
-    $sortoptions = array("Bedrooms");
+    $sortoptions = ["Bedrooms"];
 
     if (isset($unit->Rate)) {
         $sortoptions[] = "Rate";
@@ -287,7 +292,7 @@ function vrp_resultsperpage()
     }
     echo "<select autocomplete='off' name='resultCount' class='vrpshowing'>";
     echo "<option value=''>Show</option>";
-    foreach (array(10, 20, 30) as $v) {
+    foreach ([10, 20, 30] as $v) {
         echo '<option ' . (!empty($_GET['show']) && (int) $_GET['show'] == $v ? 'selected="selected"' : '') . ' value="?' . esc_attr($pageurl) . '&show=' . esc_attr($v) . '">' . esc_attr($v) . '</option>';
     }
     echo "</select>";
@@ -295,7 +300,7 @@ function vrp_resultsperpage()
 
 function dateSeries($start_date, $num)
 {
-    $dates = array();
+    $dates = [];
 
     $dates[0] = $start_date;
     for ($i = 0; $i < $num; $i ++) {
@@ -317,9 +322,9 @@ function daysTo($from, $to, $round = true)
 
 function vrpCalendar($r, $totalMonths = 3) {
 
- $datelist = array();
-    $arrivals = array();
-    $departs = array();
+ $datelist = [];
+    $arrivals = [];
+    $departs = [];
 
     foreach ($r as $v) {
         $from_date = $v->start_date;
@@ -330,7 +335,7 @@ function vrpCalendar($r, $totalMonths = 3) {
         $datelist[] = dateSeries($from_date, $num);
     }
 
-    $final_date = array();
+    $final_date = [];
 
     foreach ($datelist as $v) {
         foreach ($v as $v2) {
