@@ -56,7 +56,7 @@ class vrpSearchFormWidget extends \WP_Widget {
         <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />       
         </p>
         <label for="<?php echo $this->get_field_id( 'showAdvanced' ); ?>"><?php _e( 'Show Advanced Form:' ); ?></label> 
-        <input class="widefat" id="<?php echo $this->get_field_id( 'showAdvanced' ); ?>" name="<?php echo $this->get_field_name( 'showAdvanced' ); ?>" type="checkbox" value="1" />       
+        <input class="widefat" id="<?php echo $this->get_field_id( 'showAdvanced' ); ?>" name="<?php echo $this->get_field_name( 'showAdvanced' ); ?>" type="checkbox" value="1" <?php if ($showAdvanced ){echo 'checked';}?> />       
         </p>
         <?php 
     }
