@@ -51,7 +51,7 @@ you to seamlessly connect your website to your property management software data
 
 == Changelog ==
 = 1.3.0 =
-* Added Search Form Widget!
+* Added Search Form Widget for easier implementation of sidebar search forms.
 
 = 1.2.4 =
 * Hotfix for backward compatibility breaking issue introduced in version 1.2.3 - setting header application/json.
@@ -156,6 +156,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.3.0 =
+* New Search Widget feature added.
+
 = 0.10 =
 * Display Specials by category or individually with the use of shortcodes.
 
