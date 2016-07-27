@@ -1,12 +1,12 @@
 <?php
 
-namespace Gueststream;
+namespace Gueststream\Widgets;
 
 // Widgets
 class vrpSearchFormWidget extends \WP_Widget {
 
     public function __construct() {
-        parent::WP_Widget( 'vrpsearch_widget', 'VRPConnector - Search');
+        parent::__construct( 'vrpsearch_widget', 'VRPConnector - Search');
     }
 
     public function widget( $args, $instance ) {
@@ -62,5 +62,3 @@ class vrpSearchFormWidget extends \WP_Widget {
     }
 
 }
-
-add_action( 'widgets_init', function(){ register_widget( 'Gueststream\vrpSearchFormWidget' ); });

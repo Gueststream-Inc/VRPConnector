@@ -17,7 +17,6 @@ define('VRP_URL', plugin_dir_url(__FILE__));
 define('VRP_PATH', dirname(__FILE__) . '/');
 
 $vrp = new \Gueststream\VRPConnector;
-require __DIR__ . "/lib/Widgets.php";
 
 register_activation_hook(__FILE__, 'vrp_flush_rewrites');
 register_deactivation_hook(__FILE__, 'flush_rewrite_rules');

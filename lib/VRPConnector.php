@@ -92,7 +92,9 @@ class VRPConnector
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
 	    add_shortcode("vrpCheckUnitAvailabilityForm", [$this,'vrpCheckUnitAvailabilityForm'] );
 
-        add_filter('widget_text', 'do_shortcode');
+	    // Widgets
+	    add_filter('widget_text', 'do_shortcode');
+	    add_action( 'widgets_init', function(){ register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' ); });
     }
 
     /**
