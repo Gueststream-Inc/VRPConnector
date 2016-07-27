@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.3.0 =
+* Added Search Form Widget!
+
 = 1.2.4 =
 * Hotfix for backward compatibility breaking issue introduced in version 1.2.3 - setting header application/json.
 
