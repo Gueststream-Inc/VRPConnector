@@ -1,23 +1,30 @@
+<?php
+/**
+ * VRP Search Form Template
+ *
+ * @package VRPConnector
+ * @since 1.3.0
+ */
+
+global $vrp; ?>
+
 <div class="vrpgrid_3 alpha vrpsidebar">
     <div class="vrpgrid_100  resultsfound2">
         <h2>Search Availability</h2>
     </div>
-  <?php global $vrp; ?>
 
     <form action="<?php bloginfo('url'); ?>/vrp/search/results/" method="get">
         <table>
             <tr>
-                <th>
-                    Check In:
-                </th>
+                <th>Check In:</th>
                 <td>
-                    <input type="text" class="input" name="search[arrival]" id="arrival"
+                    <input type="text" class="vrpArrivalDate input" name="search[arrival]"
                            value="<?php echo esc_attr($vrp->search->arrival); ?>">
                 </td>
             </tr>
             <tr>
                 <th>Check Out:</th>
-                <td><input type="text" class="input" name="search[departure]" id="depart"
+                <td><input type="text" class="vrpDepartureDate input" name="search[departure]"
                            value="<?php echo esc_attr($vrp->search->depart); ?>"></td>
             </tr>
             <tr>
