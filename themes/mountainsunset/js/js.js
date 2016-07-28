@@ -82,27 +82,28 @@
 }(jQuery, window));
 
 jQuery(document).ready(function(){
-    var dates = jQuery( "#arrival, #depart" ).datepicker({
+    var arrivalDate, departureDate;
+
+    departureDate = jQuery("input[name='search[departure]").datepicker({
+
+    });
+
+    arrivalDate = jQuery( "input[name='search[arrival]']" ).datepicker({
         minDate: 2,
         onSelect: function( selectedDate ) {
-            var option = this.id == "arrival" ? "minDate" : "30",
-                instance = jQuery( this ).data( "datepicker" ),
-                date = jQuery.datepicker.parseDate(
+            console.log(selectedDate);
+            var option = jQuery(this).is(".vrpArrivalDate") ? "minDate" : "30";
+            var instance = jQuery(this).data( "datepicker" );
+            var date = jQuery.datepicker.parseDate(
                     instance.settings.dateFormat ||
                     jQuery.datepicker._defaults.dateFormat,
                     selectedDate, instance.settings );
-            dates.not( this ).datepicker( "option", option, date );
-            if (jQuery("#depart").val() != ''){
-                var arrivalDate=jQuery("#arrival").datepicker("getDate");
-                var departureDate=jQuery("#depart").datepicker("getDate");
-                var oneDay = 1000*60*60*24;
-                var difference = Math.ceil((arrivalDate.getTime() - departureDate.getTime()) / oneDay);
-                difference=-difference;
-                jQuery("#nights").val(difference);
-                jQuery("#tn").val(difference);
-            }
+
+            departureDate.not( this ).datepicker( "option", option, date );
         }
     });
+
+
 
     jQuery('.hasDatepicker').attr("autocomplete", "off").attr("readonly", "readonly");
 
