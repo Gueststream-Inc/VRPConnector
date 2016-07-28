@@ -84,11 +84,11 @@
 jQuery(document).ready(function(){
     var arrivalDate, departureDate;
 
-    departureDate = jQuery(".vrpDepartureDate").datepicker({
+    departureDate = jQuery("input[name='search[departure]").datepicker({
 
     });
 
-    arrivalDate = jQuery( ".vrpArrivalDate, .vrpDepartureDate" ).datepicker({
+    arrivalDate = jQuery( "input[name='search[arrival]']" ).datepicker({
         minDate: 2,
         onSelect: function( selectedDate ) {
             console.log(selectedDate);
