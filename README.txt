@@ -50,6 +50,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.3.1 =
+* Updated search result template file to display errors if they are known.
+
 = 1.3.0 =
 * Added Search Form Widget for easier implementation of sidebar search forms.
 
