@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
     var checkAvailArrival, checkAvailDeparture;
 
     checkAvailArrival = jQuery("#check-availability-arrival-date").datepicker({
-        minDate: 2,
+        minDate: 0,
         onSelect: function () {
             var minimumDepartureDate = checkAvailArrival.datepicker('getDate');
             minimumDepartureDate.setDate(minimumDepartureDate.getDate() + 1);
