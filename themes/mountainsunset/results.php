@@ -12,16 +12,16 @@
 		<div class="vrp-map-canvas"></div>
 	</div>
 	<div id="vrpresults" class="vrp-container-fluid">
-		<?php if ( empty($data->count) ) : ?>
+		<?php if ( empty( $data->count ) ) : ?>
 
 			<div class="vrp-row">
 				<h2>No Results Found</h2>
 
 				<p>
-					<?php if ( ! empty( $data->Error )) : ?>
+					<?php if ( ! empty( $data->Error ) ) : ?>
 						<?php echo $data->Error; ?>
 					<?php else: ?>
-							Please revise your search criteria.
+						Please revise your search criteria.
 					<?php endif; ?>
 				</p>
 			</div>
@@ -98,18 +98,14 @@
 										<div class="vrp-meta-wrapper">
 											<div class="vrp-row">
 												<div class="col-xs-6">
-
-                                            <span class="vrp-epink pull-right">
-                                                <strong><?php echo esc_html( $unit->Bedrooms ); ?> Beds</strong>
-                                            </span>
-
+		                                            <span class="vrp-epink pull-right">
+		                                                <strong><?php echo esc_html( $unit->Bedrooms ); ?> Beds</strong>
+		                                            </span>
 												</div>
 												<div class="col-xs-6">
-
-                                            <span class="vrp-kiwi pull-right">
-                                                <strong><?php echo esc_html( $unit->Bathrooms ); ?> Baths</strong>
-                                            </span>
-
+			                                        <span class="vrp-kiwi pull-right">
+			                                            <strong><?php echo esc_html( $unit->Bathrooms ); ?> Baths</strong>
+			                                        </span>
 												</div>
 											</div>
 										</div>
