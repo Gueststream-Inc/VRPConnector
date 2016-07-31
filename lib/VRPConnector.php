@@ -314,7 +314,7 @@ class VRPConnector
             case "search": // If Search Page.
                 $data = json_decode($this->search());
 
-                if ($data->count > 0) {
+                if (!empty($data->count)) {
                     $data = $this->prepareSearchResults($data);
                 }
 
