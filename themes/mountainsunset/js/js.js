@@ -89,7 +89,7 @@ jQuery(document).ready(function(){
     });
 
     arrivalDate = jQuery( "input[name='search[arrival]']" ).datepicker({
-        minDate: 2,
+        minDate: 0,
         onSelect: function( selectedDate ) {
             console.log(selectedDate);
             var option = jQuery(this).is(".vrpArrivalDate") ? "minDate" : "30";
