@@ -1,3 +1,11 @@
+<?php
+/**
+ * VRPConnector Search Results Template
+ *
+ * @package VRPConnector
+ * @since 1.3.1
+ */
+?>
 <!-- all the important responsive layout stuff -->
 <div id="vrp">
 	<div id="vrp-map">
