@@ -5,6 +5,7 @@ namespace Gueststream;
 class DummyResult
 {
     public $ID;
+	public $ancestors = [];
     public $post_title;
     public $post_content;
     public $post_name;

@@ -236,6 +236,8 @@ class VRPConnector
      */
     public function filterPosts($posts, $query)
     {
+	    global $wp_query;
+
         if (!isset($query->query_vars['action'])) {
             return $posts;
         }
@@ -260,7 +262,6 @@ class VRPConnector
                 $pagedescription = $data->SEODescription;
 
                 if (!isset($data->id)) {
-                    global $wp_query;
                     $wp_query->is_404 = true;
                 }
 
@@ -417,7 +418,12 @@ class VRPConnector
                 break;
         }
 
-        return [new DummyResult(0, $pagetitle, $content, $pagedescription)];
+	    $dummyResult = new DummyResult(0, $pagetitle, $content, $pagedescription);
+
+	    // Injecting our Post as the WP Queried Object
+	    $wp_query->queried_object = $dummyResult;
+
+	    return [$dummyResult];
     }
 
     private function specialPage($slug)
