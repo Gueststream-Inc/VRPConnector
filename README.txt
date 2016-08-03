@@ -14,6 +14,8 @@ The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to
 properties from HomeAway, Escapia, ISILink (First Resort, Property Plus, V12) , Barefoot, RNS (Resort Network), VRMGR, RTR and other property management software to your website
 allowing potential guests to search, sort, compare and book your rental properties right from your website.
 
+Learn more about the VRPConnector plugin: http://www.gueststream.com/our-software/vrpconnector/
+
 = Example Sites =
 * http://www.grandcaymanvillas.net
 * http://www.mauihawaiivacations.com
