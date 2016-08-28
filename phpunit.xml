@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<phpunit bootstrap="../vendor/autoload.php"
+<phpunit bootstrap="tests/bootstrap.php"
          backupGlobals="false"
          backupStaticAttributes="false"
          strict="true"
@@ -8,19 +8,22 @@
 
     <testsuites>
         <testsuite name="VRPConnector Test Suite">
-            <directory suffix="Test.php">classes/</directory>
+            <directory suffix="Test.php">tests/classes/</directory>
         </testsuite>
     </testsuites>
 
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">../lib</directory>
+            <directory suffix=".php">lib</directory>
+            <exclude>
+                <file>lib/xml.php</file>
+            </exclude>
         </whitelist>
     </filter>
 
     <logging>
         <log type="coverage-html"
-             target="../build/logs/coverage"
+             target="build/coverage"
              title="VRPConnector Coverage"
              charset="UTF-8"
              yui="true"
