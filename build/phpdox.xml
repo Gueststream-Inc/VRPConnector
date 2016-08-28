@@ -12,16 +12,16 @@
             <enrich base="${basedir}">
                 <source type="build"/>
                 <source type="phploc">
-                    <file name="${basedir}/logs/phploc.xml"/>
+                    <file name="logs/phploc.xml"/>
                 </source>
                 <source type="phpunit">
-                    <file name="${basedir}/logs/phpunit.xml"/>
+                    <file name="logs/clover.xml"/>
                 </source>
                 <source type="checkstyle">
-                    <file name="${basedir}/logs/checkstyle.xml"/>
+                    <file name="logs/checkstyle.xml"/>
                 </source>
                 <source type="pmd">
-                    <file name="${basedir}/logs/pmd.xml"/>
+                    <file name="logs/pmd.xml"/>
                 </source>
             </enrich>
             <build engine="html" output="html" />
