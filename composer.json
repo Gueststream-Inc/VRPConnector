@@ -1,9 +1,14 @@
 {
-    "require": {
-	"erusev/parsedown": "dev-master",
-        "eluceo/ical": "^0.9.0"
-    },
-    "autoload": {
-	"psr-4": { "Gueststream\\": "lib/"}
+  "require": {
+    "erusev/parsedown": "dev-master",
+    "eluceo/ical": "^0.9.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "4.8"
+  },
+  "autoload": {
+    "psr-4": {
+      "Gueststream\\": "lib/"
     }
+  }
 }

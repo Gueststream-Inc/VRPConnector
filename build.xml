@@ -15,10 +15,10 @@
     </exec>
 
     <target name="profile"
-            depends="prepare,lint,composer,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdox"/>
+            depends="prepare,lint,composer-dev,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpunit,phpdox"/>
 
     <target name="deploy"
-            depends="prepare, lint, composer, getsvn, updatesvn, deploysvn"/>
+            depends="prepare, lint, composer-production, getsvn, updatesvn, deploysvn"/>
 
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${basedir}/svn"/>
@@ -116,19 +116,45 @@
         <exec executable="phpdox" dir="${basedir}/build"/>
     </target>
 
-    <target name="phpunit" description="Run unit tests with PHPUnit">
-        <exec executable="phpunit"
-              failonerror="true"
-              dir="${basedir}/tests"/>
+    <target name="install-wp-tests" description="Installs necessary files and database to run WP Tests">
+        <exec executable="${basedir}/build/bin/install-wp-tests.sh"
+              failonerror="true">
+            <arg value="wordpress_test" />
+            <arg value="root" />
+            <arg value="123" />
+            <arg value="localhost" />
+            <arg value="latest" />
+        </exec>
     </target>
 
-    <target name="composer" description="Install PHP Dependencies with Composer">
+    <target name="phpunit" depends="install-wp-tests" description="Run unit tests with PHPUnit">
+        <exec executable="${basedir}/vendor/bin/phpunit"
+              failonerror="true"/>
+
+        <!--There's gotta be a better way to do this, but we have to cleanup after the WP Tests.-->
+        <exec executable="mysql"
+              failonerror="true">
+            <arg value="-uroot"/>
+            <arg value="-p123"/>
+            <arg value="-e"/>
+            <arg value="DROP DATABASE wordpress_test"/>
+        </exec>
+    </target>
+
+    <target name="composer-dev" description="Install PHP Dependencies with Composer - including required-dev">
         <exec executable="composer"
               failonerror="true">
             <arg value="update"/>
         </exec>
     </target>
 
+    <target name="composer-production" description="Install PHP Dependencies with Composer - including required-dev">
+        <exec executable="composer"
+              failonerror="true">
+            <arg value="install"/>
+            <arg value="--no-dev"/>
+        </exec>
+    </target>
     <!-- Deploy to Wordpress Plugin SVN Repo -->
 
     <target name="getsvn">
