@@ -21,7 +21,7 @@
             depends="prepare, lint, composer-production, getsvn, updatesvn, deploysvn"/>
 
     <target name="clean" description="Cleanup build artifacts">
-        <delete dir="${basedir}/svn"/>
+        <delete dir="${basedir}/build/svn"/>
         <delete dir="${basedir}/build/coverage"/>
         <delete dir="${basedir}/build/logs"/>
         <delete dir="${basedir}/build/pdepend"/>
@@ -30,7 +30,7 @@
 
     <target name="prepare" depends="clean" description="Prepare for build">
         <mkdir dir="${basedir}/build"/>
-        <mkdir dir="${basedir}/svn"/>
+        <mkdir dir="${basedir}/build/svn"/>
         <mkdir dir="${basedir}/build/coverage"/>
         <mkdir dir="${basedir}/build/logs"/>
         <mkdir dir="${basedir}/build/pdepend"/>
