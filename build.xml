@@ -15,7 +15,7 @@
     </exec>
 
     <target name="profile"
-            depends="prepare,lint,composer,phpunit,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdox"/>
+            depends="prepare,lint,composer,phploc,pdepend,phpcpd,phpmd-ci,phpcs-ci,phpdox"/>
 
     <target name="deploy"
             depends="prepare, lint, composer, getsvn, updatesvn, deploysvn"/>

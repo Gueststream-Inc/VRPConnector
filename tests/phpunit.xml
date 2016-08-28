@@ -12,16 +12,22 @@
         </testsuite>
     </testsuites>
 
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../lib</directory>
+        </whitelist>
+    </filter>
+
     <logging>
         <log type="coverage-html"
-             target="report"
+             target="../build/logs/coverage"
              title="VRPConnector Coverage"
              charset="UTF-8"
              yui="true"
              highlight="true"
              lowUpperBound="35"
              highLowerBound="70"/>
-        <log type="coverage-clover" target="report/clover.xml"/>
-        <log type="junit" target="report/junit.xml" logIncompleteSkipped="false"/>
+        <log type="coverage-clover" target="../build/logs/clover.xml"/>
+        <log type="junit" target="../build/logs/junit.xml" logIncompleteSkipped="false"/>
     </logging>
 </phpunit>
