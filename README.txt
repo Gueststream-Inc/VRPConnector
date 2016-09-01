@@ -52,6 +52,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.3.2 =
+* Fixed bug causing WP Admin Page & Post editor search to not show results.  Now, when searching for posts in WP Admin, all searched results will show.
+
 = 1.3.1 =
 * Updated search result template file to display errors if they are known.
 
@@ -161,6 +164,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.3.2 =
+* WP Admin post search bug fix.
+
 = 1.3.0 =
 * New Search Widget feature added.
 

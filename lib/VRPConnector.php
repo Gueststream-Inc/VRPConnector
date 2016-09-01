@@ -236,7 +236,7 @@ class VRPConnector
      */
     public function filterPosts($posts, $query)
     {
-        if (!isset($query->query_vars['action'])) {
+	    if (!isset($query->query_vars['action']) || !isset($query->query_vars['slug'])) {
             return $posts;
         }
 
