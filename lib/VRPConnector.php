@@ -1730,6 +1730,10 @@ class VRPConnector
         }
 
         // Adults
+	    if (!empty($_GET['search']['Adults'])) {
+		    $_SESSION['adults'] = (int) $_GET['search']['Adults'];
+	    }
+
         if (isset($_GET['search']['adults'])) {
             $_SESSION['adults'] = (int) $_GET['search']['adults'];
         }
