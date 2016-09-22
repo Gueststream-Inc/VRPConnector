@@ -150,7 +150,17 @@ global $vrp;
                            value="<?= $data->InsuranceID; ?>" />
                 <?php endif; ?>
 
-                <?php if(isset($data->InsuranceTaxAmount)) : // Escapia Insurance Tax Amount ?>
+                <?php if(isset($data->InsuranceTaxAmount)) : ?>
+                    <?php
+                    /**
+                     * Escapia Travel Insurance Tax Amount
+                     *
+                     * In most cases we have seen, travel insurance is not taxed so this will not
+                     * be present.  In the case that travel insurance is taxed, this value is necessary
+                     * to tell the server to separate this amount from the '$data->InsuranceAmount' value as
+                     * the displayed '$data->InsuranceAmount' value includes the Taxes.
+                     */
+                    ?>
                     <input type="hidden" name="booking[InsuranceTaxAmount]"
                            value="<?= $data->InsuranceTaxAmount; ?>" />
                 <?php endif; ?>
