@@ -1,6 +1,8 @@
 <?php
 /**
+ * Final page of booking/checkout template
  *
+ * @since 1.3.3
  */
 global $vrp;
 ?>
