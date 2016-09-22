@@ -1,6 +1,8 @@
 <?php
 /**
+ * Final page of booking/checkout template
  *
+ * @since 1.3.3
  */
 global $vrp;
 ?>
@@ -135,16 +137,35 @@ global $vrp;
 
             <div class="padit" style="text-align:center;font-size:13px;">
 
-                Travel insurance is available for your trip. ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br> Would
-                you like to purchase the optional travel insurance? <br>
+                Travel insurance is available for your trip.
+                ($<?php echo esc_html(number_format($data->InsuranceAmount, 2)); ?>) <br>
+                Would you like to purchase the optional travel insurance? <br>
                 <br>
                 <input type="radio" name="booking[acceptinsurance]" value="1" required /> Yes
                 <input type="radio" name="booking[acceptinsurance]" value="0" /> No
+
                 <input type="hidden" name="booking[InsuranceAmount]"
                        value="<?php echo esc_attr($data->InsuranceAmount); ?>">
-                <?php if(isset($data->InsuranceID)) { ?>
-                    <input type="hidden" name="booking[InsuranceID]" value="<?= $data->InsuranceID; ?>" />
-                <?php } ?>
+
+                <?php if(isset($data->InsuranceID)) : // Escapia Insurance ID ?>
+                    <input type="hidden" name="booking[InsuranceID]"
+                           value="<?= $data->InsuranceID; ?>" />
+                <?php endif; ?>
+
+                <?php if(isset($data->InsuranceTaxAmount)) : ?>
+                    <?php
+                    /**
+                     * Escapia Travel Insurance Tax Amount
+                     *
+                     * In most cases we have seen, travel insurance is not taxed so this will not
+                     * be present.  In the case that travel insurance is taxed, this value is necessary
+                     * to tell the server to separate this amount from the '$data->InsuranceAmount' value as
+                     * the displayed '$data->InsuranceAmount' value includes the Taxes.
+                     */
+                    ?>
+                    <input type="hidden" name="booking[InsuranceTaxAmount]"
+                           value="<?= $data->InsuranceTaxAmount; ?>" />
+                <?php endif; ?>
             </div>
         </div>
     <?php else : ?>
