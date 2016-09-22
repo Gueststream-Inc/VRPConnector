@@ -55,6 +55,7 @@ you to seamlessly connect your website to your property management software data
 
 = 1.3.3 =
 * Fixed bug causing the number of adults searched to not persist through search data to hydrate forms.
+* Added support for applicable taxes on travel insurance (Escapia)
 
 = 1.3.2 =
 * Fixed bug causing WP Admin Page & Post editor search to not show results.  Now, when searching for posts in WP Admin, all searched results will show.
