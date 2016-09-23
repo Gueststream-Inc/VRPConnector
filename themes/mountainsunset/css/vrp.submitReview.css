@@ -1,0 +1,115 @@
+.star-cb-group {
+    font-size: 0;
+    unicode-bidi: bidi-override;
+    direction: rtl;
+}
+
+.star-cb-group * {
+    font-size: 4rem;
+}
+
+.star-cb-group > input {
+    display: none;
+}
+
+.star-cb-group > input + label {
+    display: inline-block;
+    text-indent: 9999px;
+    width: 1em;
+    white-space: nowrap;
+    cursor: pointer;
+    line-height: 4rem;
+    overflow: hidden;
+}
+
+.star-cb-group > input + label:before {
+    display: inline-block;
+    text-indent: -9999px;
+    content: "☆";
+    color: #888;
+}
+
+.star-cb-group > input:checked ~ label:before, .star-cb-group > input + label:hover ~ label:before, .star-cb-group > input + label:hover:before {
+    content: "★";
+    color: #e52;
+    text-shadow: 0 0 1px #333;
+}
+
+.star-cb-group > .star-cb-clear + label {
+    text-indent: -9999px;
+    width: .5em;
+    margin-left: -.5em;
+}
+
+.star-cb-group > .star-cb-clear + label:before {
+    width: .5em;
+}
+
+.star-cb-group:hover > input + label:before {
+    content: "☆";
+    color: #888;
+    text-shadow: none;
+}
+
+.star-cb-group:hover > input + label:hover ~ label:before, .star-cb-group:hover > input + label:hover:before {
+    content: "★";
+    color: #e52;
+    text-shadow: 0 0 1px #333;
+}
+
+#vrpSubmitReviewForm fieldset {
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.custom-combobox {
+    position: relative;
+    display: inline-block;
+}
+
+.custom-combobox-toggle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin-left: -1px;
+    padding: 0;
+}
+
+.custom-combobox-input {
+    margin: 0;
+    padding: 5px 10px;
+}
+
+#vrpSubmitReviewForm i {
+    color: #676767;
+}
+
+#vrpSubmitReviewForm h4.review-section-header {
+    margin: 20px 0 10px 0;
+    border-top: 1px dashed #676767;
+    padding-top: 10px;
+}
+
+#vrpSubmitReviewForm #review-description {
+    min-height: 125px;
+}
+
+#vrpSubmitReviewForm .max-char-notice {
+    text-align: right;
+    font-size: .7em;
+}
+
+#vrpSubmitReviewForm .review-submit {
+    padding: 5px;
+}
+
+#vrpSubmitReviewForm input[type=text],
+#vrpSubmitReviewForm input[type=email],
+#vrpSubmitReviewForm select,
+#vrpSubmitReviewForm textarea {
+    display: block;
+    font-size: 1.5em;
+    width: 80%;
+    margin-bottom: 15px;
+}
