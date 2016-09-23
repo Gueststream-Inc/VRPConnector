@@ -1,3 +1,11 @@
+<?php
+/**
+ * Unit Page Template
+ *
+ * @package VRPConnector
+ * @since 1.3.0
+ */
+global $vrp;?>
 <div id="vrp" itemscope itemtype="http://schema.org/Place">
     <div class="vrp-container-fluid">
         <div class="vrp-row" id="unit-data"
@@ -192,7 +200,7 @@
                                                 <input type="text" id="check-availability-arrival-date"
                                                        name="obj[Arrival]"
                                                        class="input unitsearch"
-                                                       value="<?php echo esc_attr($_SESSION['arrival']); ?>">
+                                                       value="<?php echo esc_attr($vrp->search->arrival); ?>">
                                             </td>
                                         </tr>
                                         <tr>
@@ -201,7 +209,7 @@
                                                 <input type="text" id="check-availability-departure-date"
                                                        name="obj[Departure]"
                                                        class="input unitsearch"
-                                                       value="<?php echo esc_attr($_SESSION['depart']); ?>">
+                                                       value="<?php echo esc_attr($vrp->search->depart); ?>">
                                             </td>
                                         </tr>
 
@@ -271,7 +279,7 @@
 
                     <div class="vrp-col-md-12">
                         <div id="availability" style="">
-                            <?php echo wp_kses_post(vrpCalendar($data->avail)); ?>
+                            <?php echo vrpCalendar($data->avail); ?>
                         </div>
                     </div>
                 </div>

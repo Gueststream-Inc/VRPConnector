@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.5.1
+Tested up to: 4.6.1
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,6 +13,8 @@ Vacation Rental Platform Connector allows you to display and book your vacation 
 The Vacation Rental Property Connector plugin by Gueststream, Inc. allows you to sync all of your vacation rental
 properties from HomeAway, Escapia, ISILink (First Resort, Property Plus, V12) , Barefoot, RNS (Resort Network), VRMGR, RTR and other property management software to your website
 allowing potential guests to search, sort, compare and book your rental properties right from your website.
+
+Learn more about the VRPConnector plugin: http://www.gueststream.com/our-software/vrpconnector/
 
 = Example Sites =
 * http://www.grandcaymanvillas.net
@@ -40,7 +42,7 @@ More detailed instructions for using shortcodes, theming the VRP pages and using
 == Frequently Asked Questions ==
 = What property management software(s) does the VRP Connector support? =
 
-HomeAway, ISILink, Escapia, Barefoot, RNS.
+HomeAway, ISILink (First Resort, Property Plus, V12), Escapia, Barefoot, RNS, Streamline VRS, vOffice, VRMGR, and more!
 
 = Does the VRP Connector require an account with Gueststream.net? =
 Yes, Gueststream.net provides the back-end service of interfacing with many property management software APIs that allows
@@ -50,8 +52,24 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
-= 1.3.0 =
+= 1.4.0 =
 * Added [vrpSubmitReview] shortcode to allow creating a page for guests to submit reviews for units.
+
+= 1.3.3 =
+* Fixed bug causing the number of adults searched to not persist through search data to hydrate forms.
+* Added support for applicable taxes on travel insurance (Escapia)
+
+= 1.3.2 =
+* Fixed bug causing WP Admin Page & Post editor search to not show results.  Now, when searching for posts in WP Admin, all searched results will show.
+
+= 1.3.1 =
+* Updated search result template file to display errors if they are known.
+
+= 1.3.0 =
+* Added Search Form Widget for easier implementation of sidebar search forms.
+
+= 1.2.4 =
+* Hotfix for backward compatibility breaking issue introduced in version 1.2.3 - setting header application/json.
 
 = 1.2.3 =
 * Added datepicker functionality on unit page availability check & pricing request to make booked dates un-selectable.
@@ -153,6 +171,12 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.3.2 =
+* WP Admin post search bug fix.
+
+= 1.3.0 =
+* New Search Widget feature added.
+
 = 0.10 =
 * Display Specials by category or individually with the use of shortcodes.
 

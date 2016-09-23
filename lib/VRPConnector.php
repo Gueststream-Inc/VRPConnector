@@ -42,31 +42,6 @@ class VRPConnector
     }
 
     /**
-     * Class Destruct w/basic debugging.
-     */
-    public function __destruct()
-    {
-        if (!isset($_GET['showdebug'])) {
-            return false;
-        }
-
-        if (!$this->is_vrp_page()) {
-            return false;
-        }
-
-        echo "<div style='position:absolute;left:0;width:100%;background:white;color:black;'>";
-        echo "API Time Spent: " . esc_html($this->time) . "<br/>";
-        echo "GET VARIABLES:<br><pre>";
-        print_r($_GET);
-        echo "</pre>";
-        echo "Debug VARIABLES:<br><pre>";
-        print_r($this->debug);
-        echo "</pre>";
-        echo "Post Type: " . esc_html($wp->query_vars["post_type"]);
-        echo "</div>";
-    }
-
-    /**
      * Use the demo API key.
      */
     function __load_demo_key()
@@ -116,8 +91,11 @@ class VRPConnector
         add_shortcode("vrpshort", [$this, "vrpShort"]);
         add_shortcode("vrpFeaturedUnit", [$this, "vrpFeaturedUnit"]);
         add_shortcode("vrpSubmitReview",[$this,"vrpSubmitReview"]);
+	    add_shortcode("vrpCheckUnitAvailabilityForm", [$this,'vrpCheckUnitAvailabilityForm'] );
 
-        add_filter('widget_text', 'do_shortcode');
+	    // Widgets
+	    add_filter('widget_text', 'do_shortcode');
+	    add_action( 'widgets_init', function(){ register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' ); });
     }
 
     /**
@@ -259,7 +237,7 @@ class VRPConnector
      */
     public function filterPosts($posts, $query)
     {
-        if (!isset($query->query_vars['action'])) {
+	    if (!isset($query->query_vars['action']) || !isset($query->query_vars['slug'])) {
             return $posts;
         }
 
@@ -337,7 +315,7 @@ class VRPConnector
             case "search": // If Search Page.
                 $data = json_decode($this->search());
 
-                if ($data->count > 0) {
+                if (!empty($data->count)) {
                     $data = $this->prepareSearchResults($data);
                 }
 
@@ -627,7 +605,7 @@ class VRPConnector
         $act = $_GET['act'];
 
         if (method_exists($this, $act)) {
-            header('Content-Type: application/json');
+
             if(isset($_GET['par'])) {
                 $this->$act($_GET['par']);
                 die();
@@ -1432,6 +1410,28 @@ class VRPConnector
         return $this->loadTheme('vrpShort', $items);
     }
 
+	public function vrpCheckUnitAvailabilityForm($args)
+	{
+		if(empty($args['unit_slug'])) {
+			return '<span style="color:red;font-size: 1.2em;">unit_slug argument MUST be present when using this shortcode. example: [vrpCheckUnitAvailabilityForm unit_slug="my_awesome_unit"]</span>';
+		}
+
+		global $vrp;
+
+		if(empty($vrp)) {
+			return '<span style="color:red;font-size: 1.2em;">VRPConnector plugin must be enabled in order to use this shortcode.</span>';
+		}
+
+		$jsonUnitData = $vrp->call("getunit/" . $args['unit_slug']);
+		$unitData = json_decode($jsonUnitData);
+
+		if(empty($unitData->id)) {
+			return '<span style="color:red;font-size: 1.2em;">'.$args['unit_slug'].' is an invalid unit page slug.  Unit not found.</span>';
+		}
+
+		return $vrp->loadTheme("vrpCheckUnitAvailabilityForm", $unitData);
+	}
+
     public function vrpFeaturedUnit($params = [])
     {
         if (empty($params)) {
@@ -1749,6 +1749,10 @@ class VRPConnector
         }
 
         // Adults
+	    if (!empty($_GET['search']['Adults'])) {
+		    $_SESSION['adults'] = (int) $_GET['search']['Adults'];
+	    }
+
         if (isset($_GET['search']['adults'])) {
             $_SESSION['adults'] = (int) $_GET['search']['adults'];
         }

@@ -32,7 +32,7 @@ jQuery(document).ready(function () {
     var checkAvailArrival, checkAvailDeparture;
 
     checkAvailArrival = jQuery("#check-availability-arrival-date").datepicker({
-        minDate: 2,
+        minDate: 0,
         onSelect: function () {
             var minimumDepartureDate = checkAvailArrival.datepicker('getDate');
             minimumDepartureDate.setDate(minimumDepartureDate.getDate() + 1);
@@ -123,16 +123,17 @@ function ratebreakdown(obj) {
     tbl.append(tax);
     tbl.append(total);
     tbl.append(totaldue);
+
+    if(obj.PromoCodeDiscount) {
+        var promoCodeDiscount = "<tr><td colspan='2'>" + obj.PromoCodeDiscount.text + "</td></tr>" +
+            "<tr><td>Total Savings:</td><td>$" + obj.PromoCodeDiscount.value + "</td></tr>";
+        tbl.append(promoCodeDiscount);
+    }
 }
 
 /**
  * Google Map
  */
-jQuery(document).ready(function() {
-    jQuery("#gmaplink").on('click', function () {
-        initializeGoogleMap();
-    });
-});
 
 function initializeGoogleMap() {
     var geocoder = new google.maps.Geocoder();
@@ -228,5 +229,9 @@ jQuery(document).ready(function () {
             }
         });
         return false;
+    });
+
+    jQuery("#gmaplink").on('click', function () {
+        initializeGoogleMap();
     });
 });

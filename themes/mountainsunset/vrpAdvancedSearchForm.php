@@ -1,11 +1,13 @@
 <?php
 /**
  * VRPConnector Advanced Search Template
+ *
+ * @package VRPConnector
+ * @since 1.3.0
  */
 
 global $vrp;
-$searchoptions = $vrp->searchoptions();
-?>
+$searchoptions = $vrp->searchoptions(); ?>
 
 <h2>Advanced Search</h2>
 
@@ -17,11 +19,11 @@ $searchoptions = $vrp->searchoptions();
         <table cellspacing="10">
             <tr>
                 <td>Arrival:</td>
-                <td><input type="text" name="search[arrival]" id="arrival2" value="Not Sure"></td>
+                <td><input type="text" name="search[arrival]" class="vrpArrivalDate" placeholder="Not Sure"></td>
             </tr>
             <tr>
                 <td>Departure:</td>
-                <td><input type="text" name="search[departure]" id="depart2" value="Not Sure"></td>
+                <td><input type="text" name="search[departure]" class="vrpDepartureDate" placeholder="Not Sure"></td>
             </tr>
             <tr>
                 <td>Adults:</td>
