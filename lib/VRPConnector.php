@@ -491,20 +491,20 @@ class VRPConnector
             $obj->$k = $v;
         }
 
-        if (isset($_GET['page'])) {
+        if (!empty($_GET['page'])) {
             $obj->page = (int) $_GET['page'];
         } else {
             $obj->page = 1;
         }
 
-        if (!isset($obj->limit)) {
+        if (empty($obj->limit)) {
             $obj->limit = 10;
             if (isset($_GET['show'])) {
                 $obj->limit = (int) $_GET['show'];
             }
         }
 
-        if (isset($obj->arrival)) {
+        if (!empty($obj->arrival)) {
             if ($obj->arrival == 'Not Sure') {
                 $obj->arrival = '';
                 $obj->depart = '';

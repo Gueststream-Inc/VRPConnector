@@ -52,6 +52,8 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.3.4 =
+* Fixed bug in search so when a guest searches without entering an arrival date all units are shown instead of no units due to the broken arrival date.
 
 = 1.3.3 =
 * Fixed bug causing the number of adults searched to not persist through search data to hydrate forms.
