@@ -54,6 +54,7 @@ you to seamlessly connect your website to your property management software data
 == Changelog ==
 = 1.3.5 =
 * Fixed bug in [vrpSearch] shortcode to allow guests to override default sort and order.
+* Fixed bug in paginator that was creating links to pages that did not exist.
 
 = 1.3.4 =
 * Fixed bug in search so when a guest searches without entering an arrival date all units are shown instead of no units due to the broken arrival date.

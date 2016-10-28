@@ -1,5 +1,16 @@
 <?php
+/**
+ * Default theme functions file
+ *
+ * @package VRPConnector
+ * @since 1.3.5
+ */
 
+/**
+ * Class mountainsunset
+ *
+ * Default theme class
+ */
 class mountainsunset
 {
     function actions()
@@ -183,6 +194,10 @@ function vrp_pagination($totalPages, $curPage = 1)
 
     $totalRange = (int) ( $totalPages > 5 ? $curPage + 4 : $totalPages );
     $startRange = (int) ( $curPage > 5 ? $curPage - 4 : 1 );
+
+    if($totalRange > $totalPages) {
+        $totalRange = $totalPages;
+    }
 
     $list = [];
 
