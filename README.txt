@@ -52,6 +52,10 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.3.5 =
+* Fixed bug in [vrpSearch] shortcode to allow guests to override default sort and order.
+* Fixed bug in paginator that was creating links to pages that did not exist.
+
 = 1.3.4 =
 * Fixed bug in search so when a guest searches without entering an arrival date all units are shown instead of no units due to the broken arrival date.
 
@@ -171,6 +175,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.3.5 =
+* [vrpSearch] shortcode sort order override bugfix.
+
 = 1.3.2 =
 * WP Admin post search bug fix.
 

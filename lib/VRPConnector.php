@@ -1217,7 +1217,7 @@ class VRPConnector
      */
     public function vrpSearch($arr = [])
     {
-        if(is_array($arr) && count($arr) > 0) {
+        if(count($arr) > 0) {
             foreach($arr as $key => $value) {
                 // WP makes all keys lower case.  We should try and set most keys with ucfirst()
                 if($key == "featured") {
@@ -1226,11 +1226,13 @@ class VRPConnector
                     $arr['Featured'] = 1;
                 }
             }
-        } else {
-            $arr = [];
         }
 
-        $_GET['search'] = $arr;
+        if(empty($_GET['search'])) {
+            $_GET['search'] = [];
+        }
+
+        $_GET['search'] = array_merge($arr,$_GET['search']);
         $_GET['search']['showall'] = 1;
         $data = $this->search();
         $data = json_decode($data);
