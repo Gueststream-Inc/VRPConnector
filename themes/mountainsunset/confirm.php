@@ -1,11 +1,11 @@
 <div class="userbox" >
     <h3>Congratulations!</h3>
     <div class="padit">
-        <b>Reservation Confirmation Number:</b> <?php echo esc_html($data->thebooking->BookingNumber);?><br><br>
-        You have successfully booked <b><?php echo esc_html($data->Name);?></b> from <b><?php echo esc_html($data->Arrival); ?></b> for <b><?php echo esc_html(floor($data->Nights)); ?></b> nights.
-        <br /><br />
-        You will receive an email confirmation shortly with additional information.
-    </div>
+        <b>Reservation Confirmation Number:</b> <?php echo esc_html( $data->thebooking->BookingNumber );?><br><br>
+		You have successfully booked <b><?php echo esc_html( $data->Name );?></b> from <b><?php echo esc_html( $data->Arrival ); ?></b> for <b><?php echo esc_html( floor( $data->Nights ) ); ?></b> nights.
+		<br /><br />
+		You will receive an email confirmation shortly with additional information.
+	</div>
 
 </div>
 <?php echo '
@@ -28,11 +28,11 @@ try {
 
   pageTracker._addTrans(
 
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
+    "' . esc_js( $data->thebooking->BookingNumber ) . '",                                     // Order ID
 
     "",                            // Affiliation
 
-    "' . esc_js($data->TotalCost) . '",                                    // Total
+    "' . esc_js( $data->TotalCost ) . '",                                    // Total
 
     "",                                     // Tax
 
@@ -48,15 +48,15 @@ try {
 
  pageTracker._addItem(
 
-    "' . esc_js($data->thebooking->BookingNumber) . '",                                     // Order ID
+    "' . esc_js( $data->thebooking->BookingNumber ) . '",                                     // Order ID
 
     "",                                     // SKU
 
-    "' . esc_js($data->Name) . '",                                  // Product Name
+    "' . esc_js( $data->Name ) . '",                                  // Product Name
 
     "",                             // Category
 
-    "' . esc_js($data->TotalCost) . '",                                    // Price
+    "' . esc_js( $data->TotalCost ) . '",                                    // Price
 
     "1"                                         // Quantity
 

@@ -20,13 +20,13 @@
 				<p>
 					<?php if ( ! empty( $data->Error ) ) : ?>
 						<?php echo $data->Error; ?>
-					<?php else: ?>
+					<?php else : ?>
 						Please revise your search criteria.
 					<?php endif; ?>
 				</p>
 			</div>
 
-		<?php else: ?>
+		<?php else : ?>
 
 			<div class="vrp-row">
 				<!-- vrp-wrapper-presentation-actions-->
@@ -38,7 +38,7 @@
 				</div>
 				<div class="vrp-col-md-2 vrp-layout-action">
 					<div class="vrp-pull-right">
-						<a href="<?php echo site_url() . "/vrp/favorites/show"; ?>" id="vrp-favorites"
+						<a href="<?php echo site_url() . '/vrp/favorites/show'; ?>" id="vrp-favorites"
 						   class="vrp-btn turquoise">
 							<i class="fa fa-fw fa-lg fa-heart"></i>
 						</a>
@@ -70,7 +70,7 @@
 						<div class="vrp-item"
 						     data-vrp-address="<?php echo $unit->Address1; ?> <?php echo $unit->City; ?>, <?php echo $unit->State; ?>"
 						     data-vrp-name="<?php echo esc_html( $unit->Name ); ?>"
-						     data-vrp-url="<?php echo site_url() . "/vrp/unit/" . $unit->page_slug; ?>"
+						     data-vrp-url="<?php echo site_url() . '/vrp/unit/' . $unit->page_slug; ?>"
 						     data-vrp-thumbnail="<?php echo $unit->Thumb; ?>">
 
 							<div class="vrp-thumbnail text-center"

@@ -19,9 +19,9 @@
  */
 ?>
 
-<?php foreach($data as $a_featured_unit) : ?>
-    <a href="<?php echo site_url("/vrp/unit/" . $a_featured_unit->page_slug); ?>"
-       Title="<?php echo $a_featured_unit->Name; ?>">
-        <img src="<?php echo $a_featured_unit->Photo; ?>">
-    </a>
+<?php foreach ( $data as $a_featured_unit ) : ?>
+	<a href="<?php echo site_url( '/vrp/unit/' . $a_featured_unit->page_slug ); ?>"
+	   Title="<?php echo $a_featured_unit->Name; ?>">
+		<img src="<?php echo $a_featured_unit->Photo; ?>">
+	</a>
 <?php endforeach; ?>
