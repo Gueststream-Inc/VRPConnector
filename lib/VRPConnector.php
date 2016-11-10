@@ -1,36 +1,109 @@
 <?php
+/**
+ * VRPConnector Core Plugin Class
+ *
+ * @package VRPConnector
+ */
 
 namespace Gueststream;
 
 /**
  * VRPConnector Class
  */
-
 class VRPConnector {
 
-	private $apiKey;                                // Gueststream.net API Key
-	private $apiURL = 'https://www.gueststream.net/api/v1/';     // Gueststream.net API Endpoint
-	private $allowCache = true;                     // @todo - Remove this.
-	public $theme = '';                            // Full path to plugin theme folder
-	public $themename = '';                        // Plugin theme name.
-	public $default_theme_name = 'mountainsunset'; // Default plugin theme name.
+	/**
+	 * VRP API key.
+	 *
+	 * @var string
+	 */
+	private $api_key;
+	/**
+	 * VRP API Url
+	 *
+	 * @var string
+	 */
+	private $api_url = 'https://www.gueststream.net/api/v1/';
+	/**
+	 * VRPConnector Theme Folder
+	 *
+	 * @var string
+	 */
+	public $theme = '';
+	/**
+	 * VRPConnector Theme Name.
+	 *
+	 * @var string
+	 */
+	public $themename = '';
+	/**
+	 * Default Theme Name.
+	 *
+	 * @var string
+	 */
+	public $default_theme_name = 'mountainsunset';
+	/**
+	 * Available Built-in themes.
+	 *
+	 * @var array
+	 */
 	public $available_themes = [ 'mountainsunset' => 'Mountain Sunset' ];
-	public $otheractions = [];                //
-	public $time;                                  // Time (in seconds?) spent making calls to the API
-	public $debug = [];                       // Container for debug data
-	public $action = false; // VRP Action
+	/**
+	 * Other Actions
+	 *
+	 * @var array
+	 */
+	public $otheractions = [];
+	/**
+	 * Time (in seconds) for API calls
+	 *
+	 * @var string
+	 */
+	public $time;
+	/**
+	 * Container for Debug Data.
+	 *
+	 * @var array
+	 */
+	public $debug = [];
+	/**
+	 * VRP Action
+	 *
+	 * @var bool
+	 */
+	public $action = false;
+	/**
+	 * Favorite Units
+	 *
+	 * @var array
+	 */
 	public $favorites;
+	/**
+	 * Search Data
+	 *
+	 * @var object
+	 */
 	public $search;
+	/**
+	 * Page Title
+	 *
+	 * @var string
+	 */
 	private $pagetitle;
+	/**
+	 * Page Description
+	 *
+	 * @var string
+	 */
 	private $pagedescription;
 
 	/**
 	 * Class Construct
 	 */
 	public function __construct() {
-		$this->apiKey = get_option( 'vrpAPI' );
+		$this->api_key = get_option( 'vrpAPI' );
 
-		if ( $this->apiKey == '' ) {
+		if ( $this->api_key == '' ) {
 			add_action( 'admin_notices', [ $this, 'notice' ] );
 		}
 
@@ -44,7 +117,7 @@ class VRPConnector {
 	 * Use the demo API key.
 	 */
 	function __load_demo_key() {
-		$this->apiKey = '1533020d1121b9fea8c965cd2c978296';
+		$this->api_key = '1533020d1121b9fea8c965cd2c978296';
 	}
 
 	/**
@@ -54,7 +127,7 @@ class VRPConnector {
 		if ( is_admin() ) {
 			add_action( 'admin_menu', [ $this, 'setupPage' ] );
 			add_action( 'admin_init', [ $this, 'registerSettings' ] );
-			add_filter( 'plugin_action_links',[ $this, 'add_action_links' ], 10, 2 );
+			add_filter( 'plugin_action_links', [ $this, 'add_action_links' ], 10, 2 );
 		}
 
 		// Actions
@@ -75,6 +148,7 @@ class VRPConnector {
 		remove_filter( 'template_redirect', 'redirect_canonical' );
 
 		// Shortcodes
+		add_shortcode( 'vrpUnit', [ $this, 'vrpUnit' ] );
 		add_shortcode( 'vrpUnits', [ $this, 'vrpUnits' ] );
 		add_shortcode( 'vrpSearch', [ $this, 'vrpSearch' ] );
 		add_shortcode( 'vrpSearchForm', [ $this, 'vrpSearchForm' ] );
@@ -86,11 +160,12 @@ class VRPConnector {
 		// add_shortcode("vrpLinks", array($this, "vrpLinks"));
 		add_shortcode( 'vrpshort', [ $this, 'vrpShort' ] );
 		add_shortcode( 'vrpFeaturedUnit', [ $this, 'vrpFeaturedUnit' ] );
-	    add_shortcode( 'vrpCheckUnitAvailabilityForm', [ $this, 'vrpCheckUnitAvailabilityForm' ] );
+		add_shortcode( 'vrpCheckUnitAvailabilityForm', [ $this, 'vrpCheckUnitAvailabilityForm' ] );
 
-	    // Widgets
-	    add_filter( 'widget_text', 'do_shortcode' );
-	    add_action( 'widgets_init', function(){ register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' );
+		// Widgets
+		add_filter( 'widget_text', 'do_shortcode' );
+		add_action( 'widgets_init', function () {
+			register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' );
 		} );
 	}
 
@@ -99,14 +174,14 @@ class VRPConnector {
 	 */
 	public function setTheme() {
 		$plugin_theme_Folder = VRP_PATH . 'themes/';
-		$theme = get_option( 'vrpTheme' );
+		$theme               = get_option( 'vrpTheme' );
 
 		if ( ! $theme ) {
-			$theme = $this->default_theme_name;
+			$theme           = $this->default_theme_name;
 			$this->themename = $this->default_theme_name;
-			$this->theme = $plugin_theme_Folder . $this->default_theme_name;
+			$this->theme     = $plugin_theme_Folder . $this->default_theme_name;
 		} else {
-			$this->theme = $plugin_theme_Folder . $theme;
+			$this->theme     = $plugin_theme_Folder . $theme;
 			$this->themename = $theme;
 		}
 		$this->themename = $theme;
@@ -146,7 +221,7 @@ class VRPConnector {
 		if ( isset( $_GET['otherslug'] ) && $_GET['otherslug'] != '' ) {
 			$theme = $this->themename;
 			$theme = new $theme;
-			$func = $theme->otheractions;
+			$func  = $theme->otheractions;
 			$func2 = $func[ $_GET['otherslug'] ];
 			call_user_method( $func2, $theme );
 		}
@@ -159,7 +234,6 @@ class VRPConnector {
 		add_rewrite_tag( '%action%', '([^&]+)' );
 		add_rewrite_tag( '%slug%', '([^&]+)' );
 		add_rewrite_rule( '^vrp/([^/]*)/([^/]*)/?', 'index.php?action=$matches[1]&slug=$matches[2]', 'top' );
-
 	}
 
 	/**
@@ -172,6 +246,10 @@ class VRPConnector {
 
 	}
 
+	/**
+	 * @param $old
+	 * @param $new
+	 */
 	function flush_rewrites( $old, $new ) {
 		flush_rewrite_rules();
 	}
@@ -223,20 +301,20 @@ class VRPConnector {
 	 * @return array
 	 */
 	public function filterPosts( $posts, $query ) {
-	    if ( ! isset( $query->query_vars['action'] ) || ! isset( $query->query_vars['slug'] ) ) {
+		if ( ! isset( $query->query_vars['action'] ) || ! isset( $query->query_vars['slug'] ) ) {
 			return $posts;
 		}
 
-		$content = '';
-		$pagetitle = '';
+		$content         = '';
+		$pagetitle       = '';
 		$pagedescription = '';
-		$action = $query->query_vars['action'];
-		$slug = $query->query_vars['slug'];
+		$action          = $query->query_vars['action'];
+		$slug            = $query->query_vars['slug'];
 
 		switch ( $action ) {
 			case 'unit':
 				$data2 = $this->call( 'getunit/' . $slug );
-				$data = json_decode( $data2 );
+				$data  = json_decode( $data2 );
 
 				if ( isset( $data->SEOTitle ) ) {
 					$pagetitle = $data->SEOTitle;
@@ -287,16 +365,16 @@ class VRPConnector {
 						exit;
 						break;
 					default:
-						$content = $this->showFavorites();
+						$content   = $this->showFavorites();
 						$pagetitle = 'Favorites';
 						break;
 				}
 				break;
 
 			case 'specials': // If Special Page.
-				$content = $this->specialPage( $slug );
+				$content   = $this->specialPage( $slug );
 				$pagetitle = $this->pagetitle;
-break;
+				break;
 
 			case 'search': // If Search Page.
 				$data = json_decode( $this->search() );
@@ -337,7 +415,7 @@ break;
 				}
 
 				if ( isset( $_POST['email'] ) ) {
-					$userinfo = $this->doLogin( $_POST['email'], $_POST['password'] );
+					$userinfo             = $this->doLogin( $_POST['email'], $_POST['password'] );
 					$_SESSION['userinfo'] = $userinfo;
 					if ( ! isset( $userinfo->Error ) ) {
 						$query->query_vars['slug'] = 'step3';
@@ -350,25 +428,25 @@ break;
 
 				$data = json_decode( $_SESSION['bookingresults'] );
 				if ( $data->ID != $_GET['obj']['PropID'] ) {
-					$data = json_decode( $this->checkavailability( false, true ) );
+					$data      = json_decode( $this->checkavailability( false, true ) );
 					$data->new = true;
 				}
 
 				if ( $slug != 'confirm' ) {
-					$data = json_decode( $this->checkavailability( false, true ) );
+					$data      = json_decode( $this->checkavailability( false, true ) );
 					$data->new = true;
 				}
 
-				$data->PropID = $_GET['obj']['PropID'];
+				$data->PropID       = $_GET['obj']['PropID'];
 				$data->booksettings = $this->bookSettings( $data->PropID );
 
 				if ( $slug == 'step1' ) {
 					unset( $_SESSION['package'] );
 				}
 
-				$data->package = new \stdClass;
+				$data->package              = new \stdClass;
 				$data->package->packagecost = '0.00';
-				$data->package->items = [];
+				$data->package->items       = [];
 
 				if ( isset( $_SESSION['package'] ) ) {
 					$data->package = $_SESSION['package'];
@@ -376,8 +454,8 @@ break;
 
 				if ( $slug == 'step1a' ) {
 					if ( isset( $data->booksettings->HasPackages ) ) {
-						$a = date( 'Y-m-d', strtotime( $data->Arrival ) );
-						$d = date( 'Y-m-d', strtotime( $data->Departure ) );
+						$a              = date( 'Y-m-d', strtotime( $data->Arrival ) );
+						$d              = date( 'Y-m-d', strtotime( $data->Departure ) );
 						$data->packages = json_decode( $this->call( "getpackages/$a/$d/" ) );
 					} else {
 						$query->query_vars['slug'] = 'step2';
@@ -390,16 +468,16 @@ break;
 
 				if ( $slug == 'confirm' ) {
 					$data->thebooking = json_decode( $_SESSION['bresults'] );
-					$pagetitle = 'Reservations';
-					$content = $this->loadTheme( 'confirm', $data );
+					$pagetitle        = 'Reservations';
+					$content          = $this->loadTheme( 'confirm', $data );
 				} else {
 					$pagetitle = 'Reservations';
-					$content = $this->loadTheme( 'booking', $data );
+					$content   = $this->loadTheme( 'booking', $data );
 				}
 				break;
 
 			case 'xml':
-				$content = '';
+				$content   = '';
 				$pagetitle = '';
 				break;
 		}
@@ -410,7 +488,7 @@ break;
 	private function specialPage( $slug ) {
 		if ( $slug == 'list' ) {
 			// Special by Category
-			$data = json_decode( $this->call( 'getspecialsbycat/1' ) );
+			$data            = json_decode( $this->call( 'getspecialsbycat/1' ) );
 			$this->pagetitle = 'Specials';
 
 			return $this->loadTheme( 'specials', $data );
@@ -418,7 +496,7 @@ break;
 
 		if ( is_numeric( $slug ) ) {
 			// Special by ID
-			$data = json_decode( $this->call( 'getspecialbyid/' . $slug ) );
+			$data            = json_decode( $this->call( 'getspecialbyid/' . $slug ) );
 			$this->pagetitle = $data->title;
 
 			return $this->loadTheme( 'special', $data );
@@ -426,7 +504,7 @@ break;
 
 		if ( is_string( $slug ) ) {
 			// Special by slug
-			$data = json_decode( $this->call( 'getspecial/' . $slug ) );
+			$data            = json_decode( $this->call( 'getspecial/' . $slug ) );
 			$this->pagetitle = $data->title;
 
 			return $this->loadTheme( 'special', $data );
@@ -490,7 +568,7 @@ break;
 		if ( ! empty( $obj->arrival ) ) {
 			if ( $obj->arrival == 'Not Sure' ) {
 				$obj->arrival = '';
-				$obj->depart = '';
+				$obj->depart  = '';
 				$obj->showall = 1;
 			} else {
 				$obj->arrival = date( 'm/d/Y', strtotime( $obj->arrival ) );
@@ -511,7 +589,7 @@ break;
 	}
 
 	public function complexsearch() {
-		$url = $this->apiURL . $this->apiKey . '/complexsearch3/';
+		$url = $this->api_url . $this->api_key . '/complexsearch3/';
 
 		$obj = new \stdClass();
 		foreach ( $_GET['search'] as $k => $v ) {
@@ -529,11 +607,11 @@ break;
 		}
 		if ( $obj->arrival == 'Not Sure' ) {
 			$obj->arrival = '';
-			$obj->depart = '';
+			$obj->depart  = '';
 		}
 
 		$search['search'] = json_encode( $obj );
-		$results = $this->call( 'complexsearch3', $search );
+		$results          = $this->call( 'complexsearch3', $search );
 
 		return $results;
 	}
@@ -541,7 +619,7 @@ break;
 	/**
 	 * Loads the VRP Theme.
 	 *
-	 * @param string  $section
+	 * @param string $section
 	 * @param        $data [] $data
 	 *
 	 * @return string
@@ -555,12 +633,7 @@ break;
 			$load = $this->theme . '/' . $section . '.php';
 		}
 
-		if ( isset( $_GET['printme'] ) ) {
-			include $this->theme . '/print.php';
-			exit;
-		}
-
-		$this->debug['data'] = $data;
+		$this->debug['data']       = $data;
 		$this->debug['theme_file'] = $load;
 
 		ob_start();
@@ -586,7 +659,7 @@ break;
 		if ( method_exists( $this, $act ) ) {
 
 			if ( isset( $_GET['par'] ) ) {
-				$this->$act($_GET['par']);
+				$this->$act( $_GET['par'] );
 				die();
 			}
 
@@ -600,7 +673,7 @@ break;
 		set_time_limit( 30 );
 
 		$fields_string = 'obj=' . json_encode( $_GET['obj'] );
-		$results = $this->call( 'checkavail', $fields_string );
+		$results       = $this->call( 'checkavail', $fields_string );
 
 		if ( $ret == true ) {
 			$_SESSION['bookingresults'] = $results;
@@ -631,13 +704,14 @@ break;
 		}
 
 		$fields_string = 'obj=' . json_encode( $_POST['booking'] );
-		$results = $this->call( 'processbooking', $fields_string );
-		$res = json_decode( $results );
+		$results       = $this->call( 'processbooking', $fields_string );
+		$res           = json_decode( $results );
 		if ( isset( $res->Results ) ) {
 			$_SESSION['bresults'] = json_encode( $res->Results );
 		}
 
 		echo $results;
+
 		return;
 	}
 
@@ -645,7 +719,7 @@ break;
 		$TotalCost = $_GET['TotalCost'];
 		if ( ! isset( $_GET['package'] ) ) {
 			unset( $_SESSION['package'] );
-			$obj = new \stdClass();
+			$obj              = new \stdClass();
 			$obj->packagecost = '$0.00';
 
 			$obj->TotalCost = '$' . number_format( $TotalCost, 2 );
@@ -654,33 +728,33 @@ break;
 			return false;
 		}
 
-		$currentpackage = new \stdClass();
+		$currentpackage        = new \stdClass();
 		$currentpackage->items = [];
-		$grandtotal = 0;
+		$grandtotal            = 0;
 		// ID & QTY
 		$package = $_GET['package'];
-		$qty = $_GET['qty'];
-		$cost = $_GET['cost'];
-		$name = $_GET['name'];
+		$qty     = $_GET['qty'];
+		$cost    = $_GET['cost'];
+		$name    = $_GET['name'];
 		foreach ( $package as $v ) :
-			$amount = $qty[ $v ]; // Qty of item.
-			$obj = new \stdClass();
-			$obj->name = $name[ $v ];
-			$obj->qty = $amount;
-			$obj->total = $cost[ $v ] * $amount;
-			$grandtotal = $grandtotal + $obj->total;
+			$amount                      = $qty[ $v ]; // Qty of item.
+			$obj                         = new \stdClass();
+			$obj->name                   = $name[ $v ];
+			$obj->qty                    = $amount;
+			$obj->total                  = $cost[ $v ] * $amount;
+			$grandtotal                  = $grandtotal + $obj->total;
 			$currentpackage->items[ $v ] = $obj;
 		endforeach;
 
-		$TotalCost = $TotalCost + $grandtotal;
-		$obj = new \stdClass();
+		$TotalCost        = $TotalCost + $grandtotal;
+		$obj              = new \stdClass();
 		$obj->packagecost = '$' . number_format( $grandtotal, 2 );
 
 		$obj->TotalCost = '$' . number_format( $TotalCost, 2 );
 		echo json_encode( $obj );
 		$currentpackage->packagecost = $grandtotal;
-		$currentpackage->TotalCost = $TotalCost;
-		$_SESSION['package'] = $currentpackage;
+		$currentpackage->TotalCost   = $TotalCost;
+		$_SESSION['package']         = $currentpackage;
 	}
 
 	public function getspecial() {
@@ -738,23 +812,23 @@ break;
 
 	public function getUnitBookedDates( $unitSlug ) {
 		$unitDataJson = $this->call( 'getunit/' . (string) $unitSlug );
-		$unitData = json_decode( $unitDataJson );
+		$unitData     = json_decode( $unitDataJson );
 
 		$unitBookedDates = [
 			'bookedDates' => [],
-			'noCheckin' => [],
+			'noCheckin'   => [],
 		];
 
 		foreach ( $unitData->avail as $v ) {
 
 			$fromDateTS = strtotime( '+1 Day', strtotime( $v->start_date ) );
-			$toDateTS = strtotime( $v->end_date );
+			$toDateTS   = strtotime( $v->end_date );
 
-			array_push( $unitBookedDates['noCheckin'],date( 'n-j-Y', strtotime( $v->start_date ) ) );
+			array_push( $unitBookedDates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
 
-			for ( $currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24) ) {
+			for ( $currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24 ) ) {
 				$currentDateStr = date( 'n-j-Y', $currentDateTS );
-				array_push( $unitBookedDates['bookedDates'],$currentDateStr );
+				array_push( $unitBookedDates['bookedDates'], $currentDateStr );
 			}
 		}
 
@@ -776,6 +850,7 @@ break;
 			$settings_link = '<a href="' . admin_url( 'options-general.php?page=VRPConnector' ) . '">' . __( 'Settings' ) . '</a>';
 			array_unshift( $links, $settings_link ); // before other links
 		}
+
 		return $links;
 	}
 
@@ -785,17 +860,17 @@ break;
 	/**
 	 * Make a call to the VRPc API
 	 *
-	 * @param $call
+	 * @param       $call
 	 * @param array $params
 	 *
 	 * @return string
 	 */
 	public function call( $call, $params = [] ) {
 		$cache_key = md5( $call . json_encode( $params ) );
-		$results = wp_cache_get( $cache_key, 'vrp' );
+		$results   = wp_cache_get( $cache_key, 'vrp' );
 		if ( false == $results ) {
 			$ch = curl_init();
-			curl_setopt( $ch, CURLOPT_URL, $this->apiURL . $this->apiKey . '/' . $call );
+			curl_setopt( $ch, CURLOPT_URL, $this->api_url . $this->api_key . '/' . $call );
 			curl_setopt( $ch, CURLOPT_POST, 1 );
 			curl_setopt( $ch, CURLOPT_POSTFIELDS, $params );
 			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
@@ -818,8 +893,8 @@ break;
 			$obj->$k = $v;
 		}
 
-		$search['search'] = json_encode( $obj );
-		$results = $this->call( $call, $search );
+		$search['search']       = json_encode( $obj );
+		$results                = $this->call( $call, $search );
 		$this->debug['results'] = $results;
 		echo $results;
 	}
@@ -841,12 +916,13 @@ break;
 	public function searchoptions( array $filters = null ) {
 		if ( is_array( $filters ) ) {
 			$queryString = http_build_query( [ 'filters' => $filters ] );
-			return json_decode( $this->call( 'searchoptions',$queryString ) );
+
+			return json_decode( $this->call( 'searchoptions', $queryString ) );
 		}
 
 		$searchOptions = json_decode( $this->call( 'searchoptions' ) );
 
-		$searchOptions->minbaths = (empty( $searchOptions->minbaths )) ? 1 : $searchOptions->minbaths;
+		$searchOptions->minbaths = ( empty( $searchOptions->minbaths ) ) ? 1 : $searchOptions->minbaths;
 
 		return $searchOptions;
 	}
@@ -883,7 +959,7 @@ break;
 	 * @ajax
 	 */
 	public function getflipkey() {
-		$id = $_GET['slug'];
+		$id   = $_GET['slug'];
 		$call = "getflipkey/?unit_id=$id";
 		$data = $this->customcall( $call );
 		echo '<!DOCTYPE html><html>';
@@ -898,12 +974,13 @@ break;
 			return false;
 		}
 
-		$params['params'] = json_encode([
-			'unit_id' => $unit_id,
+		$params['params'] = json_encode( [
+			'unit_id'    => $unit_id,
 			'ip_address' => $_SERVER['REMOTE_ADDR'],
-		]);
+		] );
 
-		$this->call( 'customAction/unitpageviews/saveUnitPageView',$params );
+		$this->call( 'customAction/unitpageviews/saveUnitPageView', $params );
+
 		return true;
 	}
 
@@ -947,16 +1024,16 @@ break;
 	}
 
 	private function setFavoriteCookie( $favorites ) {
-		setcookie( 'vrpFavorites', serialize( $favorites ),  time() + 60 * 60 * 24 * 30 );
+		setcookie( 'vrpFavorites', serialize( $favorites ), time() + 60 * 60 * 24 * 30 );
 	}
 
 	public function savecompare() {
-		$obj = new \stdClass();
-		$obj->compare = $_SESSION['compare'];
-		$obj->arrival = $_SESSION['arrival'];
-		$obj->depart = $_SESSION['depart'];
+		$obj              = new \stdClass();
+		$obj->compare     = $_SESSION['compare'];
+		$obj->arrival     = $_SESSION['arrival'];
+		$obj->depart      = $_SESSION['depart'];
 		$search['search'] = json_encode( $obj );
-		$results = $this->call( 'savecompare', $search );
+		$results          = $this->call( 'savecompare', $search );
 
 		return $results;
 	}
@@ -964,15 +1041,15 @@ break;
 	public function showFavorites() {
 		if ( isset( $_GET['shared'] ) ) {
 			$_SESSION['cp'] = 1;
-			$id = (int) $_GET['shared'];
-			$source = '';
+			$id             = (int) $_GET['shared'];
+			$source         = '';
 			if ( isset( $_GET['source'] ) ) {
 				$source = $_GET['source'];
 			}
-			$data = json_decode( $this->call( 'getshared/' . $id . '/' . $source ) );
+			$data                = json_decode( $this->call( 'getshared/' . $id . '/' . $source ) );
 			$_SESSION['compare'] = $data->compare;
 			$_SESSION['arrival'] = $data->arrival;
-			$_SESSION['depart'] = $data->depart;
+			$_SESSION['depart']  = $data->depart;
 		}
 
 		$obj = new \stdClass();
@@ -990,17 +1067,17 @@ break;
 			exit;
 		}
 
-		$compare = $_GET['favorites'];
+		$compare               = $_GET['favorites'];
 		$_SESSION['favorites'] = $compare;
 
 		if ( isset( $_GET['arrival'] ) ) {
-			$obj->arrival = $_GET['arrival'];
-			$obj->departure = $_GET['depart'];
+			$obj->arrival        = $_GET['arrival'];
+			$obj->departure      = $_GET['depart'];
 			$_SESSION['arrival'] = $obj->arrival;
-			$_SESSION['depart'] = $obj->departure;
+			$_SESSION['depart']  = $obj->departure;
 		} else {
 			if ( isset( $_SESSION['arrival'] ) ) {
-				$obj->arrival = $_SESSION['arrival'];
+				$obj->arrival   = $_SESSION['arrival'];
 				$obj->departure = $_SESSION['depart'];
 			}
 		}
@@ -1008,7 +1085,7 @@ break;
 		$obj->items = $compare;
 		sort( $obj->items );
 		$search['search'] = json_encode( $obj );
-		$results = json_decode( $this->call( 'compare', $search ) );
+		$results          = json_decode( $this->call( 'compare', $search ) );
 		if ( count( $results->results ) == 0 ) {
 			return $this->loadTheme( 'vrpFavoritesEmpty' );
 		}
@@ -1061,7 +1138,7 @@ break;
 			$items['maxbed'] = (int) $_GET['maxbed'];
 		}
 
-		$obj = new \stdClass();
+		$obj       = new \stdClass();
 		$obj->okay = 1;
 		if ( count( $items ) != 0 ) {
 			foreach ( $items as $k => $v ) {
@@ -1070,12 +1147,30 @@ break;
 		}
 
 		$search['search'] = json_encode( $obj );
-		$results = $this->call( 'allcomplexes', $search );
-		$results = json_decode( $results );
-		$content = $this->loadTheme( 'vrpComplexes', $results );
+		$results          = $this->call( 'allcomplexes', $search );
+		$results          = json_decode( $results );
+		$content          = $this->loadTheme( 'vrpComplexes', $results );
 
 		return $content;
 	}
+
+	public function vrpUnit( $args = [] ) {
+
+		if ( empty( $args['page_slug'] ) ) {
+			return '<span style="color:red;font-size: 1.2em;">page_slug argument MUST be present when using this shortcode. example: [vrpUnit page_slug="my_awesome_unit"]</span>';
+		}
+
+		$json_unit_data = $this->call( "getunit/" . $args['page_slug'] );
+		$unit_data     = json_decode( $json_unit_data );
+
+		if ( empty( $unit_data->id ) ) {
+			return '<span style="color:red;font-size: 1.2em;">' . $args['page_slug'] . ' is an invalid unit page slug.  Unit not found.</span>';
+		}
+
+		return $this->loadTheme( "unit", $unit_data );
+
+	}
+
 
 	/**
 	 * [vrpUnits] Shortcode
@@ -1105,7 +1200,7 @@ break;
 			$items['maxbed'] = (int) $_GET['maxbed'];
 		}
 
-		$obj = new \stdClass();
+		$obj       = new \stdClass();
 		$obj->okay = 1;
 		if ( count( $items ) != 0 ) {
 			foreach ( $items as $k => $v ) {
@@ -1122,9 +1217,9 @@ break;
 		}
 
 		$search['search'] = json_encode( $obj );
-		$results = $this->call( 'allunits', $search );
-		$results = json_decode( $results );
-		$content = $this->loadTheme( 'vrpUnits', $results );
+		$results          = $this->call( 'allunits', $search );
+		$results          = json_decode( $results );
+		$content          = $this->loadTheme( 'vrpUnits', $results );
 
 		return $content;
 	}
@@ -1176,10 +1271,10 @@ break;
 			$_GET['search'] = [];
 		}
 
-		$_GET['search'] = array_merge( $arr,$_GET['search'] );
+		$_GET['search']            = array_merge( $arr, $_GET['search'] );
 		$_GET['search']['showall'] = 1;
-		$data = $this->search();
-		$data = json_decode( $data );
+		$data                      = $this->search();
+		$data                      = json_decode( $data );
 
 		if ( $data->count > 0 ) {
 			$data = $this->prepareSearchResults( $data );
@@ -1207,14 +1302,14 @@ break;
 				$arr[ $k ] = explode( '|', $v );
 			}
 		endforeach;
-		$_GET['search'] = $arr;
+		$_GET['search']            = $arr;
 		$_GET['search']['showall'] = 1;
 
 		$this->time = microtime( true );
-		$data = $this->complexsearch();
+		$data       = $this->complexsearch();
 
-		$this->time = round( (microtime( true ) - $this->time), 4 );
-		$data = json_decode( $data );
+		$this->time = round( ( microtime( true ) - $this->time ), 4 );
+		$data       = json_decode( $data );
 		if ( isset( $data->type ) ) {
 			$content = $this->loadTheme( $data->type, $data );
 		} else {
@@ -1232,9 +1327,9 @@ break;
 	 * @return string
 	 */
 	public function vrpAreaList( $arr ) {
-		$area = $arr['area'];
-		$r = $this->call( "areabymainlocation/$area" );
-		$data = json_decode( $r );
+		$area    = $arr['area'];
+		$r       = $this->call( "areabymainlocation/$area" );
+		$data    = json_decode( $r );
 		$content = $this->loadTheme( 'arealist', $data );
 
 		return $content;
@@ -1282,7 +1377,7 @@ break;
 				break;
 		}
 
-		$obj = new \stdClass();
+		$obj       = new \stdClass();
 		$obj->okay = 1;
 		if ( count( $items ) != 0 ) {
 			foreach ( $items as $k => $v ) {
@@ -1291,7 +1386,7 @@ break;
 		}
 
 		$search['search'] = json_encode( $obj );
-		$results = json_decode( $this->call( $call, $search ) );
+		$results          = json_decode( $this->call( $call, $search ) );
 
 		$ret = "<ul style='list-style:none'>";
 		if ( $items['type'] == 'Villa' ) {
@@ -1324,17 +1419,17 @@ break;
 		}
 
 		if (
-			(isset( $params['attribute'] ) && $params['attribute'] == true) ||
-			(($params['type'] == 'complex') || $params['type'] == 'View')
+			( isset( $params['attribute'] ) && $params['attribute'] == true ) ||
+			( ( $params['type'] == 'complex' ) || $params['type'] == 'View' )
 		) {
 			$items['attributes'] = true;
-			$items['aname'] = $params['type'];
-			$items['value'] = $params['value'];
+			$items['aname']      = $params['type'];
+			$items['value']      = $params['value'];
 		} else {
 			$items[ $params['type'] ] = $params['value'];
 		}
 
-		$items['sort'] = 'Name';
+		$items['sort']  = 'Name';
 		$items['order'] = 'low';
 
 		return $this->loadTheme( 'vrpShort', $items );
@@ -1352,7 +1447,7 @@ break;
 		}
 
 		$jsonUnitData = $vrp->call( 'getunit/' . $args['unit_slug'] );
-		$unitData = json_decode( $jsonUnitData );
+		$unitData     = json_decode( $jsonUnitData );
 
 		if ( empty( $unitData->id ) ) {
 			return '<span style="color:red;font-size: 1.2em;">' . $args['unit_slug'] . ' is an invalid unit page slug.  Unit not found.</span>';
@@ -1388,7 +1483,7 @@ break;
 			}
 			// Returning a single unit
 			$params['num'] = 1;
-			$data = json_decode( $this->call( 'getfeaturedbyoption', $params ) );
+			$data          = json_decode( $this->call( 'getfeaturedbyoption', $params ) );
 
 			return $this->loadTheme( 'vrpFeaturedUnit', $data );
 		}
@@ -1428,8 +1523,10 @@ break;
 		add_settings_field( 'vrpApiKey', 'VRP Api Key', [ $this, 'apiKeyCallback' ], 'VRPConnector', 'vrpApiKey' );
 		add_settings_section( 'vrpLoginCreds', 'VRP Login', [ $this, 'vrpLoginSettingTitleCallback' ], 'VRPConnector' );
 		add_settings_field( 'vrpUser', 'VRP Username', [ $this, 'vrpUserCallback' ], 'VRPConnector', 'vrpLoginCreds' );
-		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector', 'vrpLoginCreds' );
-		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ], 'VRPConnector' );
+		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector',
+			'vrpLoginCreds' );
+		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ],
+			'VRPConnector' );
 		add_settings_field( 'vrpTheme', 'VRP Theme', [ $this, 'vrpThemeSettingCallback' ], 'VRPConnector', 'vrpTheme' );
 	}
 
@@ -1504,7 +1601,7 @@ break;
 	 * @return array|mixed
 	 */
 	public function doLogin( $email, $password ) {
-		$url = $this->apiURL . $this->apiKey . "/userlogin/?email=$email&password=$password";
+		$url = $this->api_url . $this->api_key . "/userlogin/?email=$email&password=$password";
 
 		return json_decode( file_get_contents( $url ) );
 	}
@@ -1587,7 +1684,7 @@ break;
 		if ( isset( $_SESSION['nights'] ) ) {
 			$this->search->nights = $_SESSION['nights'];
 		} else {
-			$this->search->nights = (strtotime( $this->search->depart ) - strtotime( $this->search->arrival )) / 60 / 60 / 24;
+			$this->search->nights = ( strtotime( $this->search->depart ) - strtotime( $this->search->arrival ) ) / 60 / 60 / 24;
 		}
 
 		$this->search->type = '';
@@ -1596,7 +1693,7 @@ break;
 		}
 
 		if ( isset( $_SESSION['type'] ) ) {
-			$this->search->type = $_SESSION['type'];
+			$this->search->type    = $_SESSION['type'];
 			$this->search->complex = $_SESSION['type'];
 		}
 
@@ -1648,9 +1745,9 @@ break;
 		}
 
 		// Adults
-	    if ( ! empty( $_GET['search']['Adults'] ) ) {
-		    $_SESSION['adults'] = (int) $_GET['search']['Adults'];
-	    }
+		if ( ! empty( $_GET['search']['Adults'] ) ) {
+			$_SESSION['adults'] = (int) $_GET['search']['Adults'];
+		}
 
 		if ( isset( $_GET['search']['adults'] ) ) {
 			$_SESSION['adults'] = (int) $_GET['search']['adults'];

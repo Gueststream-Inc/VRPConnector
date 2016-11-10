@@ -52,6 +52,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.4.0 =
+* Added new shortcode [vrpUnit pag_slug="my_unit_page_slug"] to turn pages and posts in to unit pages.
+
 = 1.3.5 =
 * Fixed bug in [vrpSearch] shortcode to allow guests to override default sort and order.
 * Fixed bug in paginator that was creating links to pages that did not exist.
@@ -175,6 +178,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.4.0 =
+* [vrpUnit page_slug="my_awesome_property"] shortcode added. You can not place unit data on any page of your site!
+
 = 1.3.5 =
 * [vrpSearch] shortcode sort order override bugfix.
 
