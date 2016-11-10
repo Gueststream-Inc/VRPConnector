@@ -1,4 +1,11 @@
 <?php
+/**
+ * Calendar Generator
+ *
+ * This class is used to generate HTML availability calendars for on unit pages.
+ *
+ * @package VRPConnector
+ */
 
 namespace Gueststream;
 
@@ -14,32 +21,144 @@ namespace Gueststream;
  * @license http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt GPL v2.0
  */
 class Calendar {
+	/**
+	 * Calendar start date.
+	 *
+	 * @var false|string
+	 */
 	var $date;
+	/**
+	 * Calendar Start Year
+	 *
+	 * @var null|string
+	 */
 	var $year;
+	/**
+	 * Calendar Start Month
+	 *
+	 * @var string
+	 */
 	var $month;
+	/**
+	 * Calendar Start Day
+	 *
+	 * @var string
+	 */
 	var $day;
+	/**
+	 * Week start on date.
+	 *
+	 * @var bool
+	 * @depreciated
+	 */
 	var $week_start_on = false;
-	var $week_start = 7; // sunday
+	/**
+	 * Week start on date. 7 = Sunday.
+	 *
+	 * @var int
+	 */
+	var $week_start = 7;
+	/**
+	 * Link Days
+	 *
+	 * @var bool
+	 * @depreciated
+	 */
 	var $link_days = true;
+	/**
+	 * Link days to
+	 *
+	 * @var string
+	 * @depreciated
+	 */
 	var $link_to;
+	/**
+	 * Date Format to link to.
+	 *
+	 * @var string
+	 */
 	var $formatted_link_to;
+	/**
+	 * Add today_date_class to current date on calendar to highlight it
+	 *
+	 * @var bool
+	 */
 	var $mark_today = true;
+	/**
+	 * When mark_today is true, add this to todays calendar date to highlight it.
+	 *
+	 * @var string
+	 */
 	var $today_date_class = 'today';
+	/**
+	 * Add selected_date_class to selected dates.
+	 *
+	 * @var bool
+	 */
 	var $mark_selected = true;
+	/**
+	 * Selected date class to add to selected dates when mark_selected is true.
+	 *
+	 * @var string
+	 */
 	var $selected_date_class = 'selected';
+	/**
+	 * Add passed_date_class to dates on calendar prior to today.
+	 *
+	 * @var bool
+	 */
 	var $mark_passed = true;
+	/**
+	 * Class to add to dates that are before todays date.
+	 *
+	 * @var string
+	 */
 	var $passed_date_class = 'passed';
+	/**
+	 * Array of dates to be highlighted.
+	 *
+	 * @var array
+	 */
 	var $highlighted_dates;
+	/**
+	 * CSS Class to apply to higlighted dates.
+	 *
+	 * @var string
+	 */
 	var $default_highlighted_class = 'highlighted';
+	/**
+	 * CSS Class to apply to arrival dates.
+	 *
+	 * @var string
+	 */
 	var $arrival_class = 'aDate';
+	/**
+	 * CSS Class to apply to departure dates.
+	 *
+	 * @var string
+	 */
 	var $depart_class = 'dDate';
+	/**
+	 * Array of arrival dates.
+	 *
+	 * @var array
+	 */
 	var $arrival_dates;
+	/**
+	 * Array of departure dates.
+	 *
+	 * @var array
+	 */
 	var $depart_dates;
 
+	/**
+	 * Calendar constructor.
+	 *
+	 * @param null $date Start date.
+	 * @param null $year Start year (if start date not present).
+	 * @param null $month Start month (if start date not present).
+	 */
 	function __construct( $date = null, $year = null, $month = null ) {
-		$self          = htmlspecialchars( $_SERVER['PHP_SELF'] );
-		$this->link_to = $self;
-
 		if ( is_null( $year ) || is_null( $month ) ) {
 			if ( ! is_null( $date ) ) {
 				// -------- strtotime the submitted date to ensure correct format
@@ -55,17 +174,29 @@ class Calendar {
 		}
 	}
 
+	/**
+	 * Establish Calendar start day, month & year from date.
+	 *
+	 * @param string $date Calendar Start Date.
+	 */
 	function set_date_parts_from_date( $date ) {
 		$this->year  = date( 'Y', strtotime( $date ) );
 		$this->month = date( 'm', strtotime( $date ) );
 		$this->day   = date( 'd', strtotime( $date ) );
 	}
 
+	/**
+	 * Day of the week
+	 *
+	 * @param string $date Date.
+	 *
+	 * @return false|int|string
+	 */
 	function day_of_week( $date ) {
 		$day_of_week = date( 'N', $date );
 		if ( ! is_numeric( $day_of_week ) ) {
 			$day_of_week = date( 'w', $date );
-			if ( $day_of_week == 0 ) {
+			if ( 0 === $day_of_week ) {
 				$day_of_week = 7;
 			}
 		}
@@ -73,24 +204,30 @@ class Calendar {
 		return $day_of_week;
 	}
 
+	/**
+	 * Output Calendar
+	 *
+	 * @param null   $year Output Calendar Year.
+	 * @param null   $month Output Calendar Month.
+	 * @param string $calendar_class CSS Calendar Class.
+	 *
+	 * @return string
+	 */
 	function output_calendar( $year = null, $month = null, $calendar_class = 'calendar' ) {
-		if ( isset( $_GET['debug'] ) ) {
-		}
-
-		if ( $this->week_start_on !== false ) {
+		if ( false !== $this->week_start_on ) {
 			echo 'The property week_start_on is replaced due to a bug present in version before 2.6. of this class! Use the property week_start instead!';
 			exit;
 		}
 
-		// --------------------- override class methods if values passed directly
+		// Override class methods if values passed directly.
 		$year  = ( is_null( $year ) ) ? $this->year : $year;
 		$month = ( is_null( $month ) ) ? $this->month : str_pad( $month, 2, '0', STR_PAD_LEFT );
 
-		// ------------------------------------------- create first date of month
+		// Create first date of month.
 		$month_start_date = strtotime( $year . '-' . $month . '-01' );
-		// ------------------------- first day of month falls on what day of week
+		// First day of month falls on what day of week.
 		$first_day_falls_on = $this->day_of_week( $month_start_date );
-		// ----------------------------------------- find number of days in month
+		// Find number of days in month.
 		$days_in_month = date( 't', $month_start_date );
 		// -------------------------------------------- create last date of month
 		$month_end_date = strtotime( $year . '-' . $month . '-' . $days_in_month );
@@ -110,7 +247,7 @@ class Calendar {
 			$localized_day_name = gmstrftime( '%A', $t );
 			$col .= '<col class="' . strtolower( $localized_day_name ) . "\" />\n";
 			$th .= "\t<th title=\"" . ucfirst( $localized_day_name ) . '">' . strtoupper( $localized_day_name{0} ) . "</th>\n";
-			$j = ( $j == 7 ) ? 0 : $j;
+			$j = ( 7 === $j ) ? 0 : $j;
 		}
 
 		// ------------------------------------------------------- markup columns
@@ -141,44 +278,42 @@ class Calendar {
 		// --------------------------------------------------- loop days of month
 		for ( $day = 1, $cell = $prepend + 1; $day <= $days_in_month; $day ++, $cell ++ ) {
 
-			/*
-              if this is first cell and not also the first day, end previous row
-             */
-			if ( $cell == 1 && $day != 1 ) {
+			// If this is first cell and not also the first day, end previous row.
+			if ( 1 === $cell && 1 !== $day ) {
 				$output .= "<tr>\n";
 			}
 
-			// -------------- zero pad day and create date string for comparisons
+			// Zero pad day and create date string for comparisons.
 			$day      = str_pad( $day, 2, '0', STR_PAD_LEFT );
 			$day_date = $year . '-' . $month . '-' . $day;
 
-			// -------------------------- compare day and add classes for matches
-			if ( $this->mark_today == true && $day_date == date( 'Y-m-d' ) ) {
+			// Compare day and add classes for matches.
+			if ( true === $this->mark_today && date( 'Y-m-d' ) === $day_date ) {
 				$classes[] = $this->today_date_class;
 			}
 
-			if ( $this->mark_selected == true && $day_date == $this->date ) {
+			if ( true === $this->mark_selected && $day_date === $this->date ) {
 				$classes[] = $this->selected_date_class;
 			}
 
-			if ( $this->mark_passed == true && $day_date < date( 'Y-m-d' ) ) {
+			if ( true === $this->mark_passed && date( 'Y-m-d' ) > $day_date ) {
 				$classes[] = $this->passed_date_class;
 			}
 
 			if ( is_array( $this->highlighted_dates ) ) {
-				if ( in_array( $day_date, $this->highlighted_dates ) ) {
+				if ( in_array( $day_date, $this->highlighted_dates, true ) ) {
 					$classes[] = $this->default_highlighted_class;
-					if ( in_array( $day_date, $this->arrival_dates ) ) {
+					if ( in_array( $day_date, $this->arrival_dates, true ) ) {
 						$classes[] .= $this->arrival_class;
 					}
 
-					if ( in_array( $day_date, $this->depart_dates ) ) {
+					if ( in_array( $day_date, $this->depart_dates, true ) ) {
 						$classes[] .= $this->depart_class;
 					}
 				}
 			}
 
-			// ----------------- loop matching class conditions, format as string
+			// Loop matching class conditions, format as string.
 			if ( isset( $classes ) ) {
 				$day_class = ' class="';
 				foreach ( $classes as $value ) {
@@ -189,62 +324,21 @@ class Calendar {
 				$day_class = '';
 			}
 
-			// ---------------------------------- start table cell, apply classes
-			// detect windows os and substitute for unsupported day of month modifer
-			$title_format = ( strtoupper( substr( PHP_OS, 0, 3 ) ) == 'WIN' ) ? '%A, %B %#d, %Y' : '%A, %B %e, %Y';
+			// Start table cell, apply classes.
+			$output .= "\t<td" . $day_class . ' title="'
+			           . ucwords( strftime( '%A, %B %e, %Y', strtotime( $day_date ) )
+			           ) . '">';
 
-			$output .= "\t<td" . $day_class . ' title="' . ucwords( strftime( $title_format,
-					strtotime( $day_date ) ) ) . '">';
-
-			// ----------------------------------------- unset to keep loop clean
+			// Unset to keep loop clean.
 			unset( $day_class, $classes );
 
-			// -------------------------------------- conditional, start link tag
-			switch ( $this->link_days ) {
-				case 0 :
-					$output .= $day;
-					break;
-
-				case 1 :
-					if ( empty( $this->formatted_link_to ) ) {
-						$output .= '<a href="' . $this->link_to . '?date=' . $day_date . '">' . $day . '</a>';
-					} else {
-						$output .= '<a href="' . strftime( $this->formatted_link_to,
-								strtotime( $day_date ) ) . '">' . $day . '</a>';
-					}
-					break;
-
-				case 2 :
-					if ( is_array( $this->highlighted_dates ) ) {
-						if ( in_array( $day_date, $this->highlighted_dates ) ) {
-							if ( empty( $this->formatted_link_to ) ) {
-								$output .= '<a href="' . $this->link_to . '?date=' . $day_date . '">';
-							} else {
-								$output .= '<a href="' . strftime( $this->formatted_link_to,
-										strtotime( $day_date ) ) . '">';
-							}
-						}
-					}
-
-					$output .= $day;
-
-					if ( is_array( $this->highlighted_dates ) ) {
-						if ( in_array( $day_date, $this->highlighted_dates ) ) {
-							if ( empty( $this->formatted_link_to ) ) {
-								$output .= '</a>';
-							} else {
-								$output .= '</a>';
-							}
-						}
-					}
-					break;
-			}
+			$output .= $day;
 
 			// ------------------------------------------------- close table cell
 			$output .= "</td>\n";
 
-			// ------- if this is the last cell, end the row and reset cell count
-			if ( $cell == 7 ) {
+			// If this is the last cell, end the row and reset cell count.
+			if ( 7 === $cell ) {
 				$output .= "</tr>\n";
 				$cell = 0;
 			}
