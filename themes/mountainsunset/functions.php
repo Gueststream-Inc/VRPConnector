@@ -14,43 +14,53 @@
 class mountainsunset {
 
 	function actions() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'my_scripts_method' ) );
-		add_action( 'wp_print_styles', array( $this, 'add_my_stylesheet' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'my_scripts_method' ] );
+		add_action( 'wp_print_styles', [ $this, 'add_my_stylesheet' ] );
 	}
 
 	function my_scripts_method() {
 		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js' ) ) {
-			wp_register_script( 'VRPjQueryUI', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js', array( 'jquery' ) );
+			wp_register_script( 'VRPjQueryUI',
+				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js', [ 'jquery' ] );
 		} else {
-			wp_register_script( 'VRPjQueryUI', plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_register_script( 'VRPjQueryUI',
+				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname( __FILE__ ) ),
+				[ 'jquery' ] );
 		}
 		wp_enqueue_script( 'VRPjQueryUI' );
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.namespace.js' ) ) {
-			wp_register_script( 'vrpNamespace', get_stylesheet_directory_uri() . '/vrp/js/vrp.namespace.js', array( 'jquery' ) );
+			wp_register_script( 'vrpNamespace', get_stylesheet_directory_uri() . '/vrp/js/vrp.namespace.js',
+				[ 'jquery' ] );
 		} else {
-			wp_register_script( 'vrpNamespace', plugins_url( '/mountainsunset/js/vrp.namespace.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_register_script( 'vrpNamespace',
+				plugins_url( '/mountainsunset/js/vrp.namespace.js', dirname( __FILE__ ) ), [ 'jquery' ] );
 		}
 		wp_enqueue_script( 'vrpNamespace' );
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.mRespond.js' ) ) {
-			wp_register_script( 'vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js', array( 'jquery' ) );
+			wp_register_script( 'vrpMRespondModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.mRespond.js',
+				[ 'jquery' ] );
 		} else {
-			wp_register_script( 'vrpMRespondModule', plugins_url( '/mountainsunset/js/vrp.mRespond.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_register_script( 'vrpMRespondModule',
+				plugins_url( '/mountainsunset/js/vrp.mRespond.js', dirname( __FILE__ ) ), [ 'jquery' ] );
 		}
 		wp_enqueue_script( 'vrpMRespondModule' );
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.ui.js' ) ) {
-			wp_register_script( 'vrpUIModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.ui.js', array( 'jquery' ) );
+			wp_register_script( 'vrpUIModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.ui.js', [ 'jquery' ] );
 		} else {
-			wp_register_script( 'vrpUIModule', plugins_url( '/mountainsunset/js/vrp.ui.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_register_script( 'vrpUIModule', plugins_url( '/mountainsunset/js/vrp.ui.js', dirname( __FILE__ ) ),
+				[ 'jquery' ] );
 		}
 		wp_enqueue_script( 'vrpUIModule' );
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.queryString.js' ) ) {
-			wp_register_script( 'vrpQueryStringModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.queryString.js', array( 'jquery' ) );
+			wp_register_script( 'vrpQueryStringModule', get_stylesheet_directory_uri() . '/vrp/js/vrp.queryString.js',
+				[ 'jquery' ] );
 		} else {
-			wp_register_script( 'vrpQueryStringModule', plugins_url( '/mountainsunset/js/vrp.queryString.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_register_script( 'vrpQueryStringModule',
+				plugins_url( '/mountainsunset/js/vrp.queryString.js', dirname( __FILE__ ) ), [ 'jquery' ] );
 		}
 		wp_enqueue_script( 'vrpQueryStringModule' );
 
@@ -58,31 +68,37 @@ class mountainsunset {
 		wp_enqueue_script( 'googleMap' );
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/js.js' ) ) {
-			wp_enqueue_script( 'VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js', array( 'jquery' ) );
+			wp_enqueue_script( 'VRPthemeJS', get_stylesheet_directory_uri() . '/vrp/js/js.js', [ 'jquery' ] );
 		} else {
-			wp_enqueue_script( 'VRPthemeJS', plugins_url( '/mountainsunset/js/js.js', dirname( __FILE__ ) ), array( 'jquery' ) );
+			wp_enqueue_script( 'VRPthemeJS', plugins_url( '/mountainsunset/js/js.js', dirname( __FILE__ ) ),
+				[ 'jquery' ] );
 		}
 
 		// Result List Map
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.resultListMap.js' ) ) {
-			wp_enqueue_script( 'VRPResultMap', get_stylesheet_directory_uri() . '/vrp/js/vrp.resultListMap.js', array( 'jquery', 'googleMap' ) );
+			wp_enqueue_script( 'VRPResultMap', get_stylesheet_directory_uri() . '/vrp/js/vrp.resultListMap.js',
+				[ 'jquery', 'googleMap' ] );
 		} else {
-			wp_enqueue_script( 'VRPResultMap', plugins_url( '/mountainsunset/js/vrp.resultListMap.js', dirname( __FILE__ ) ), array( 'jquery', 'googleMap' ) );
+			wp_enqueue_script( 'VRPResultMap',
+				plugins_url( '/mountainsunset/js/vrp.resultListMap.js', dirname( __FILE__ ) ),
+				[ 'jquery', 'googleMap' ] );
 		}
 
 		// Unit Page
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/vrp.unit.js' ) ) {
-			wp_enqueue_script( 'VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js', array( 'jquery', 'googleMap' ) );
+			wp_enqueue_script( 'VRPUnitPage', get_stylesheet_directory_uri() . '/vrp/js/vrp.unit.js',
+				[ 'jquery', 'googleMap' ] );
 		} else {
-			wp_enqueue_script( 'VRPUnitPage', plugins_url( '/mountainsunset/js/vrp.unit.js', dirname( __FILE__ ) ), array( 'jquery', 'googleMap' ) );
+			wp_enqueue_script( 'VRPUnitPage', plugins_url( '/mountainsunset/js/vrp.unit.js', dirname( __FILE__ ) ),
+				[ 'jquery', 'googleMap' ] );
 		}
 
 		$script_vars = [
-			'site_url' => site_url(),
+			'site_url'           => site_url(),
 			'stylesheet_dir_url' => get_stylesheet_directory_uri(),
-			'plugin_url' => plugins_url( '',dirname( dirname( __FILE__ ) ) ),
+			'plugin_url'         => plugins_url( '', dirname( dirname( __FILE__ ) ) ),
 		];
-		wp_localize_script( 'VRPthemeJS','url_paths',$script_vars );
+		wp_localize_script( 'VRPthemeJS', 'url_paths', $script_vars );
 
 	}
 
@@ -90,14 +106,16 @@ class mountainsunset {
 		if ( file_exists( get_stylesheet_directory() . '/vrp/css/font-awesome.css' ) ) {
 			wp_enqueue_style( 'FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css' );
 		} else {
-			wp_enqueue_style( 'FontAwesome', plugins_url( '/mountainsunset/css/font-awesome.css', dirname( __FILE__ ) ) );
+			wp_enqueue_style( 'FontAwesome',
+				plugins_url( '/mountainsunset/css/font-awesome.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' ) ) {
-			wp_enqueue_style( 'VRPjQueryUISmoothness', get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' );
+			wp_enqueue_style( 'VRPjQueryUISmoothness',
+				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' );
 		} else {
-			wp_enqueue_style('VRPjQueryUISmoothness',
-			plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname( __FILE__ ) ));
+			wp_enqueue_style( 'VRPjQueryUISmoothness',
+				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! file_exists( get_stylesheet_directory() . '/vrp/css/css.css' ) ) {
@@ -134,28 +152,29 @@ function generateList( $list, $options = [] ) {
 
 			$subMenu = '';
 
-			$children = ( ! empty( $properties[ $options->child ] ) ? true : false);
+			$children = ( ! empty( $properties[ $options->child ] ) ? true : false );
 
 			if ( $children ) {
-				$subMenu = $recursive($properties[ $options->children ], true, $options);
+				$subMenu = $recursive( $properties[ $options->children ], true, $options );
 			}
 
-			$html .= '<li class="' . ( ! empty( $properties['class'] ) ? $properties['class'] : '') . '"><a class="'
-				. ( ! empty( $properties['disabled'] ) && $properties['disabled'] === true ? ' disabled ' : '')
-				. ( ! empty( $properties['selected'] ) ? ' current ' : '') . '" href="?'
-				. $properties['pageurl']
-				. '&show=' . $properties['show']
-				. '&page=' . $properties['page']
-				. '">' . $title . '</a>'
-				. $subMenu . '</li>';
+			$html .= '<li class="' . ( ! empty( $properties['class'] ) ? $properties['class'] : '' ) . '"><a class="'
+			         . ( ! empty( $properties['disabled'] ) && $properties['disabled'] === true ? ' disabled ' : '' )
+			         . ( ! empty( $properties['selected'] ) ? ' current ' : '' ) . '" href="?'
+			         . $properties['pageurl']
+			         . '&show=' . $properties['show']
+			         . '&page=' . $properties['page']
+			         . '">' . $title . '</a>'
+			         . $subMenu . '</li>';
 
 			unset( $children, $subMenu );
 
 		}
+
 		return $html . '</ul>';
 	};
 
-	return $recursive($list, false, $options);
+	return $recursive( $list, false, $options );
 
 }
 
@@ -178,9 +197,9 @@ function generateSearchQueryString() {
 
 function vrp_pagination( $totalPages, $curPage = 1 ) {
 	$_SESSION['pageurl'] = $pageurl = generateSearchQueryString();
-	$curPage = (int) esc_attr( $curPage );
-	$pageurl = esc_attr( $pageurl );
-	$show = ( ! empty( $_GET['show'] ) ? esc_attr( $_GET['show'] ) : 10 );
+	$curPage             = (int) esc_attr( $curPage );
+	$pageurl             = esc_attr( $pageurl );
+	$show                = ( ! empty( $_GET['show'] ) ? esc_attr( $_GET['show'] ) : 10 );
 
 	$totalRange = (int) ( $totalPages > 5 ? $curPage + 4 : $totalPages );
 	$startRange = (int) ( $curPage > 5 ? $curPage - 4 : 1 );
@@ -191,7 +210,13 @@ function vrp_pagination( $totalPages, $curPage = 1 ) {
 
 	$list = [];
 
-	$list['Prev'] = [ 'pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage - 1), 'class' => 'button', 'disabled' => ($curPage !== 1 ? false : true) ];
+	$list['Prev'] = [
+		'pageurl'  => $pageurl,
+		'show'     => $show,
+		'page'     => ( $curPage - 1 ),
+		'class'    => 'button',
+		'disabled' => ( $curPage !== 1 ? false : true )
+	];
 
 	foreach ( range( $startRange, $totalRange ) as $incPage ) {
 
@@ -206,8 +231,22 @@ function vrp_pagination( $totalPages, $curPage = 1 ) {
 
 	}
 
-	$list['Last'] = [ 'active' => false, 'pageurl' => $pageurl, 'show' => $show, 'page' => $totalPages, 'class' => 'button', 'disabled' => ($totalPages > 5 ? false : true) ];
-	$list['Next'] = [ 'active' => false, 'pageurl' => $pageurl, 'show' => $show, 'page' => ($curPage + 1), 'class' => 'button', 'disabled' => ($curPage < $totalPages ? false : true) ];
+	$list['Last'] = [
+		'active'   => false,
+		'pageurl'  => $pageurl,
+		'show'     => $show,
+		'page'     => $totalPages,
+		'class'    => 'button',
+		'disabled' => ( $totalPages > 5 ? false : true )
+	];
+	$list['Next'] = [
+		'active'   => false,
+		'pageurl'  => $pageurl,
+		'show'     => $show,
+		'page'     => ( $curPage + 1 ),
+		'class'    => 'button',
+		'disabled' => ( $curPage < $totalPages ? false : true )
+	];
 
 	return generateList( $list, [ 'attr' => 'class="vrp-cd-pagination"' ] );
 }
@@ -233,7 +272,7 @@ function vrpsortlinks( $unit ) {
 	rtrim( $fields_string, '&' );
 	$pageurl = $fields_string;
 
-	$sortoptions = array( 'Bedrooms' );
+	$sortoptions = [ 'Bedrooms' ];
 
 	if ( isset( $unit->Rate ) ) {
 		$sortoptions[] = 'Rate';
@@ -251,7 +290,7 @@ function vrpsortlinks( $unit ) {
 	foreach ( $sortoptions as $s ) {
 
 		$pageurl = esc_attr( $pageurl );
-		$order = esc_attr( $order );
+		$order   = esc_attr( $order );
 
 		if ( $sort == $s ) {
 			if ( $order == 'low' ) {
@@ -270,7 +309,7 @@ function vrpsortlinks( $unit ) {
 		echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=low">' . $s . '(low to high)</option>';
 		echo '<option value="?' . $pageurl . 'search[sort]=' . $s . '&show=' . $show . '&search[order]=high">' . $s . '(high to low)</option>';
 	}
-	 echo '</select>';
+	echo '</select>';
 }
 
 function vrp_resultsperpage() {
@@ -280,7 +319,7 @@ function vrp_resultsperpage() {
 	}
 
 	$fields_string = rtrim( $fields_string, '&' );
-	$pageurl = $fields_string;
+	$pageurl       = $fields_string;
 
 	if ( isset( $_GET['show'] ) ) {
 		$show = (int) $_GET['show'];
@@ -289,48 +328,50 @@ function vrp_resultsperpage() {
 	}
 	echo "<select autocomplete='off' name='resultCount' class='vrpshowing'>";
 	echo "<option value=''>Show</option>";
-	foreach ( array( 10, 20, 30 ) as $v ) {
-		echo '<option ' . ( ! empty( $_GET['show'] ) && (int) $_GET['show'] == $v ? 'selected="selected"' : '') . ' value="?' . esc_attr( $pageurl ) . '&show=' . esc_attr( $v ) . '">' . esc_attr( $v ) . '</option>';
+	foreach ( [ 10, 20, 30 ] as $v ) {
+		echo '<option ' . ( ! empty( $_GET['show'] ) && (int) $_GET['show'] == $v ? 'selected="selected"' : '' ) . ' value="?' . esc_attr( $pageurl ) . '&show=' . esc_attr( $v ) . '">' . esc_attr( $v ) . '</option>';
 	}
 	echo '</select>';
 }
 
 function dateSeries( $start_date, $num ) {
-	$dates = array();
+	$dates = [];
 
 	$dates[0] = $start_date;
 	for ( $i = 0; $i < $num; $i ++ ) {
-		$start = strtotime( end( $dates ) );
-		$day = mktime( 0, 0, 0, date( 'm', $start ), date( 'd', $start ) + 1, date( 'Y', $start ) );
+		$start   = strtotime( end( $dates ) );
+		$day     = mktime( 0, 0, 0, date( 'm', $start ), date( 'd', $start ) + 1, date( 'Y', $start ) );
 		$dates[] = date( 'Y-m-d', $day );
 	}
+
 	return $dates;
 }
 
 function daysTo( $from, $to, $round = true ) {
 	$from = strtotime( $from );
-	$to = strtotime( $to );
+	$to   = strtotime( $to );
 	$diff = $to - $from;
 	$days = $diff / 86400;
+
 	return $round == true ? floor( $days ) : round( $days, 2 );
 }
 
 function vrpCalendar( $r, $totalMonths = 3 ) {
 
-	$datelist = array();
-	$arrivals = array();
-	$departs = array();
+	$datelist = [];
+	$arrivals = [];
+	$departs  = [];
 
 	foreach ( $r as $v ) {
-		$from_date = $v->start_date;
+		$from_date  = $v->start_date;
 		$arrivals[] = $from_date;
-		$to_date = $v->end_date;
-		$departs[] = $to_date;
-		$num = daysTo( $from_date, $to_date );
+		$to_date    = $v->end_date;
+		$departs[]  = $to_date;
+		$num        = daysTo( $from_date, $to_date );
 		$datelist[] = dateSeries( $from_date, $num );
 	}
 
-	$final_date = array();
+	$final_date = [];
 
 	foreach ( $datelist as $v ) {
 		foreach ( $v as $v2 ) {
@@ -338,27 +379,26 @@ function vrpCalendar( $r, $totalMonths = 3 ) {
 		}
 	}
 
-	$today = strtotime( date( 'Y' ) . '-' . date( 'm' ) . '-01' );
-	$calendar = new \Gueststream\Calendar( date( 'Y-m-d' ) );
-	$calendar->link_days = 0;
+	$today                       = strtotime( date( 'Y' ) . '-' . date( 'm' ) . '-01' );
+	$calendar                    = new \Gueststream\Calendar( date( 'Y-m-d' ) );
 	$calendar->highlighted_dates = $final_date;
-	$calendar->arrival_dates = $arrivals;
-	$calendar->depart_dates = $departs;
-	$theKey = "<div class=\"calkey\" style='clear:both'><span style=\"float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Available</span> <span style=\"float:left;display:block;width:15px;height:15px;;margin-left:10px;border:1px solid #404040;\" class=\"notavailable highlighted\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Unavailable</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable dDate\"></span><span style=\"float:left;\">&nbsp; Check-In Only</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable aDate\"></span><span style=\"float:left;\">&nbsp; Check-Out Only</span><br style=\"clear:both;\" /></div><br style=\"clear:both;\" />";
-	$ret = '';
-	$x = 0;
-	$curYear = date( 'Y' );
-	for ( $i = 0; $i <= $totalMonths; $i++ ) {
+	$calendar->arrival_dates     = $arrivals;
+	$calendar->depart_dates      = $departs;
+	$theKey                      = "<div class=\"calkey\" style='clear:both'><span style=\"float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Available</span> <span style=\"float:left;display:block;width:15px;height:15px;;margin-left:10px;border:1px solid #404040;\" class=\"notavailable highlighted\"> &nbsp;</span> <span style=\"float:left;\">&nbsp; Unavailable</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable dDate\"></span><span style=\"float:left;\">&nbsp; Check-In Only</span><span style=\"margin-left:10px;float:left;display:block;width:15px;height:15px;border:1px solid #404040;\" class=\"isavailable aDate\"></span><span style=\"float:left;\">&nbsp; Check-Out Only</span><br style=\"clear:both;\" /></div><br style=\"clear:both;\" />";
+	$ret                         = '';
+	$x                           = 0;
+	$curYear                     = date( 'Y' );
+	for ( $i = 0; $i <= $totalMonths; $i ++ ) {
 
-		$nextyear = date( 'Y', mktime( 0, 0, 0, date( 'm', $today ) + $i, date( 'd', $today ), date( 'Y', $today ) ) );
+		$nextyear  = date( 'Y', mktime( 0, 0, 0, date( 'm', $today ) + $i, date( 'd', $today ), date( 'Y', $today ) ) );
 		$nextmonth = date( 'm', mktime( 0, 0, 0, date( 'm', $today ) + $i, date( 'd', $today ), date( 'Y', $today ) ) );
 
 		$ret .= $calendar->output_calendar( $nextyear, $nextmonth );
 		if ( $x == 3 ) {
 			$ret .= '';
-			$x = -1;
+			$x = - 1;
 		}
-		$x++;
+		$x ++;
 	}
 
 	return '' . $ret . $theKey;

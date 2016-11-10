@@ -25,7 +25,7 @@ if ( get_option('vrpUser') != "" && get_option('vrpPass') != "" ) { ?>
     <?php settings_fields('VRPConnector'); ?>
 
 
-    <?php if($vrp->apiKey === false || $vrp->apiKey === '1533020d1121b9fea8c965cd2c978296'):?>
+    <?php if( $vrp->api_key === false || $vrp->api_key === '1533020d1121b9fea8c965cd2c978296'):?>
         <a href="https://secure.gueststream.com" target="_blank">
             <img width="25%" style="float:right" src="<?php echo plugins_url('/images/free_30_day_trial.png', __FILE__); ?>" alt="VRP Connector Trial"/>
         </a>
