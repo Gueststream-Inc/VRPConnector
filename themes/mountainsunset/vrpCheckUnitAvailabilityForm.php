@@ -8,18 +8,18 @@
 ?>
 
 <div id="unit-data"
-     data-unit-id="<?php echo $data->id; ?>"
-     data-unit-slug="<?php echo $data->page_slug; ?>"
-     data-unit-address1="<?php echo $data->Address1; ?>"
-     data-unit-address2="<?php echo $data->Address2; ?>"
-     data-unit-city="<?php echo $data->City; ?>"
-     data-unit-state="<?php echo $data->State; ?>"
-     data-unit-zip="<?php echo $data->PostalCode; ?>"
-     data-unit-latitude="<?php echo $data->lat; ?>"
-     data-unit-longitude="<?php echo $data->long; ?>"
-     data-display-pageviews="<?php echo (isset($data->pageViews)) ? "true" : "false"; ?>"
+	 data-unit-id="<?php echo $data->id; ?>"
+	 data-unit-slug="<?php echo $data->page_slug; ?>"
+	 data-unit-address1="<?php echo $data->Address1; ?>"
+	 data-unit-address2="<?php echo $data->Address2; ?>"
+	 data-unit-city="<?php echo $data->City; ?>"
+	 data-unit-state="<?php echo $data->State; ?>"
+	 data-unit-zip="<?php echo $data->PostalCode; ?>"
+	 data-unit-latitude="<?php echo $data->lat; ?>"
+	 data-unit-longitude="<?php echo $data->long; ?>"
+	 data-display-pageviews="<?php echo (isset( $data->pageViews )) ? 'true' : 'false'; ?>"
 
-     style="display:none;"
+	 style="display:none;"
 	></div>
 
 <div id="checkavailbox">
@@ -28,7 +28,7 @@
 	<div id="datespicked">
 		Select your arrival and departure dates below to reserve this unit.<br><br>
 
-		<form action="<?php echo esc_url(site_url('/vrp/book/step3/', 'https')); ?>"
+		<form action="<?php echo esc_url( site_url( '/vrp/book/step3/', 'https' ) ); ?>"
 		      method="get" id="bookingform">
 
 			<table align="center" width="96%">
@@ -38,7 +38,7 @@
 						<input type="text" id="check-availability-arrival-date"
 						       name="obj[Arrival]"
 						       class="input unitsearch"
-						       value="<?php echo esc_attr($_SESSION['arrival']); ?>">
+						       value="<?php echo esc_attr( $_SESSION['arrival'] ); ?>">
 					</td>
 				</tr>
 				<tr>
@@ -47,7 +47,7 @@
 						<input type="text" id="check-availability-departure-date"
 						       name="obj[Departure]"
 						       class="input unitsearch"
-						       value="<?php echo esc_attr($_SESSION['depart']); ?>">
+						       value="<?php echo esc_attr( $_SESSION['depart'] ); ?>">
 					</td>
 				</tr>
 

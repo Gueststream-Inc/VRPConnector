@@ -8,17 +8,16 @@
  * Author URI: http://www.gueststream.com/
  */
 
-if (version_compare(phpversion(), '5.4.0', '<')) {
-    function vrp_phpold()
-    {
-        printf('<div class="error"><p>' . __('Your PHP version is too old, please upgrade to a newer version of PHP. Your PHP version is %1$s, <strong>VRPConnector</strong> requires %2$s', 'breadcrumb-navxt') . '</p></div>', phpversion(), '5.4.0');
-    }
+if ( version_compare( phpversion(), '5.4.0', '<' ) ) {
+	function vrp_phpold() {
+		printf( '<div class="error"><p>' . __( 'Your PHP version is too old, please upgrade to a newer version of PHP. Your PHP version is %1$s, <strong>VRPConnector</strong> requires %2$s', 'breadcrumb-navxt' ) . '</p></div>', phpversion(), '5.4.0' );
+	}
 
-    if (is_admin()) {
-        add_action('admin_notices', 'vrp_phpold');
-    }
+	if ( is_admin() ) {
+		add_action( 'admin_notices', 'vrp_phpold' );
+	}
 
-    return;
+	return;
 } else {
-    require __DIR__ . "/loader.php";
+	require __DIR__ . '/loader.php';
 }

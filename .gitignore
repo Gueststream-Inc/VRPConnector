@@ -1,20 +1,15 @@
-# OSx hates filesystems
-.DS_Store
-
 # Logs
 error_log
 
 # IDE
 /.idea/
 
-# Test results
-/tests/report/
-
 /build/coverage
 /build/logs
 /build/pdepend
 /build/phpdox
 /build/svn
+/build/wpcs
 
 cache.properties
 

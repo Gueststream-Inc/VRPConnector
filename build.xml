@@ -87,20 +87,36 @@
         </exec>
     </target>
 
-    <target name="phpcs">
-        <exec executable="phpcs">
-            <arg value="--standard=PSR2"/>
-            <arg path="${basedir}/lib"/>
+    <target name="check-wordpress-phpcs-installed">
+        <available file="${basedir}/build/wpcs/vendor/bin/phpcs" property="wpcs.installed" />
+    </target>
+
+    <target name="install-wordpress-code-style-standards" depends="check-wordpress-phpcs-installed" unless="wpcs.installed">
+        <exec executable="composer" dir="${basedir}/build">
+            <arg value="create-project"/>
+            <arg value="wp-coding-standards/wpcs:dev-master"/>
+            <arg value="--no-dev"/>
         </exec>
     </target>
 
-    <target name="phpcs-ci"
-            description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-        <exec executable="phpcs">
+    <target name="phpcs" depends="install-wordpress-code-style-standards">
+        <exec executable="${basedir}/build/wpcs/vendor/bin/phpcs">
+            <arg value="--standard=WordPress"/>
+            <arg value="--extensions=php"/>
+            <arg value="--ignore=*/tests/*,*/vendor/*,*/build/*"/>
+            <arg value="--report-file=${basedir}/build/logs/checkstyle.txt"/>
+            <arg path="${basedir}"/>
+        </exec>
+    </target>
+
+    <target name="phpcs-ci" depends="install-wordpress-code-style-standards">
+        <exec executable="${basedir}/build/wpcs/vendor/bin/phpcs">
+            <arg value="--standard=WordPress"/>
+            <arg value="--extensions=php"/>
+            <arg value="--ignore=*/tests/*,*/vendor/*,*/build/*"/>
             <arg value="--report=checkstyle"/>
             <arg value="--report-file=${basedir}/build/logs/checkstyle.xml"/>
-            <arg value="--standard=PSR2"/>
-            <arg path="${basedir}/lib"/>
+            <arg path="${basedir}"/>
         </exec>
     </target>
 

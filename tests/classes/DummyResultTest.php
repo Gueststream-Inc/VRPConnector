@@ -1,5 +1,5 @@
 <?php
-date_default_timezone_set('UTC');
+date_default_timezone_set( 'UTC' );
 /**
  * @file DummyResultTest.php
  * @project VRPConnector
@@ -7,49 +7,47 @@ date_default_timezone_set('UTC');
  * @created 2/19/15 5:11 PM
  */
 
-class DummyResultTest extends \PHPUnit_Framework_TestCase
-{
-    public function testConstruct()
-    {
-        $id = 1;
-        $title = "Dummy Result";
-        $content = "All the worlds content is here!";
-        $description = "some description";
-        $dummyresult = new \Gueststream\DummyResult($id,$title,$content,$description);
+class DummyResultTest extends \PHPUnit_Framework_TestCase {
 
-        //ID should be what we set it to
-        $this->assertSame($id,$dummyresult->ID);
+	public function testConstruct() {
+		$id = 1;
+		$title = 'Dummy Result';
+		$content = 'All the worlds content is here!';
+		$description = 'some description';
+		$dummyresult = new \Gueststream\DummyResult( $id,$title,$content,$description );
 
-        //Post title should be what we set it do
-        $this->assertSame($title,$dummyresult->post_title);
+		// ID should be what we set it to
+		$this->assertSame( $id,$dummyresult->ID );
 
-        //Content should be what we set it to.
-        $this->assertSame($content,$dummyresult->post_content);
-    }
+		// Post title should be what we set it do
+		$this->assertSame( $title,$dummyresult->post_title );
 
-    public function testDefaultPropertyValues()
-    {
-        $dummyresult = new \Gueststream\DummyResult(0,'some title','some content','some description');
+		// Content should be what we set it to.
+		$this->assertSame( $content,$dummyresult->post_content );
+	}
 
-        // Comment Status should be 'closed'
-        $this->assertSame('closed',$dummyresult->comment_status);
+	public function testDefaultPropertyValues() {
+		$dummyresult = new \Gueststream\DummyResult( 0,'some title','some content','some description' );
 
-        // Post Status should be 'publish'
-        $this->assertSame('publish',$dummyresult->post_status);
+		// Comment Status should be 'closed'
+		$this->assertSame( 'closed',$dummyresult->comment_status );
 
-        // Ping Status should be 'closed'
-        $this->assertSame('closed',$dummyresult->ping_status);
+		// Post Status should be 'publish'
+		$this->assertSame( 'publish',$dummyresult->post_status );
 
-        // Post Type should be 'page'
-        $this->assertSame('page',$dummyresult->post_type);
+		// Ping Status should be 'closed'
+		$this->assertSame( 'closed',$dummyresult->ping_status );
 
-        // Comment Count should be 0
-        $this->assertSame(0,$dummyresult->comment_count);
+		// Post Type should be 'page'
+		$this->assertSame( 'page',$dummyresult->post_type );
 
-        // Post Parent should be 450
-        $this->assertSame(450,$dummyresult->post_parent);
+		// Comment Count should be 0
+		$this->assertSame( 0,$dummyresult->comment_count );
 
-        // Post Author should be 'admin'
-        $this->assertSame('admin',$dummyresult->post_author);
-    }
+		// Post Parent should be 450
+		$this->assertSame( 450,$dummyresult->post_parent );
+
+		// Post Author should be 'admin'
+		$this->assertSame( 'admin',$dummyresult->post_author );
+	}
 }
