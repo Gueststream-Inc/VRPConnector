@@ -169,7 +169,7 @@ jQuery(document).ready(function(){
         jQuery("span.vrpmsg").remove();
         jQuery(".badfields").removeClass("badfields");
         jQuery("#comments").val(jQuery("#comments").val());
-        jQuery.post("/?vrpjax=1&act=processbooking",jQuery(this).serialize(),function(data){
+        jQuery.post(url_paths.site_url + "/?vrpjax=1&act=processbooking",jQuery(this).serialize(),function(data){
 
             var obj=jQuery.parseJSON(data);
             if (obj.Bad.length != 0){
