@@ -52,6 +52,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.4.1 =
+* Added site home url path to booking form submission path to support alternate install directories.
+
 = 1.4.0 =
 * Added new shortcode [vrpUnit pag_slug="my_unit_page_slug"] to turn pages and posts in to unit pages.
 
