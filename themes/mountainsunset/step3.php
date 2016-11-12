@@ -7,7 +7,7 @@
 global $vrp;
 ?>
 <form
-	action="/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr( $data->Arrival ); ?>&obj[Departure]=<?php echo esc_attr( $data->Departure ); ?>&obj[PropID]=<?php echo esc_attr( $_GET['obj']['PropID'] ); ?>"
+	action="<?php echo site_url(); ?>/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr( $data->Arrival ); ?>&obj[Departure]=<?php echo esc_attr( $data->Departure ); ?>&obj[PropID]=<?php echo esc_attr( $_GET['obj']['PropID'] ); ?>"
 	id="vrpbookform" method="post">
 	<div class="userbox" id="guestinfodiv">
 		<h3>Guest Information</h3>
