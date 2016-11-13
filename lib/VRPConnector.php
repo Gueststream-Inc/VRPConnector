@@ -17,7 +17,7 @@ class VRPConnector {
 	 *
 	 * @var string
 	 */
-	private $api_key;
+	public $api_key;
 	/**
 	 * VRP API Url
 	 *
