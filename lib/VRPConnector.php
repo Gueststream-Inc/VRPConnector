@@ -1529,8 +1529,8 @@ class VRPConnector {
 	}
 
 	public function apiKeySettingTitleCallback() {
-		echo "<p>Your API Key can be found in the settings section after logging in to <a href='http://www.gueststream.net'>Gueststream.net</a>.</p>
-        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='http://www.gueststream.net'>Gueststream.net</a> account.</p>
+		echo "<p>Your API Key can be found in the settings section after logging in to <a href='https://www.gueststream.net'>Gueststream.net</a>.</p>
+        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='https://www.gueststream.net'>Gueststream.net</a> account.</p>
         <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
 	}
 
@@ -1539,7 +1539,7 @@ class VRPConnector {
 	}
 
 	public function vrpLoginSettingTitleCallback() {
-		echo "The VRP Login is only necessary if you want to be able to automatically login to your VRP portal.  The only necessary field in this form is the VRP Api Key above.";
+		echo "<p>The VRP Login is only necessary if you want to be able to automatically login to your VRP portal at <a href='https://www.gueststream.net'>Gueststream.net</a>.  The only necessary field in this form is the VRP Api Key above.</p>";
 	}
 
 	public function vrpUserCallback() {
