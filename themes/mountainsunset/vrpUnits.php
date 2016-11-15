@@ -1,12 +1,11 @@
 <?php
 /**
- * @Author Josh Houghtelin <josh@gueststream.com>
+ * [vrpUnits] Shortcode Template File
  *
- * [vrpUnits] Shortcode Theme File
+ * @package VRPConnector
  */
-?>
 
-<?php if ( $data->count > 0 ) : ?>
+if ( $data->count > 0 ) : ?>
 	<div class="row">
 		<?php echo esc_html( $data->count ); ?> Units
 	</div>
@@ -14,7 +13,7 @@
 		<div class="row">
 			<div class="row">
 				<h2>
-					<a href="<?php echo site_url( '/vrp/unit/' . $a_unit->page_slug ); ?>">
+					<a href="<?php echo esc_url( site_url( '/vrp/unit/' . $a_unit->page_slug ) ); ?>">
 						<?php echo esc_html( $a_unit->Name ); ?>
 					</a>
 				</h2>
