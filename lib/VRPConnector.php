@@ -1523,10 +1523,8 @@ class VRPConnector {
 		add_settings_field( 'vrpApiKey', 'VRP Api Key', [ $this, 'apiKeyCallback' ], 'VRPConnector', 'vrpApiKey' );
 		add_settings_section( 'vrpLoginCreds', 'VRP Login', [ $this, 'vrpLoginSettingTitleCallback' ], 'VRPConnector' );
 		add_settings_field( 'vrpUser', 'VRP Username', [ $this, 'vrpUserCallback' ], 'VRPConnector', 'vrpLoginCreds' );
-		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector',
-			'vrpLoginCreds' );
-		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ],
-			'VRPConnector' );
+		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector', 'vrpLoginCreds' );
+		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ], 'VRPConnector' );
 		add_settings_field( 'vrpTheme', 'VRP Theme', [ $this, 'vrpThemeSettingCallback' ], 'VRPConnector', 'vrpTheme' );
 	}
 
@@ -1541,6 +1539,7 @@ class VRPConnector {
 	}
 
 	public function vrpLoginSettingTitleCallback() {
+		echo "The VRP Login is only necessary if you want to be able to automatically login to your VRP portal.  The only necessary field in this form is the VRP Api Key above.";
 	}
 
 	public function vrpUserCallback() {
@@ -1567,13 +1566,6 @@ class VRPConnector {
 			echo '<option value="' . esc_attr( $name ) . '" ' . esc_attr( $sel ) . '>' . esc_attr( $displayname ) . '</option>';
 		}
 		echo '</select>';
-	}
-
-	/**
-	 * Displays the 'VRP Login' admin page.
-	 */
-	public function loadVRP() {
-		include VRP_PATH . 'views/login.php';
 	}
 
 	/**
