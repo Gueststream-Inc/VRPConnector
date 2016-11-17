@@ -52,6 +52,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.4.2 =
+* Bugfix for Admin settings page that was causing PHP 5.4 systems to not display the settings page.
+
 = 1.4.1 =
 * Added site home url path to booking form submission path to support alternate install directories.
 * Added site url path to booking form confirmation page path.

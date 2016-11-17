@@ -5,20 +5,23 @@
  * @package VRPConnector
  */
 
-global $vrp; ?>
+global $vrp;
+$vrp_user = get_option( 'vrpUser' );
+$vrp_pass = get_option( 'vrpPass' );
+?>
 	<div>
 		<img src="<?php echo esc_url( plugins_url( '/images/vrpconnector-logo.png', __FILE__ ) ); ?>"
 		     alt="VRP Connector Logo"/>
 	</div>
 <?php
-if ( ! empty( get_option( 'vrpUser' ) ) && ! empty( get_option( 'vrpPass' ) ) ) { ?>
+if ( ! empty( $vrp_user ) && ! empty( $vrp_pass ) ) { ?>
 	<h2>Vacation Rental Platform Access</h2>
 	<?php
 	echo '<div>';
 	echo '<label for="vrploginbtn">Click the button below to access the VRP:</label><br/>';
 	echo '<form action="http://www.gueststream.net/main/login/" method="post" id="VRPLOGIN" target="_blank">';
-	echo '<input type="hidden" name="vrpUser" value="' . esc_attr( get_option( 'vrpUser' ) ) . '">';
-	echo '<input type="hidden" name="vrpPass" value="' . esc_attr( get_option( 'vrpPass' ) ) . '">';
+	echo '<input type="hidden" name="vrpUser" value="' . esc_attr( $vrp_user ) . '">';
+	echo '<input type="hidden" name="vrpPass" value="' . esc_attr( $vrp_pass ) . '">';
 	echo '<input id="vrploginbtn" class="button-primary" type="submit" value="LOGIN TO VRP" style="font-size:26px;font-weight:bold;padding: 0.5em 1em;line-height: 26px;/* vertical-align: top; */height: auto;margin-top: 0.5em;margin-bottom: 2em;">';
 	echo '</form>';
 	echo '</div>';
