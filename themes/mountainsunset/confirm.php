@@ -1,3 +1,12 @@
+<?php
+/**
+ * VRPConnector booking confirmation template
+ *
+ * Add Client's Google Analytics tracking ID to implement support E-Commerce transaction tracking. =)
+ *
+ * @package VRPConnector
+ */
+?>
 <div class="userbox" >
     <h3>Congratulations!</h3>
     <div class="padit">
@@ -56,7 +65,7 @@ try {
 
     "",                             // Category
 
-    "' . esc_js( $data->TotalCost ) . '",                                    // Price
+    "' . esc_js( $data->TotalCost ) . '",       // Price
 
     "1"                                         // Quantity
 
