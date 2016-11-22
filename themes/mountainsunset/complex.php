@@ -1,12 +1,11 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Josh Houghtelin <josh@findsomehelp.com>
- * Date: 10/26/14
- * Time: 6:41 PM
+ * VRPConnector complex page template
+ *
+ * @package VRPConnector
  */
-?>
 
+?>
 <div class="container">
 	<div class="row">
 		<div id="tabs">
@@ -33,12 +32,12 @@
 
 			<div id="units">
 				<?php foreach ( $data->units as $unit ) { ?>
-				<li>
-					<a href="/vrp/unit/<?php echo esc_attr( $unit->page_slug ); ?>">
-						<h2><?php echo esc_html( $unit->Name ); ?></h2>
-					</a>
-					<?php echo wp_kses_post( $unit->ShortDescription ); ?>
-				</li>
+					<li>
+						<a href="/vrp/unit/<?php echo esc_attr( $unit->page_slug ); ?>">
+							<h2><?php echo esc_html( $unit->Name ); ?></h2>
+						</a>
+						<?php echo wp_kses_post( $unit->ShortDescription ); ?>
+					</li>
 				<?php } ?>
 			</div>
 
