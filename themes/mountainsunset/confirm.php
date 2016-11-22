@@ -6,17 +6,20 @@
  *
  * @package VRPConnector
  */
-?>
-<div class="userbox" >
-    <h3>Congratulations!</h3>
-    <div class="padit">
-        <b>Reservation Confirmation Number:</b> <?php echo esc_html( $data->thebooking->BookingNumber );?><br><br>
-		You have successfully booked <b><?php echo esc_html( $data->Name );?></b> from <b><?php echo esc_html( $data->Arrival ); ?></b> for <b><?php echo esc_html( floor( $data->Nights ) ); ?></b> nights.
-		<br /><br />
-		You will receive an email confirmation shortly with additional information.
-	</div>
 
-</div>
+?>
+	<div class="userbox">
+		<h3>Congratulations!</h3>
+		<div class="padit">
+			<b>Reservation Confirmation Number:</b> <?php echo esc_html( $data->thebooking->BookingNumber ); ?><br><br>
+			You have successfully booked <b><?php echo esc_html( $data->Name ); ?></b> from
+			<b><?php echo esc_html( $data->Arrival ); ?></b> for
+			<b><?php echo esc_html( floor( $data->Nights ) ); ?></b> nights.
+			<br/><br/>
+			You will receive an email confirmation shortly with additional information.
+		</div>
+
+	</div>
 <?php echo '
 <script type="text/javascript">
 
