@@ -52,6 +52,10 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.4.3 =
+* Prevent search engines from indexing search result pages to prevent content duplication.
+* Code style changes to built in theme to better meet WordPress code style standards.
+
 = 1.4.2 =
 * Bugfix for Admin settings page that was causing PHP 5.4 systems to not display the settings page.
 
