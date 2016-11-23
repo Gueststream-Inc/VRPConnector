@@ -379,6 +379,11 @@ class VRPConnector {
 			case 'search': // If Search Page.
 				$data = json_decode( $this->search() );
 
+				add_action('wp_head', function () {
+					// Do not index search results.
+					echo '<META NAME="ROBOTS" CONTENT="NOINDEX, FOLLOW">';
+				});
+
 				if ( ! empty( $data->count ) ) {
 					$data = $this->prepareSearchResults( $data );
 				}
