@@ -53,6 +53,7 @@ you to seamlessly connect your website to your property management software data
 
 == Changelog ==
 = 1.4.3 =
+* Added SEO page title & meta description support for complex pages.
 * Prevent search engines from indexing search result pages to prevent content duplication.
 * Code style changes to built in theme to better meet WordPress code style standards.
 
