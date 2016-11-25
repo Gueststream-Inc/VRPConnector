@@ -52,6 +52,9 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
+= 1.4.4 =
+* Added support for Yoast SEO plugin to display page titles and meta descriptions.
+
 = 1.4.3 =
 * Added SEO page title & meta description support for complex pages.
 * Prevent search engines from indexing search result pages to prevent content duplication.
@@ -190,6 +193,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 1.4.4 =
+* Added Yoast Support! Now VRPConnector plays well with Yoast and All-in-one SEO plugins.
+
 = 1.4.0 =
 * [vrpUnit page_slug="my_awesome_property"] shortcode added. You can not place unit data on any page of your site!
 
