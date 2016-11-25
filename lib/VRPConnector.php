@@ -1266,7 +1266,13 @@ class VRPConnector {
 	 * @return string
 	 */
 	public function vrpSearch( $arr = [] ) {
-		if ( count( $arr ) > 0 ) {
+
+		if (!is_array($arr)) {
+			// If no arguments are used in the shortcode, WP passes $arr as an empty string.
+			$arr = [];
+		}
+
+		if ( 0 < count( $arr ) ) {
 			foreach ( $arr as $key => $value ) {
 				// WP makes all keys lower case.  We should try and set most keys with ucfirst()
 				if ( $key == 'featured' ) {
