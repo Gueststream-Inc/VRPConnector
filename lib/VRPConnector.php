@@ -492,7 +492,29 @@ class VRPConnector {
 				break;
 		}
 
+		if (!empty($pagetitle)) {
+			$this->overrideYoastPageTitle($pagetitle);
+		}
+
+		if (!empty($pagedescription)) {
+			$this->overrideYoastMetaDesc($pagedescription);
+		}
+
 		return [ new DummyResult( 0, $pagetitle, $content, $pagedescription ) ];
+	}
+
+	private function overrideYoastPageTitle($page_title)
+	{
+		add_filter('wpseo_title', function ($yoast_page_title) use ($page_title) {
+			return $page_title;
+		});
+	}
+
+	private function overrideYoastMetaDesc($page_description)
+	{
+		add_filter('wpseo_metadesc', function ($yoast_page_description) use ($page_description) {
+			return $page_description;
+		});
 	}
 
 	private function specialPage( $slug ) {
