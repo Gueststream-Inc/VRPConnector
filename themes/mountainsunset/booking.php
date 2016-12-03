@@ -1,4 +1,10 @@
 <?php
+/**
+ * Booking Template
+ *
+ * @package VRPConnector
+ */
+
 if ( isset( $data->Error ) ) {
 	echo esc_html( $data->Error );
 	echo "<br><br><a href='/'>Please try again.</a> ";
@@ -41,7 +47,8 @@ if ( isset( $data->Error ) ) {
 							<td><?php echo esc_html( $v->Description ); ?>:</td>
 							<td><?php if ( isset( $v->Type ) && $v->Type == 'discount' ) {
 									echo '-';
-} ?>$<?php echo esc_html( number_format( $v->Amount, 2 ) ); ?></td>
+} ?>$<?php echo esc_html( number_format( $v->Amount, 2 ) ); ?>
+							</td>
 						</tr>
 					<?php
 					endforeach;
