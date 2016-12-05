@@ -45,7 +45,7 @@ if ( isset( $data->Error ) ) {
 						?>
 						<tr>
 							<td><?php echo esc_html( $v->Description ); ?>:</td>
-							<td><?php if ( isset( $v->Type ) && $v->Type == 'discount' ) {
+							<td><?php if ( isset( $v->Type ) && 'discount' === $v->Type ) {
 									echo '-';
 } ?>$<?php echo esc_html( number_format( $v->Amount, 2 ) ); ?>
 							</td>
@@ -127,7 +127,7 @@ if ( isset( $data->Error ) ) {
 	endif;
 	?>
 		<?php
-		if ( $data->TotalCost != $data->DueToday ) {
+		if ( $data->TotalCost !== $data->DueToday ) {
 			echo 'A deposit of <a href="#myModal2">$' . esc_html( number_format( $data->DueToday, 2 ) ) . '</a> is due now.';
 		}
 		?>
