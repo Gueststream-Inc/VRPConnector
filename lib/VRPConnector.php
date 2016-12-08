@@ -1309,7 +1309,7 @@ class VRPConnector {
 			$_GET['search'] = [];
 		}
 
-		$_GET['search']            = array_merge( $arr, $_GET['search'] );
+		$_GET['search']            = array_merge( $_GET['search'], $arr );
 		$_GET['search']['showall'] = 1;
 		$data                      = $this->search();
 		$data                      = json_decode( $data );
