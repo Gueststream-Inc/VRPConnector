@@ -1689,7 +1689,7 @@ class VRPConnector {
 			$_SESSION['arrival'] = $_GET['search']['arrival'];
 		}
 
-		if ( isset( $_SESSION['arrival'] ) ) {
+		if ( isset( $_SESSION['arrival'] ) && $_SESSION['arrival'] != '01/01/1970') {
 			$this->search->arrival = date( 'm/d/Y', strtotime( $_SESSION['arrival'] ) );
 		} else {
 			$this->search->arrival = date( 'm/d/Y', strtotime( '+1 Days' ) );
@@ -1700,7 +1700,7 @@ class VRPConnector {
 			$_SESSION['depart'] = $_GET['search']['departure'];
 		}
 
-		if ( isset( $_SESSION['depart'] ) ) {
+		if ( isset( $_SESSION['depart'] ) && $_SESSION['depart'] != '01/01/1970') {
 			$this->search->depart = date( 'm/d/Y', strtotime( $_SESSION['depart'] ) );
 		} else {
 			$this->search->depart = date( 'm/d/Y', strtotime( '+4 Days' ) );
