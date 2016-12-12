@@ -1,9 +1,11 @@
 <?php
 /**
  * [vrpComplexes] ShortCode view
+ *
+ * @package VRPConnector
  */
-?>
 
+?>
 <div id="vrp">
 	<?php foreach ( $data as $complex ) : ?>
 		<div class="vrp-row" style="padding-bottom: 20px;">
