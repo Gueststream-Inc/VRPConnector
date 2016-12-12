@@ -11,7 +11,7 @@ $searchoptions = $vrp->searchoptions(); ?>
 
 <h2>Advanced Search</h2>
 
-<form action="<?php echo site_url(); ?>/vrp/search/results/" method="GET" id="vrp-advanced-search-form">
+<form action="<?php echo esc_url( site_url( '/vrp/search/results/' ) ); ?>" method="GET" id="vrp-advanced-search-form">
 	<div class="large-3 columns">
 		<div class="ui-widget-header ui-corner-all">
 			<h4>Search Options</h4>
@@ -30,9 +30,9 @@ $searchoptions = $vrp->searchoptions(); ?>
 				<td>
 					<select name="search[Adults]">
 						<option selected="selected" value="">Any</option>
-						<?php foreach ( range( 1, $searchoptions->maxsleeps ) as $sleepCount ) : ?>
-							<option value="<?php echo esc_attr( $sleepCount ); ?>">
-								<?php echo esc_attr( $sleepCount ); ?>
+						<?php foreach ( range( 1, $searchoptions->maxsleeps ) as $sleep_count ) : ?>
+							<option value="<?php echo esc_attr( $sleep_count ); ?>">
+								<?php echo esc_attr( $sleep_count ); ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -44,9 +44,9 @@ $searchoptions = $vrp->searchoptions(); ?>
 					<!-- If selected this affects the total occupancy (search[Children] +  search[Adults]) a unit must meet -->
 					<select name="search[Children]">
 						<option value="">Any</option>
-						<?php foreach ( range( 1, 10 ) as $v ) : ?>
-							<option value="<?php echo esc_attr( $v ); ?>">
-								<?php echo esc_attr( $v ); ?>
+						<?php foreach ( range( 1, 10 ) as $children_count ) : ?>
+							<option value="<?php echo esc_attr( $children_count ); ?>">
+								<?php echo esc_attr( $children_count ); ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -60,9 +60,11 @@ $searchoptions = $vrp->searchoptions(); ?>
 					will set the exact number of rooms a unit may have. -->
 					<select name="search[bedrooms]" style="width:90px;">
 						<option selected="selected" value="">Any</option>
-						<?php foreach ( range( $searchoptions->minbeds, $searchoptions->maxbeds ) as $bedroomCount ) : ?>
-							<option value="<?php echo esc_attr( $bedroomCount ); ?>">
-								<?php echo esc_attr( $bedroomCount ); ?>+
+						<?php foreach (
+							range( $searchoptions->minbeds, $searchoptions->maxbeds ) as $bedroom_count
+						) : ?>
+							<option value="<?php echo esc_attr( $bedroom_count ); ?>">
+								<?php echo esc_attr( $bedroom_count ); ?>+
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -73,9 +75,11 @@ $searchoptions = $vrp->searchoptions(); ?>
 				<td>
 					<select name="search[bathrooms]" style="width:90px;">
 						<option selected="selected" value="">Any</option>
-						<?php foreach ( range( $searchoptions->minbaths, $searchoptions->maxbaths ) as $bathroomCount ) : ?>
-							<option value="<?php echo esc_attr( $bathroomCount ); ?>">
-								<?php echo esc_attr( $bathroomCount ); ?>+
+						<?php foreach (
+							range( $searchoptions->minbaths, $searchoptions->maxbaths ) as $bathroom_count
+						) : ?>
+							<option value="<?php echo esc_attr( $bathroom_count ); ?>">
+								<?php echo esc_attr( $bathroom_count ); ?>+
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -87,9 +91,9 @@ $searchoptions = $vrp->searchoptions(); ?>
 					<!-- search[type] - is the single unit type a guest wants to limit their search to -->
 					<select name="search[Type]">
 						<option value="">Any</option>
-						<?php foreach ( $searchoptions->types as $type ) : ?>
-							<option value="<?php echo esc_attr( $type ); ?>">
-								<?php echo esc_attr( $type ); ?>
+						<?php foreach ( $searchoptions->types as $unit_type ) : ?>
+							<option value="<?php echo esc_attr( $unit_type ); ?>">
+								<?php echo esc_attr( $unit_type ); ?>
 							</option>
 						<?php endforeach; ?>
 					</select>
@@ -107,8 +111,10 @@ $searchoptions = $vrp->searchoptions(); ?>
 				<?php foreach ( $searchoptions->locations as $location ) : ?>
 					<li>
 						<label>
-							<input type="checkbox" name="search[location][]" id="location_<?php echo $location; ?>"
-								   value="<?php echo esc_attr( $location ); ?>"/>
+							<input type="checkbox"
+							       name="search[location][]"
+							       id="<?php echo esc_attr( 'location_' . $location ); ?>"
+							       value="<?php echo esc_attr( $location ); ?>"/>
 							<?php echo esc_html( $location ); ?>
 						</label>
 					</li>
