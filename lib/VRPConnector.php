@@ -347,7 +347,7 @@ class VRPConnector {
 
 					$pagetitle = $data->name;
 
-					if(!empty($data->page_title)) {
+					if ( ! empty( $data->page_title ) ) {
 						$pagetitle = $data->page_title;
 					}
 
@@ -384,10 +384,10 @@ class VRPConnector {
 			case 'search': // If Search Page.
 				$data = json_decode( $this->search() );
 
-				add_action('wp_head', function () {
+				add_action( 'wp_head', function () {
 					// Do not index search results.
 					echo '<META NAME="ROBOTS" CONTENT="NOINDEX, FOLLOW">';
-				});
+				} );
 
 				if ( ! empty( $data->count ) ) {
 					$data = $this->prepareSearchResults( $data );
@@ -492,29 +492,27 @@ class VRPConnector {
 				break;
 		}
 
-		if (!empty($pagetitle)) {
-			$this->overrideYoastPageTitle($pagetitle);
+		if ( ! empty( $pagetitle ) ) {
+			$this->overrideYoastPageTitle( $pagetitle );
 		}
 
-		if (!empty($pagedescription)) {
-			$this->overrideYoastMetaDesc($pagedescription);
+		if ( ! empty( $pagedescription ) ) {
+			$this->overrideYoastMetaDesc( $pagedescription );
 		}
 
 		return [ new DummyResult( 0, $pagetitle, $content, $pagedescription ) ];
 	}
 
-	private function overrideYoastPageTitle($page_title)
-	{
-		add_filter('wpseo_title', function ($yoast_page_title) use ($page_title) {
+	private function overrideYoastPageTitle( $page_title ) {
+		add_filter( 'wpseo_title', function ( $yoast_page_title ) use ( $page_title ) {
 			return $page_title;
-		});
+		} );
 	}
 
-	private function overrideYoastMetaDesc($page_description)
-	{
-		add_filter('wpseo_metadesc', function ($yoast_page_description) use ($page_description) {
+	private function overrideYoastMetaDesc( $page_description ) {
+		add_filter( 'wpseo_metadesc', function ( $yoast_page_description ) use ( $page_description ) {
 			return $page_description;
-		});
+		} );
 	}
 
 	private function specialPage( $slug ) {
@@ -1193,7 +1191,7 @@ class VRPConnector {
 		}
 
 		$json_unit_data = $this->call( "getunit/" . $args['page_slug'] );
-		$unit_data     = json_decode( $json_unit_data );
+		$unit_data      = json_decode( $json_unit_data );
 
 		if ( empty( $unit_data->id ) ) {
 			return '<span style="color:red;font-size: 1.2em;">' . $args['page_slug'] . ' is an invalid unit page slug.  Unit not found.</span>';
@@ -1289,7 +1287,7 @@ class VRPConnector {
 	 */
 	public function vrpSearch( $arr = [] ) {
 
-		if (!is_array($arr)) {
+		if ( ! is_array( $arr ) ) {
 			// If no arguments are used in the shortcode, WP passes $arr as an empty string.
 			$arr = [];
 		}
@@ -1561,15 +1559,17 @@ class VRPConnector {
 		add_settings_field( 'vrpApiKey', 'VRP Api Key', [ $this, 'apiKeyCallback' ], 'VRPConnector', 'vrpApiKey' );
 		add_settings_section( 'vrpLoginCreds', 'VRP Login', [ $this, 'vrpLoginSettingTitleCallback' ], 'VRPConnector' );
 		add_settings_field( 'vrpUser', 'VRP Username', [ $this, 'vrpUserCallback' ], 'VRPConnector', 'vrpLoginCreds' );
-		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector', 'vrpLoginCreds' );
-		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ], 'VRPConnector' );
+		add_settings_field( 'vrpPass', 'VRP Password', [ $this, 'vrpPasswordCallback' ], 'VRPConnector',
+			'vrpLoginCreds' );
+		add_settings_section( 'vrpTheme', 'VRP Theme Selection', [ $this, 'vrpThemeSettingTitleCallback' ],
+			'VRPConnector' );
 		add_settings_field( 'vrpTheme', 'VRP Theme', [ $this, 'vrpThemeSettingCallback' ], 'VRPConnector', 'vrpTheme' );
 	}
 
 	public function apiKeySettingTitleCallback() {
 		echo "<p>Your API Key can be found in the settings section after logging in to <a href='https://www.gueststream.net'>Gueststream.net</a>.</p>
-        <p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='https://www.gueststream.net'>Gueststream.net</a> account.</p>
-        <p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
+<p>Don't have an account? <a href='http://www.gueststream.com/apps-and-tools/vrpconnector-sign-up-page/'>Click Here</a> to learn more about getting a <a href='https://www.gueststream.net'>Gueststream.net</a> account.</p>
+<p>Demo API Key: <strong>1533020d1121b9fea8c965cd2c978296</strong> The Demo API Key does not contain bookable units therfor availability searches will not work.</p>";
 	}
 
 	public function apiKeyCallback() {
@@ -1689,7 +1689,7 @@ class VRPConnector {
 			$_SESSION['arrival'] = $_GET['search']['arrival'];
 		}
 
-		if ( isset( $_SESSION['arrival'] ) && $_SESSION['arrival'] != '01/01/1970') {
+		if ( isset( $_SESSION['arrival'] ) && $_SESSION['arrival'] != '01/01/1970' ) {
 			$this->search->arrival = date( 'm/d/Y', strtotime( $_SESSION['arrival'] ) );
 		} else {
 			$this->search->arrival = date( 'm/d/Y', strtotime( '+1 Days' ) );
@@ -1700,7 +1700,7 @@ class VRPConnector {
 			$_SESSION['depart'] = $_GET['search']['departure'];
 		}
 
-		if ( isset( $_SESSION['depart'] ) && $_SESSION['depart'] != '01/01/1970') {
+		if ( isset( $_SESSION['depart'] ) && $_SESSION['depart'] != '01/01/1970' ) {
 			$this->search->depart = date( 'm/d/Y', strtotime( $_SESSION['depart'] ) );
 		} else {
 			$this->search->depart = date( 'm/d/Y', strtotime( '+4 Days' ) );
