@@ -849,16 +849,18 @@ class VRPConnector {
 			'noCheckin'   => [],
 		];
 
-		foreach ( $unitData->avail as $v ) {
+		if ( isset( $unitData->avail ) && is_array( $unitData->avail ) ) {
+			foreach ( $unitData->avail as $v ) {
 
-			$fromDateTS = strtotime( '+1 Day', strtotime( $v->start_date ) );
-			$toDateTS   = strtotime( $v->end_date );
+				$fromDateTS = strtotime( '+1 Day', strtotime( $v->start_date ) );
+				$toDateTS   = strtotime( $v->end_date );
 
-			array_push( $unitBookedDates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
+				array_push( $unitBookedDates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
 
-			for ( $currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24 ) ) {
-				$currentDateStr = date( 'n-j-Y', $currentDateTS );
-				array_push( $unitBookedDates['bookedDates'], $currentDateStr );
+				for ( $currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24 ) ) {
+					$currentDateStr = date( 'n-j-Y', $currentDateTS );
+					array_push( $unitBookedDates['bookedDates'], $currentDateStr );
+				}
 			}
 		}
 
