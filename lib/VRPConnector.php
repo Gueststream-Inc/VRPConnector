@@ -840,31 +840,31 @@ class VRPConnector {
 		exit;
 	}
 
-	public function getUnitBookedDates( $unitSlug ) {
-		$unitDataJson = $this->call( 'getunit/' . (string) $unitSlug );
-		$unitData     = json_decode( $unitDataJson );
+	public function getUnitBookedDates( $unit_slug ) {
+		$unit_data_json = $this->call( 'getunit/' . (string) $unit_slug );
+		$unit_data     = json_decode( $unit_data_json );
 
-		$unitBookedDates = [
+		$unit_booked_dates = [
 			'bookedDates' => [],
 			'noCheckin'   => [],
 		];
 
-		if ( isset( $unitData->avail ) && is_array( $unitData->avail ) ) {
-			foreach ( $unitData->avail as $v ) {
+		if ( isset( $unit_data->avail ) && is_array( $unit_data->avail ) ) {
+			foreach ( $unit_data->avail as $v ) {
 
-				$fromDateTS = strtotime( '+1 Day', strtotime( $v->start_date ) );
+				$from_date_ts = strtotime( '+1 Day', strtotime( $v->start_date ) );
 				$toDateTS   = strtotime( $v->end_date );
 
-				array_push( $unitBookedDates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
+				array_push( $unit_booked_dates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
 
-				for ( $currentDateTS = $fromDateTS; $currentDateTS < $toDateTS; $currentDateTS += ( 60 * 60 * 24 ) ) {
-					$currentDateStr = date( 'n-j-Y', $currentDateTS );
-					array_push( $unitBookedDates['bookedDates'], $currentDateStr );
+				for ( $current_date_ts = $from_date_ts; $current_date_ts < $toDateTS; $current_date_ts += ( 60 * 60 * 24 ) ) {
+					$currentDateStr = date( 'n-j-Y', $current_date_ts );
+					array_push( $unit_booked_dates['bookedDates'], $currentDateStr );
 				}
 			}
 		}
 
-		echo json_encode( $unitBookedDates );
+		echo json_encode( $unit_booked_dates );
 	}
 
 	//
