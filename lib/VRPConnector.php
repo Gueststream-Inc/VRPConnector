@@ -90,12 +90,6 @@ class VRPConnector {
 	 * @var string
 	 */
 	private $pagetitle;
-	/**
-	 * Page Description
-	 *
-	 * @var string
-	 */
-	private $pagedescription;
 
 	/**
 	 * Class Construct
@@ -103,7 +97,7 @@ class VRPConnector {
 	public function __construct() {
 		$this->api_key = get_option( 'vrpAPI' );
 
-		if ( $this->api_key == '' ) {
+		if ( empty( $this->api_key ) ) {
 			add_action( 'admin_notices', [ $this, 'notice' ] );
 		}
 
@@ -116,12 +110,12 @@ class VRPConnector {
 	/**
 	 * Use the demo API key.
 	 */
-	function __load_demo_key() {
+	function load_demo_key() {
 		$this->api_key = '1533020d1121b9fea8c965cd2c978296';
 	}
 
 	/**
-	 * init WordPress Actions, Filters & shortcodes
+	 * Init WordPress Actions, Filters & shortcodes
 	 */
 	public function actions() {
 		if ( is_admin() ) {
@@ -130,7 +124,7 @@ class VRPConnector {
 			add_filter( 'plugin_action_links', [ $this, 'add_action_links' ], 10, 2 );
 		}
 
-		// Actions
+		// Actions.
 		add_action( 'init', [ $this, 'ajax' ] );
 		add_action( 'init', [ $this, 'sitemap' ] );
 		add_action( 'init', [ $this, 'featuredunit' ] );
@@ -143,11 +137,11 @@ class VRPConnector {
 		add_action( 'wp', [ $this, 'remove_filters' ] );
 		add_action( 'pre_get_posts', [ $this, 'query_template' ] );
 
-		// Filters
+		// Filters.
 		add_filter( 'robots_txt', [ $this, 'robots_mod' ], 10, 2 );
 		remove_filter( 'template_redirect', 'redirect_canonical' );
 
-		// Shortcodes
+		// Shortcodes.
 		add_shortcode( 'vrpUnit', [ $this, 'vrpUnit' ] );
 		add_shortcode( 'vrpUnits', [ $this, 'vrpUnits' ] );
 		add_shortcode( 'vrpSearch', [ $this, 'vrpSearch' ] );
@@ -155,14 +149,14 @@ class VRPConnector {
 		add_shortcode( 'vrpAdvancedSearchForm', [ $this, 'vrpAdvancedSearchForm' ] );
 		add_shortcode( 'vrpComplexes', [ $this, 'vrpComplexes' ] );
 		add_shortcode( 'vrpComplexSearch', [ $this, 'vrpComplexSearch' ] );
-		// add_shortcode("vrpAreaList", array($this, "vrpAreaList"));
-		// add_shortcode("vrpSpecials", array($this, "vrpSpecials"));
-		// add_shortcode("vrpLinks", array($this, "vrpLinks"));
+		add_shortcode( "vrpAreaList", [ $this, "vrpAreaList" ] );
+		add_shortcode( "vrpSpecials", [ $this, "vrpSpecials" ] );
+		add_shortcode( "vrpLinks", [ $this, "vrpLinks" ] );
 		add_shortcode( 'vrpshort', [ $this, 'vrpShort' ] );
 		add_shortcode( 'vrpFeaturedUnit', [ $this, 'vrpFeaturedUnit' ] );
 		add_shortcode( 'vrpCheckUnitAvailabilityForm', [ $this, 'vrpCheckUnitAvailabilityForm' ] );
 
-		// Widgets
+		// Widgets.
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_action( 'widgets_init', function () {
 			register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' );
@@ -173,15 +167,15 @@ class VRPConnector {
 	 * Set the plugin theme used & include the theme functions file.
 	 */
 	public function setTheme() {
-		$plugin_theme_Folder = VRP_PATH . 'themes/';
+		$plugin_theme_folder = VRP_PATH . 'themes/';
 		$theme               = get_option( 'vrpTheme' );
 
 		if ( ! $theme ) {
 			$theme           = $this->default_theme_name;
 			$this->themename = $this->default_theme_name;
-			$this->theme     = $plugin_theme_Folder . $this->default_theme_name;
+			$this->theme     = $plugin_theme_folder . $this->default_theme_name;
 		} else {
-			$this->theme     = $plugin_theme_Folder . $theme;
+			$this->theme     = $plugin_theme_folder . $theme;
 			$this->themename = $theme;
 		}
 		$this->themename = $theme;
@@ -947,16 +941,16 @@ class VRPConnector {
 	 */
 	public function searchoptions( array $filters = null ) {
 		if ( is_array( $filters ) ) {
-			$queryString = http_build_query( [ 'filters' => $filters ] );
+			$query_string = http_build_query( [ 'filters' => $filters ] );
 
-			return json_decode( $this->call( 'searchoptions', $queryString ) );
+			return json_decode( $this->call( 'searchoptions', $query_string ) );
 		}
 
-		$searchOptions = json_decode( $this->call( 'searchoptions' ) );
+		$search_options = json_decode( $this->call( 'searchoptions' ) );
 
-		$searchOptions->minbaths = ( empty( $searchOptions->minbaths ) ) ? 1 : $searchOptions->minbaths;
+		$search_options->minbaths = ( empty( $search_options->minbaths ) ) ? 1 : $search_options->minbaths;
 
-		return $searchOptions;
+		return $search_options;
 	}
 
 	/**
@@ -1484,14 +1478,14 @@ class VRPConnector {
 			return '<span style="color:red;font-size: 1.2em;">VRPConnector plugin must be enabled in order to use this shortcode.</span>';
 		}
 
-		$jsonUnitData = $vrp->call( 'getunit/' . $args['unit_slug'] );
-		$unitData     = json_decode( $jsonUnitData );
+		$json_unit_data = $vrp->call( 'getunit/' . $args['unit_slug'] );
+		$unit_data     = json_decode( $json_unit_data );
 
-		if ( empty( $unitData->id ) ) {
+		if ( empty( $unit_data->id ) ) {
 			return '<span style="color:red;font-size: 1.2em;">' . $args['unit_slug'] . ' is an invalid unit page slug.  Unit not found.</span>';
 		}
 
-		return $vrp->loadTheme( 'vrpCheckUnitAvailabilityForm', $unitData );
+		return $vrp->loadTheme( 'vrpCheckUnitAvailabilityForm', $unit_data );
 	}
 
 	public function vrpFeaturedUnit( $params = [] ) {
