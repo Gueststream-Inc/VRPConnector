@@ -35,7 +35,7 @@ class mountainsunset {
 		wp_enqueue_script( 'VRPjQueryUI' );
 
 		$this->enqueue_theme_script('vrpNamespace','vrp.namespace.js',['jquery']);
-		$this->enqueue_theme_script( 'vrpMRespondModule', 'vrpmRespond.js', [ 'jquery' ] );
+		$this->enqueue_theme_script( 'vrpMRespondModule', 'vrp.mRespond.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpUIModule', 'vrp.ui.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpQueryStringModule', 'vrp.queryString.js', [ 'jquery' ] );
 
