@@ -41,7 +41,7 @@ class mountainsunset {
 
 		wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp' );
 
-		$this->enqueue_theme_script( 'VRPThemeJS', 'js.js', [ 'jquery' ] );
+		$this->enqueue_theme_script( 'VRPthemeJS', 'js.js', [ 'jquery' ] );
 
 		// Result List Map
 		$this->enqueue_theme_script( 'VRPResultMap', 'vrp.resultListMap.js', [ 'jquery', 'googleMap' ] );
