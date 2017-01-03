@@ -113,7 +113,7 @@ function ratebreakdown(obj) {
         tbl.append(row);
     }
     if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row = "<tr><td>Insurance</td><td>$" + obj.InsuranceAmount + "</td></tr>";
+        var row = "<tr><td>Insurance (optional)</td><td>$" + obj.InsuranceAmount + "</td></tr>";
         tbl.append(row);
     }
     var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
