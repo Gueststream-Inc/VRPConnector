@@ -290,7 +290,7 @@ global $vrp; ?>
 
 					<div class="vrp-col-md-12">
 						<div id="availability" style="">
-							<?php echo wp_kses_post( vrpCalendar( $data->avail ) ); ?>
+							<?php echo wp_kses_post( vrp_calendar( $data->avail ) ); ?>
 						</div>
 					</div>
 				</div>

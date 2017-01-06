@@ -283,6 +283,9 @@ function vrpsortlinks( $unit ) {
 	echo '</select>';
 }
 
+/**
+ * Display drop down to select how many results per page to display.
+ */
 function vrp_resultsperpage() {
 	$fields_string = '';
 	foreach ( $_GET['search'] as $key => $value ) {
@@ -305,7 +308,7 @@ function vrp_resultsperpage() {
 	echo '</select>';
 }
 
-function dateSeries( $start_date, $num ) {
+function date_series( $start_date, $num ) {
 	$dates = [];
 
 	$dates[0] = $start_date;
@@ -318,16 +321,24 @@ function dateSeries( $start_date, $num ) {
 	return $dates;
 }
 
-function daysTo( $from, $to, $round = true ) {
+function days_to( $from, $to, $round = true ) {
 	$from = strtotime( $from );
 	$to   = strtotime( $to );
 	$diff = $to - $from;
 	$days = $diff / 86400;
 
-	return $round == true ? floor( $days ) : round( $days, 2 );
+	return (true === $round) ? floor( $days ) : round( $days, 2 );
 }
 
-function vrpCalendar( $r, $total_months = 3 ) {
+/**
+ * Generate HTML Calendar for unit page.
+ *
+ * @param     $r
+ * @param int $total_months
+ *
+ * @return string
+ */
+function vrp_calendar( $r, $total_months = 3 ) {
 
 	$datelist = [];
 	$arrivals = [];
@@ -338,8 +349,8 @@ function vrpCalendar( $r, $total_months = 3 ) {
 		$arrivals[] = $from_date;
 		$to_date    = $v->end_date;
 		$departs[]  = $to_date;
-		$num        = daysTo( $from_date, $to_date );
-		$datelist[] = dateSeries( $from_date, $num );
+		$num        = days_to( $from_date, $to_date );
+		$datelist[] = date_series( $from_date, $num );
 	}
 
 	$final_date = [];
@@ -365,7 +376,7 @@ function vrpCalendar( $r, $total_months = 3 ) {
 		$nextmonth = date( 'm', mktime( 0, 0, 0, date( 'm', $today ) + $i, date( 'd', $today ), date( 'Y', $today ) ) );
 
 		$ret .= $calendar->output_calendar( $nextyear, $nextmonth );
-		if ( $x == 3 ) {
+		if ( 3 == $x ) {
 			$ret .= '';
 			$x = - 1;
 		}
