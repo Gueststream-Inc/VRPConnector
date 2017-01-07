@@ -13,11 +13,17 @@
  */
 class mountainsunset {
 
+	/**
+	 * Theme actions - Enqueue scripts and styles.
+	 */
 	function actions() {
 		add_action( 'wp_enqueue_scripts', [ $this, 'my_scripts_method' ] );
 		add_action( 'wp_print_styles', [ $this, 'add_my_stylesheet' ] );
 	}
 
+	/**
+	 * Enqueuing Scripts.
+	 */
 	function my_scripts_method() {
 		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js' ) ) {
 			wp_register_script(
@@ -57,6 +63,13 @@ class mountainsunset {
 		wp_localize_script( 'VRPthemeJS', 'url_paths', $script_vars );
 	}
 
+	/**
+	 * Local theme script enqueue helper.
+	 *
+	 * @param $handle
+	 * @param $script
+	 * @param $deps
+	 */
 	private function enqueue_theme_script( $handle, $script, $deps ) {
 		if ( file_exists( get_stylesheet_directory() . '/vrp/js/' . $script ) ) {
 			wp_enqueue_script(
@@ -73,6 +86,9 @@ class mountainsunset {
 		}
 	}
 
+	/**
+	 * Enqueuing Stylesheets.
+	 */
 	public function add_my_stylesheet() {
 		if ( file_exists( get_stylesheet_directory() . '/vrp/css/font-awesome.css' ) ) {
 			wp_enqueue_style( 'FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css' );
