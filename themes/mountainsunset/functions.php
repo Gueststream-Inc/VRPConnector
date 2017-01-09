@@ -324,6 +324,12 @@ function vrp_resultsperpage() {
 	echo '</select>';
 }
 
+/**
+ * @param string $start_date Start date in series.
+ * @param int $num Number of dates in series.
+ *
+ * @return array
+ */
 function date_series( $start_date, $num ) {
 	$dates = [];
 
@@ -337,6 +343,13 @@ function date_series( $start_date, $num ) {
 	return $dates;
 }
 
+/**
+ * @param int $from Unix time start date.
+ * @param int $to Unit time end date.
+ * @param bool $round Whether or not to round to the next day.
+ *
+ * @return float
+ */
 function days_to( $from, $to, $round = true ) {
 	$from = strtotime( $from );
 	$to   = strtotime( $to );
@@ -349,8 +362,8 @@ function days_to( $from, $to, $round = true ) {
 /**
  * Generate HTML Calendar for unit page.
  *
- * @param     $r
- * @param int $total_months
+ * @param array $r Calendar array.
+ * @param int   $total_months Total Months to display.
  *
  * @return string
  */
@@ -392,7 +405,7 @@ function vrp_calendar( $r, $total_months = 3 ) {
 		$nextmonth = date( 'm', mktime( 0, 0, 0, date( 'm', $today ) + $i, date( 'd', $today ), date( 'Y', $today ) ) );
 
 		$ret .= $calendar->output_calendar( $nextyear, $nextmonth );
-		if ( 3 == $x ) {
+		if ( 3 === $x ) {
 			$ret .= '';
 			$x = - 1;
 		}
