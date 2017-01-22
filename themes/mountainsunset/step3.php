@@ -7,7 +7,7 @@
 global $vrp;
 ?>
 <form
-	action="<?php echo site_url(); ?>/vrp/book/confirm/?obj[Arrival]=<?php echo esc_attr( $data->Arrival ); ?>&obj[Departure]=<?php echo esc_attr( $data->Departure ); ?>&obj[PropID]=<?php echo esc_attr( $_GET['obj']['PropID'] ); ?>"
+	action="<?php echo site_url('/vrp/book/confirm/'); ?>?obj[Arrival]=<?php echo esc_attr( $data->Arrival ); ?>&obj[Departure]=<?php echo esc_attr( $data->Departure ); ?>&obj[PropID]=<?php echo esc_attr( $_GET['obj']['PropID'] ); ?>"
 	id="vrpbookform" method="post">
 	<div class="userbox" id="guestinfodiv">
 		<h3>Guest Information</h3>
@@ -119,17 +119,18 @@ global $vrp;
 						<th>Adults:</th>
 						<td>
 							<input type="hidden" name="booking[adults]"
-								   value="<?php echo esc_attr( $vrp->search->adults ); ?>"/>
+							       value="<?php echo esc_attr( $vrp->search->adults ); ?>"/>
 							<?php echo esc_html( $vrp->search->adults ); ?>
 							<input type="hidden"
-								   name="booking[children]"
-								   value="0"/>
+							       name="booking[children]"
+							       value="0"/>
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<br style="clear:both;"></div>
+		<br style="clear:both;">
+	</div>
 
 	<?php if ( isset( $data->HasInsurance ) && $data->HasInsurance ) : ?>
 		<div class="vrpgrid_12 alpha omega userbox" style="margin-top:20px;">
@@ -141,15 +142,15 @@ global $vrp;
 				($<?php echo esc_html( number_format( $data->InsuranceAmount, 2 ) ); ?>) <br>
 				Would you like to purchase the optional travel insurance? <br>
 				<br>
-				<input type="radio" name="booking[acceptinsurance]" value="1" required /> Yes
-				<input type="radio" name="booking[acceptinsurance]" value="0" /> No
+				<input type="radio" name="booking[acceptinsurance]" value="1" required/> Yes
+				<input type="radio" name="booking[acceptinsurance]" value="0"/> No
 
 				<input type="hidden" name="booking[InsuranceAmount]"
-					   value="<?php echo esc_attr( $data->InsuranceAmount ); ?>">
+				       value="<?php echo esc_attr( $data->InsuranceAmount ); ?>">
 
 				<?php if ( isset( $data->InsuranceID ) ) : // Escapia Insurance ID ?>
 					<input type="hidden" name="booking[InsuranceID]"
-						   value="<?php echo $data->InsuranceID; ?>" />
+					       value="<?php echo $data->InsuranceID; ?>"/>
 				<?php endif; ?>
 
 				<?php if ( isset( $data->InsuranceTaxAmount ) ) : ?>
@@ -164,13 +165,40 @@ global $vrp;
 					 */
 					?>
 					<input type="hidden" name="booking[InsuranceTaxAmount]"
-						   value="<?php echo $data->InsuranceTaxAmount; ?>" />
+					       value="<?php echo $data->InsuranceTaxAmount; ?>"/>
 				<?php endif; ?>
 			</div>
 		</div>
 	<?php else : ?>
 		<input type="hidden" name="booking[acceptinsurance]" value="0">
 	<?php endif; ?>
+
+	<?php if ( ! empty( $data->addons ) ) :
+		// Currently only applicable to Barefoot PMS. ?>
+		<div class="vrpgrid_12 alpha omega userbox">
+			<h3>Addons</h3>
+
+			<?php foreach ( $data->addons as $addon ) :
+				$checked = '';
+				foreach ( $data->Charges as $charge ) :
+					if ( ! empty( $charge->id ) && $charge->id === $addon->id ) :
+						$checked = 'checked';
+					endif;
+				endforeach;
+				?>
+				<input type="checkbox"
+				       id="addon_<?php echo esc_attr( $addon->id ); ?>"
+				       name="booking[addon][]"
+				       class="vrp-booking-addon"
+				       value="<?php echo esc_attr( $addon->id ); ?>" <?php echo esc_attr( $checked ); ?>/>
+				<label for="addon_<?php echo esc_attr( $addon->id ); ?>">
+					<?php echo esc_attr( $addon->name ); ?>
+				</label>
+				<br/>
+			<?php endforeach; ?>
+		</div>
+	<?php endif; ?>
+
 	<div class="userbox" style="margin-top:20px;">
 		<h3>Payment Information</h3>
 
@@ -200,34 +228,40 @@ global $vrp;
 				<?php if ( isset( $data->booksettings->Cards ) ) { ?>
 					<tr id="expYeartr">
 						<td><b>Expiration*:</b></td>
-						<td><select name="booking[expMonth]">
+						<td>
+							<select name="booking[expMonth]">
 								<?php foreach ( range( 1, 12 ) as $month ) : ?>
-									<option value="<?php echo esc_attr(sprintf('%02d',
-									$month)); ?>"><?php echo esc_attr( sprintf( '%02d', $month ) ); ?></option>
+									<option value="<?php echo esc_attr( sprintf( '%02d', $month ) ); ?>">
+										<?php echo esc_attr( sprintf( '%02d', $month ) ); ?>
+									</option>
 								<?php endforeach; ?>
 							</select>/<select name="booking[expYear]">
 								<?php foreach ( range( date( 'Y' ), date( 'Y' ) + 10 ) as $year ) : ?>
-									<option
-										value="<?php echo esc_attr( $year ); ?>"><?php echo esc_attr( $year ); ?></option>
+									<option value="<?php echo esc_attr( $year ); ?>">
+										<?php echo esc_attr( $year ); ?>
+									</option>
 								<?php endforeach; ?>
-
-							</select></td>
+							</select>
+						</td>
 					</tr>
 				<?php } else { ?>
 					<tr id="expYeartr">
 						<td><b>Expiration*:</b></td>
-						<td><select name="booking[expMonth]">
+						<td>
+							<select name="booking[expMonth]">
 								<?php foreach ( range( 1, 12 ) as $month ) : ?>
-									<option value="<?php echo esc_attr(sprintf('%02d',
-									$month)); ?>"><?php echo esc_attr( sprintf( '%02d', $month ) ); ?></option>
+									<option value="<?php echo esc_attr( sprintf( '%02d', $month ) ); ?>">
+										<?php echo esc_attr( sprintf( '%02d', $month ) ); ?>
+									</option>
 								<?php endforeach; ?>
 							</select>/<select name="booking[expYear]">
 								<?php foreach ( range( date( 'y' ), date( 'y' ) + 10 ) as $year ) : ?>
-									<option
-										value="<?php echo esc_attr( $year ); ?>"><?php echo esc_attr( $year ); ?></option>
+									<option value="<?php echo esc_attr( $year ); ?>">
+										<?php echo esc_attr( $year ); ?>
+									</option>
 								<?php endforeach; ?>
-
-							</select></td>
+							</select>
+						</td>
 					</tr>
 				<?php } ?>
 			</table>
@@ -244,61 +278,41 @@ global $vrp;
 		</div>
 
 	</div>
+
 	<div class="" style="margin-top:20px; text-align:center">
 		<div style="margin:0 auto;width:80%">
 			By clicking the "Book This Property Now" you are agreeing to the
 			<a href="#thecontract" id="showContract"><b>terms and conditions</b></a>.
 			<br><br>
 
-			<?php if ( isset( $data->ratecalc ) ) { ?>
-				<input type="hidden" name="booking[ratecalc]" value="1">
-				<?php
-				if ( ! isset( $data->prop->ISIRate ) ) {
-					$newrate = $data->TotalCost;
-					foreach ( $data->Charges as $v ) {
-						if ( $v->Description == 'Rent' ) {
-							$newrate = $v->Amount;
-						}
-					}
-				} else {
-					$newrate = $data->prop->ISIRate;
-				}
-				?>
-				<input type="hidden" name="booking[newrate]" value="<?php echo esc_attr( $newrate ); ?>">
-			<?php } ?>
-
+			<?php if ( isset( $data->leaseid ) ) :
+				// Barefoot lease id. ?>
+				<input type="hidden" id="vrp-booking-leaseid" name="booking[leaseid]"
+				       value="<?php echo esc_attr( $data->leaseid ); ?>"/>
+			<?php endif; ?>
 
 			<input type="hidden" name="booking[password]" value=" ">
 			<input type="hidden" name="booking[password2]" value=" ">
-			<input type="hidden" name="booking[PropID]" value="<?php echo esc_attr( $data->PropID ); ?>">
+			<input type="hidden" id="vrp-prop-id" name="booking[PropID]"
+			       value="<?php echo esc_attr( $data->PropID ); ?>">
 			<input type="hidden" name="booking[arrival]" value="<?php echo esc_attr( $data->Arrival ); ?>">
 			<input type="hidden" name="booking[depart]" value="<?php echo esc_attr( $data->Departure ); ?>">
 			<input type="hidden" name="booking[nights]" value="<?php echo esc_attr( $data->Nights ); ?>">
 			<input type="hidden" name="booking[DueToday]" value="<?php echo esc_attr( $data->DueToday ); ?>">
 			<input type="hidden" name="booking[TotalCost]" value="<?php echo esc_attr( $data->TotalCost ); ?>">
 			<input type="hidden" name="booking[TotalBefore]"
-				   value="<?php echo esc_attr( $data->TotalCost - $data->TotalTax ); ?>">
+			       value="<?php echo esc_attr( $data->TotalCost - $data->TotalTax ); ?>">
 			<input type="hidden" name="booking[TotalTax]" value="<?php echo esc_attr( $data->TotalTax ); ?>">
 
 			<?php if ( ! empty( $_GET['obj']['PromoCode'] ) || ! empty( $data->promocode ) ) : ?>
-				<?php $promoCode = ( ! empty( $_GET['obj']['PromoCode'] )) ? $_GET['obj']['PromoCode'] : $data->promocode; ?>
+				<?php $promoCode = ( ! empty( $_GET['obj']['PromoCode'] ) ) ? $_GET['obj']['PromoCode'] : $data->promocode; ?>
 				<input type="hidden" name="booking[PromoCode]" value="<?php echo $promoCode ?>">
 			<?php endif; ?>
 
-			<?php if ( ! empty( $_GET['obj']['Pets'] ) ) : ?>
-				<input type="hidden" name="booking[Pets]" value="<?php echo $_GET['obj']['Pets']; ?>">
+			<?php if ( ! empty( $_GET['obj']['Pets'] ) ) :
+				// Currently, only applicable to Escapia PMS. ?>
+				<input type="hidden" name="booking[Pets]" value="<?php echo esc_attr( $_GET['obj']['Pets'] ); ?>">
 			<?php endif; ?>
-
-			<?php if ( isset( $data->InsuranceAmount ) ) : ?>
-				<?php $data->TotalCost = $data->TotalCost - $data->InsuranceAmount; ?>
-			<?php endif; ?>
-
-			<?php if ( isset( $data->booksettings->HasPackages )
-				&& (isset( $data->package->items ) && count( $data->package->items ) != 0)
-			) { ?>
-				<input type="hidden" name="booking[packages]"
-					   value="<?php echo esc_attr( base64_encode( serialize( $data->package ) ) ); ?>">
-			<?php } ?>
 
 			<div id="vrploadinggif" style="display:none"><b>Processing Your Booking...</b></div>
 			<input type="submit" value="Book This Property Now" class="vrp-btn vrp-btn-success " id="bookingbuttonvrp">
@@ -317,9 +331,3 @@ global $vrp;
 		<a href="#" id="closeContract" class="btn" data-dismiss="modal" aria-hidden="true">Close</a>
 	</div>
 </div>
-
-</div>
-
-<style>
-
-</style>

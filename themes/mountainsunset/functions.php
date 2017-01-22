@@ -55,10 +55,14 @@ class mountainsunset {
 		// Unit Page
 		$this->enqueue_theme_script( 'VRPUnitPage', 'vrp.unit.js', [ 'jquery', 'googleMap' ] );
 
+		$this->enqueue_theme_script( 'VRPCheckoutBarefoot', 'vrp.checkout.barefoot.js', [ 'jquery' ] );
+
 		$script_vars = [
 			'site_url'           => site_url(),
 			'stylesheet_dir_url' => get_stylesheet_directory_uri(),
 			'plugin_url'         => plugins_url( '', dirname( dirname( __FILE__ ) ) ),
+			'ajaxurl'            => admin_url( 'admin-ajax.php' ),
+			'nonce'              => wp_create_nonce( 'vrp-xsrf-prevention' ),
 		];
 		wp_localize_script( 'VRPthemeJS', 'url_paths', $script_vars );
 	}

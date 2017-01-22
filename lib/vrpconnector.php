@@ -7,6 +7,8 @@
 
 namespace Gueststream;
 
+use Gueststream\PMS\Barefoot;
+
 /**
  * VRPConnector Class
  */
@@ -104,6 +106,7 @@ class VRPConnector {
 		$this->prepareData();
 		$this->setTheme();
 		$this->actions();
+		$this->init_pms_libraries();
 		$this->themeActions();
 	}
 
@@ -161,6 +164,13 @@ class VRPConnector {
 		add_action( 'widgets_init', function () {
 			register_widget( 'Gueststream\Widgets\vrpSearchFormWidget' );
 		} );
+	}
+
+	/**
+	 * Initialize Property Management Software Libraries.
+	 */
+	private function init_pms_libraries() {
+		new Barefoot( $this );
 	}
 
 	/**
@@ -412,13 +422,17 @@ class VRPConnector {
 				break;
 
 			case 'book':
-				if ( $slug == 'dobooking' ) {
+				// Not at all sure what real function this provides.
+				if ( 'dobooking' === $slug ) {
 					if ( isset( $_SESSION['package'] ) ) {
 						$_POST['booking']['packages'] = $_SESSION['package'];
 					}
 				}
 
+				// We no longer use this for any clients that I'm aware of.
 				if ( isset( $_POST['email'] ) ) {
+					// It allows the guest to store their personal info and login to auto-fill
+					// the final step of the booking page.
 					$userinfo             = $this->doLogin( $_POST['email'], $_POST['password'] );
 					$_SESSION['userinfo'] = $userinfo;
 					if ( ! isset( $userinfo->Error ) ) {
@@ -426,25 +440,31 @@ class VRPConnector {
 					}
 				}
 
+				// Generally used to fill populate fields on the booking page when some content submits the
+				// page and needs to load it again (refresh).
 				if ( isset( $_POST['booking'] ) ) {
 					$_SESSION['userinfo'] = $_POST['booking'];
 				}
 
+				// $_SESSION['bookingresults'] is initially set from the checkavail request on
+				// the unit page. However, if a link was provided to the checkout, this may
+				// not have ever been set.
 				$data = json_decode( $_SESSION['bookingresults'] );
-				if ( $data->ID != $_GET['obj']['PropID'] ) {
-					$data      = json_decode( $this->checkavailability( false, true ) );
-					$data->new = true;
+
+				if ( 'confirm' !== $slug ) {
+					// There are two stages to generating quotes whch are only useful to the Barefoot PMS system.
+					// "quote" for generating simple quotes. (default)
+					// "book" for generating quotes for the booking/checkout process.
+					$_GET['obj']['stage'] = "book";
+					$data                 = json_decode( $this->checkavailability( false, true ) );
 				}
 
-				if ( $slug != 'confirm' ) {
-					$data      = json_decode( $this->checkavailability( false, true ) );
-					$data->new = true;
-				}
+				$data->PropID = $_GET['obj']['PropID'];
 
-				$data->PropID       = $_GET['obj']['PropID'];
+				// Book Settings include contract data and booking requirements such as accepted credit card types.
 				$data->booksettings = $this->bookSettings( $data->PropID );
 
-				if ( $slug == 'step1' ) {
+				if ( $slug == 'step1' && isset( $_SESSION['package'] ) ) {
 					unset( $_SESSION['package'] );
 				}
 
@@ -693,18 +713,28 @@ class VRPConnector {
 		die();
 	}
 
+	/**
+	 * Get Rate Quote.
+	 *
+	 * @param bool $par Echo the response.
+	 * @param bool $ret Return the response.
+	 *
+	 * @return bool|string
+	 */
 	public function checkavailability( $par = false, $ret = false ) {
 		set_time_limit( 30 );
 
 		$fields_string = 'obj=' . json_encode( $_GET['obj'] );
 		$results       = $this->call( 'checkavail', $fields_string );
 
+		// Return Results
 		if ( $ret == true ) {
 			$_SESSION['bookingresults'] = $results;
 
 			return $results;
 		}
 
+		// Echo results.
 		if ( $par != false ) {
 			$_SESSION['bookingresults'] = $results;
 			echo $results;
@@ -836,7 +866,7 @@ class VRPConnector {
 
 	public function getUnitBookedDates( $unit_slug ) {
 		$unit_data_json = $this->call( 'getunit/' . (string) $unit_slug );
-		$unit_data     = json_decode( $unit_data_json );
+		$unit_data      = json_decode( $unit_data_json );
 
 		$unit_booked_dates = [
 			'bookedDates' => [],
@@ -847,7 +877,7 @@ class VRPConnector {
 			foreach ( $unit_data->avail as $v ) {
 
 				$from_date_ts = strtotime( '+1 Day', strtotime( $v->start_date ) );
-				$toDateTS   = strtotime( $v->end_date );
+				$toDateTS     = strtotime( $v->end_date );
 
 				array_push( $unit_booked_dates['noCheckin'], date( 'n-j-Y', strtotime( $v->start_date ) ) );
 
@@ -894,7 +924,7 @@ class VRPConnector {
 	public function call( $call, $params = [] ) {
 		$cache_key = md5( $call . json_encode( $params ) );
 		$results   = wp_cache_get( $cache_key, 'vrp' );
-		if ( false == $results ) {
+		if ( false === $results ) {
 			$ch = curl_init();
 			curl_setopt( $ch, CURLOPT_URL, $this->api_url . $this->api_key . '/' . $call );
 			curl_setopt( $ch, CURLOPT_POST, 1 );
@@ -1479,7 +1509,7 @@ class VRPConnector {
 		}
 
 		$json_unit_data = $vrp->call( 'getunit/' . $args['unit_slug'] );
-		$unit_data     = json_decode( $json_unit_data );
+		$unit_data      = json_decode( $json_unit_data );
 
 		if ( empty( $unit_data->id ) ) {
 			return '<span style="color:red;font-size: 1.2em;">' . $args['unit_slug'] . ' is an invalid unit page slug.  Unit not found.</span>';

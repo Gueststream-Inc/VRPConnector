@@ -246,14 +246,21 @@ global $vrp; ?>
 											</tr>
 										<?php endif; ?>
 
-										<tr>
-											<?php // Promo Codes work with Escapia/RNS/Barefoot & ISILink Powered Software. ?>
-											<td>Promo Code</td>
-											<td>
-												<input type="text" name="obj[PromoCode]" value=""
-												       placeholder="Promo Code">
-											</td>
-										</tr>
+
+										<?php if ( 'Barefoot' !== $data->manager->Name ) :
+											// Barefoot property management software requires Promo Codes are added during checkout and does not support using them on the initial quote request.
+											// All other PMS do support promo codes during the initial quote request: Escapia, ISILink, RNS, etc.
+											?>
+											<tr>
+												<td>Promo Code</td>
+												<td>
+													<input type="text"
+													       name="obj[PromoCode]"
+													       value=""
+													       placeholder="Promo Code">
+												</td>
+											</tr>
+										<?php endif; ?>
 
 										<tr>
 											<td colspan="2" id="errormsg">
@@ -267,7 +274,8 @@ global $vrp; ?>
 
 										<tr>
 											<td>
-												<input type="hidden" name="obj[PropID]"
+												<input type="hidden"
+												       name="obj[PropID]"
 												       value="<?php echo esc_attr( $data->id ); ?>">
 												<input type="button"
 												       value="Check Availability"
@@ -275,7 +283,8 @@ global $vrp; ?>
 												       id="checkbutton">
 											</td>
 											<td>
-												<input type="submit" value="Book Now!"
+												<input type="submit"
+												       value="Book Now!"
 												       id="booklink"
 												       class="vrp-btn"
 												       style="display:none;"/>

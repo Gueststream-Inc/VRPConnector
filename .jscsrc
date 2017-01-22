@@ -1,0 +1,36 @@
+{
+  "preset": "google",
+  "fileExtensions": [".js"],
+
+  "requireSemicolons": true,
+  "requireParenthesesAroundIIFE": true,
+  "requireCamelCaseOrUpperCaseIdentifiers": false,
+  "maximumLineLength": 120,
+  "validateLineBreaks": "LF",
+  "validateIndentation": 4,
+  "disallowTrailingComma": true,
+  "disallowUnusedParams": true,
+
+  "disallowSpacesInsideObjectBrackets": null,
+  "disallowImplicitTypeConversion": ["string"],
+
+  "safeContextKeyword": "_this",
+
+  "jsDoc": {
+    "checkAnnotations": "closurecompiler",
+    "checkParamNames": true,
+    "requireParamTypes": true,
+    "checkRedundantParams": true,
+    "checkReturnTypes": true,
+    "checkRedundantReturns": true,
+    "requireReturnTypes": true,
+    "checkTypes": "capitalizedNativeCase",
+    "checkRedundantAccess": true,
+    "requireNewlineAfterDescription": true
+  },
+
+  "excludeFiles": [
+    "build/**",
+    "themes/mountainsunset/css/jquery-ui-1.11.2.custom/**"
+  ]
+}
