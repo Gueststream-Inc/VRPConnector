@@ -108,27 +108,31 @@ function checkAvailability() {
 
 function ratebreakdown(obj) {
     var tbl = jQuery("#ratebreakdown");
-    for (var i in obj.Charges) {
-        var row = "<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>";
-        tbl.append(row);
-    }
-    if (obj.HasInsurance && obj.HasInsurance == 1) {
-        var row = "<tr><td>Insurance (optional)</td><td>$" + obj.InsuranceAmount + "</td></tr>";
-        tbl.append(row);
-    }
-    var tax = "<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>";
-    var total = "<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>";
-    var totaldue = "<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>";
+    tbl.empty();
 
-    tbl.append(tax);
-    tbl.append(total);
-    tbl.append(totaldue);
+    for (var i in obj.Charges) {
+        tbl.append("<tr><td>" + obj.Charges[i].Description + "</td><td>$" + obj.Charges[i].Amount + "</td></tr>");
+    }
+
+    if (obj.HasInsurance && obj.HasInsurance == 1) {
+        tbl.append("<tr><td>Insurance (optional)</td><td>$" + obj.InsuranceAmount + "</td></tr>");
+    }
+
+    tbl.append("<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>");
+    tbl.append("<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>");
+
+    if(obj.DueToday !== obj.TotalCost) {
+        // No sense in displaying something that says 'Due Now' if it isn't less than the total cost.
+        tbl.append("<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>");
+    }
 
     if(obj.PromoCodeDiscount) {
         var promoCodeDiscount = "<tr><td colspan='2'>" + obj.PromoCodeDiscount.text + "</td></tr>" +
             "<tr><td>Total Savings:</td><td>$" + obj.PromoCodeDiscount.value + "</td></tr>";
         tbl.append(promoCodeDiscount);
     }
+
+    jQuery('#vrp-booking-due-now').html(obj.DueToday);
 }
 
 /**
@@ -184,12 +188,6 @@ function initializeGoogleMap() {
 jQuery(document).ready(function () {
     // Unit Page Tabs
     unitTabs = jQuery("#tabs").tabs();
-
-    // Allow outside links to open tabs
-    jQuery('.open-tab').click(function (event) {
-        var tab = jQuery(this).attr('href');
-        unitTabs.tabs("load", 2);
-    });
 
     // Unit Page photo gallery
     jQuery('#gallery .thumb').click(function () {
