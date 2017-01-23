@@ -39,7 +39,7 @@ class Barefoot {
 	 */
 	private function set_hooks() {
 		// Ajax hooks.
-		add_action( 'wp_ajax_vrp_barefoot_update_quote_addons', [ $this, 'update_quote_addons' ] );
+		add_action( 'wp_ajax_nopriv_vrp_barefoot_update_quote_addons', [ $this, 'update_quote_addons' ] );
 	}
 
 	/**
@@ -72,7 +72,7 @@ class Barefoot {
 		$params = [
 			'leaseId'        => $lease_id,
 			'selectedAddons' => $selected_addons,
-			'wavedAddons'    => $waived_addons,
+			'waivedAddons'    => $waived_addons,
 		];
 
 		$response_json = $this->vrp_client->call(
