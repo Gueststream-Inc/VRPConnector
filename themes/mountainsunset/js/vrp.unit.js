@@ -120,7 +120,11 @@ function ratebreakdown(obj) {
 
     tbl.append("<tr><td>Tax:</td><td>$" + obj.TotalTax + "</td></tr>");
     tbl.append("<tr><td><b>Total Cost:</b></td><td><b>$" + obj.TotalCost + "</b></td></tr>");
-    tbl.append("<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>");
+
+    if(obj.DueToday !== obj.TotalCost) {
+        // No sense in displaying something that says 'Due Now' if it isn't less than the total cost.
+        tbl.append("<tr class='success'><td><b>Total Due Now:</b></td><td><b>$" + obj.DueToday + "</b></td></tr>");
+    }
 
     if(obj.PromoCodeDiscount) {
         var promoCodeDiscount = "<tr><td colspan='2'>" + obj.PromoCodeDiscount.text + "</td></tr>" +
