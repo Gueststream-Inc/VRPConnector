@@ -1,0 +1,292 @@
+
+.vrp-checkout table {
+    border: none;
+}
+
+.vrp-checkout td {
+    border: 0;
+    background: none;
+}
+
+.vrp-checkout #vrp-booking-comments {
+    font-size: 16px;
+    height:100px;
+    width: 100%;
+}
+
+
+.vrp-checkout #cc-expire-year {
+    float:left;
+    margin-left:0.25em;
+
+}
+
+.bhighlighted {
+    padding: 20px;
+    font-weight: bold;
+    background-color: #f0f0f0;
+}
+
+.right-align {
+    text-align: right !important;
+    padding-right: 5px !important;
+    margin-right: 5px;
+}
+/****************************************
+ *Booking
+ ********************************************/
+
+.book-wrapper{
+    width: 100%;
+    margin: 0 auto;
+}
+
+
+.book-box-wrap {
+position: relative;
+}
+
+
+
+#guestinfodiv, #payment {
+background-color: #fcfcfc;
+}
+ #bookingbuttonvrp {
+ border: 0; padding: 1em; line-height: 0em; display: block; text-align: center; margin: 0.5em auto; float: none; color: #fff; font-weight: bold;
+  background-color: #297FB8;
+  margin: 0 auto !important;
+  text-align: center;
+ }
+
+
+.book-title-color1,  .book-title-color2,  .book-title-color3, .book-title {
+    padding: 5px;
+    text-align: left;
+}
+
+
+.book-title-color3.center {
+  text-align: center;
+
+}
+
+.book-title-color3.center h3 {
+  font-weight: bold;
+  padding: 10px;
+  background-color: #eee;
+
+}
+
+
+.book-title-color1 h3,  .book-title-color2 h3,  .book-title-color3 h3 {
+    margin: 0 0 10px;
+    font-size: 20px;
+
+}
+
+.book.one-third {
+    background-color: #B4C7DA;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+
+
+}
+.book-box-wrap.full {
+    width: 100%;
+}
+.book-box-wrap.right {
+    float: right;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    margin-top: 20px;
+}
+.book {
+    display: inline-block;
+
+}
+
+
+.book img {
+    float: left;
+}
+
+.book .results-title {
+    width: 72%;
+}
+
+html,body {
+    height:100%;
+}
+
+
+.book-box-wrap.flex {
+    display: inline-block;
+    width: 100%;
+}
+
+ .book-number {
+background-color: #fff;
+border: 1px solid;
+border-radius: 50%;
+color: #428BCA;
+font-size: 1.125em;
+height: 36px;
+left: -40px;
+top: 0px;
+line-height: 34px;
+position: absolute;
+text-align: center;
+
+width: 36px;
+}
+
+ .book-title {
+     background-color: #428BCA;
+     }
+.book-title h3 {
+    margin: 2px;
+    color: #fff!important;
+}
+.book-details.bold {
+  font-weight: bold;
+  font-size: .8em;
+}
+
+.book-details-wrap h2, .book-details {
+  text-align: center;
+}
+
+.book-details-wrap {
+box-shadow: 0 0 20px 5px #e6e6e6;
+}
+.book-details.highlight {
+  background-color: #ffffff;
+  text-align: left;
+  margin-left: 3%;
+margin-right: 3%;
+padding: 6%;
+
+}
+
+
+.book-details-dates {
+  display: inline-block;
+  padding-left: 1em;
+  margin-left: 1em;
+  margin-right: 2em;
+  }
+
+.book-details-dates .bookdetails {
+  font-weight: bold;
+}
+
+.book-details-dates .book-details.small{
+  font-weight: normal;
+  font-size: .7em;
+  text-align: left;
+}
+
+.book-details.left {
+  text-align: left;
+}
+
+.double {
+  border-bottom: 3px double #cacaca ;
+}
+
+.single {
+   border-bottom: 1px solid #cacaca;
+}
+
+.book-details {
+  padding: 5px;
+}
+
+
+
+
+#coupon {
+  width: 90%;
+}
+
+.booktable div {
+    width: 45%;
+    display:inline-block;
+    margin-bottom: 1%;
+}
+
+.booktable  {
+
+    display:inline-block;
+
+}
+
+.paymenttable #cccvv, .paymenttable #ccnum {
+    width: 100%;
+    display:inline-block;
+    margin-bottom: 1%;
+}
+
+.booktable input {
+    width: 90%;
+}
+
+.book-box-content {
+    padding: 1%;
+
+
+}
+@media (max-width: 1100px) {
+  .booktable div {
+    width: 90%;
+  }
+}
+@media (max-width: 940px) {
+  .book-number {
+    left: 0!important;
+  }
+
+  .book-title {
+    margin-left: 40px!important;
+
+  }
+
+  .booktable div {
+    width: 90%;
+  }
+  .book-details .right {
+    float: none!important;
+    display: inline-block;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+
+
+    #vrpbookform {
+      position: relative;
+    }
+
+
+
+}
+
+#cc-expire-year, #cc-expire-month {
+    width: 20% !important;
+}
+
+.select-inline {
+    display: inline-block;
+    width: 45%;
+    
+}
+
+#country, #statetr {
+width: 40%;
+margin-right: 5%;
+}
+.paymenttable {
+width: 100%;
+}

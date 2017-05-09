@@ -1,17 +1,18 @@
 <?php
 /**
- * Default theme functions file
+ * Desert Sunrise Theme functions file
  *
  * @package VRPConnector
  * @since 1.3.5
  */
 
 /**
- * Class mountainsunset
+ * Class desertsunrise
  *
- * Default theme class
+ * Desert Sunrise theme class
  */
-class mountainsunset {
+
+class desertsunrise  {
 
 	/**
 	 * Theme actions - Enqueue scripts and styles.
@@ -25,16 +26,16 @@ class mountainsunset {
 	 * Enqueuing Scripts.
 	 */
 	function my_scripts_method() {
-		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js' ) ) {
+        if (file_exists(get_stylesheet_directory() . '/vrp/css/jquery-ui-1.12.1.custom/jquery-ui.js')) {
 			wp_register_script(
 				'VRPjQueryUI',
-				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js',
+				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.12.1.custom/jquery-ui.js',
 				[ 'jquery' ]
 			);
 		} else {
 			wp_register_script(
 				'VRPjQueryUI',
-				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname( __FILE__ ) ),
+				plugins_url( '/desertsunrise/css/jquery-ui-1.12.1.custom/jquery-ui.js', dirname( __FILE__ ) ),
 				[ 'jquery' ]
 			);
 		}
@@ -44,16 +45,24 @@ class mountainsunset {
 		$this->enqueue_theme_script( 'vrpMRespondModule', 'vrp.mRespond.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpUIModule', 'vrp.ui.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpQueryStringModule', 'vrp.queryString.js', [ 'jquery' ] );
+
         //Google Map Key must be replaced with generated key
-		wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp' );
+		$vrpMapKey_default='';
+        $vrpMapKey=get_option( 'vrpMapKey', $vrpMapKey_default );
+
+        wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?key='.$vrpMapKey);
 
 		$this->enqueue_theme_script( 'VRPthemeJS', 'js.js', [ 'jquery' ] );
 
 		// Result List Map
 		$this->enqueue_theme_script( 'VRPResultMap', 'vrp.resultListMap.js', [ 'jquery', 'googleMap' ] );
+        // Results JS
+        $this->enqueue_theme_script( 'VRPResults', 'vrp.results.js', [ 'jquery' ] );
 
 		// Unit Page
 		$this->enqueue_theme_script( 'VRPUnitPage', 'vrp.unit.js', [ 'jquery', 'googleMap' ] );
+
+        $this->enqueue_theme_script( 'LightSlider', 'lightslider.min.js', [ 'jquery'] );
 
 		$this->enqueue_theme_script( 'VRPCheckoutBarefoot', 'vrp.checkout.barefoot.js', [ 'jquery' ] );
 
@@ -84,7 +93,7 @@ class mountainsunset {
 		} else {
 			wp_enqueue_script(
 				$handle,
-				plugins_url( '/mountainsunset/js/' . $script, dirname( __FILE__ ) ),
+				plugins_url( '/desertsunrise/js/' . $script, dirname( __FILE__ ) ),
 				$deps
 			);
 		}
@@ -98,24 +107,41 @@ class mountainsunset {
 			wp_enqueue_style( 'FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css' );
 		} else {
 			wp_enqueue_style( 'FontAwesome',
-				plugins_url( '/mountainsunset/css/font-awesome.css', dirname( __FILE__ ) ) );
+				plugins_url( '/desertsunrise/css/font-awesome.css', dirname( __FILE__ ) ) );
 		}
+       
+        if ( file_exists( get_stylesheet_directory() . '/vrp/css/lightslider.min.css' ) ) {
+            wp_enqueue_style( 'LightSlider', get_stylesheet_directory_uri() . '/vrp/css/lightslider.min.css' );
+        } else {
+            wp_enqueue_style( 'LightSlider',
+                plugins_url( '/desertsunrise/css/lightslider.min.css', dirname( __FILE__ ) ) );
+        }
 
-		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' ) ) {
+		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.12.1.custom/jquery-ui.css' ) ) {
 			wp_enqueue_style( 'VRPjQueryUISmoothness',
-				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' );
+				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.12.1.custom/jquery-ui.css' );
 		} else {
 			wp_enqueue_style( 'VRPjQueryUISmoothness',
-				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname( __FILE__ ) ) );
+				plugins_url( '/desertsunrise/css/jquery-ui-1.12.1.custom/jquery-ui.css', dirname( __FILE__ ) ) );
 		}
 
 		if ( ! file_exists( get_stylesheet_directory() . '/vrp/css/css.css' ) ) {
 			$myStyleUrl = plugins_url(
-				'/mountainsunset/css/css.css', dirname( __FILE__ )
+				'/desertsunrise/css/css.css', dirname( __FILE__ )
 			);
 		} else {
 			$myStyleUrl = get_stylesheet_directory_uri() . '/vrp/css/css.css';
 		}
+
+            if ( file_exists( get_stylesheet_directory() . '/vrp/css/booking.custom.css' ) ) {
+                wp_enqueue_style( 'BookingCSS',
+                    get_stylesheet_directory_uri() . '/vrp/css/booking.custom.css' );
+            } else {
+                wp_enqueue_style( 'BookingCSS',
+                    plugins_url( '/vrp/css/booking.custom.css', dirname( __FILE__ ) ) );
+            }
+
+
 
 		wp_register_style( 'themeCSS', $myStyleUrl );
 		wp_enqueue_style( 'themeCSS' );
@@ -205,7 +231,7 @@ function vrp_pagination( $total_pages, $cur_page = 1 ) {
 		'pageurl'  => $pageurl,
 		'show'     => $show,
 		'page'     => ( $cur_page - 1 ),
-		'class'    => 'button',
+		'class'    => 'vrp-pagination-btn',
 		'disabled' => ( $cur_page !== 1 ? false : true )
 	];
 
@@ -227,7 +253,7 @@ function vrp_pagination( $total_pages, $cur_page = 1 ) {
 		'pageurl'  => $pageurl,
 		'show'     => $show,
 		'page'     => $total_pages,
-		'class'    => 'button',
+		'class'    => 'vrp-pagination-btn',
 		'disabled' => ( $total_pages > 5 ? false : true )
 	];
 	$list['Next'] = [
@@ -235,7 +261,7 @@ function vrp_pagination( $total_pages, $cur_page = 1 ) {
 		'pageurl'  => $pageurl,
 		'show'     => $show,
 		'page'     => ( $cur_page + 1 ),
-		'class'    => 'button',
+		'class'    => 'vrp-pagination-btn',
 		'disabled' => ( $cur_page < $total_pages ? false : true )
 	];
 
@@ -371,7 +397,7 @@ function days_to( $from, $to, $round = true ) {
  *
  * @return string
  */
-function vrp_calendar( $r, $total_months = 3 ) {
+function vrp_calendar( $r, $total_months = 5 ) {
 
 	$datelist = [];
 	$arrivals = [];
@@ -418,3 +444,30 @@ function vrp_calendar( $r, $total_months = 3 ) {
 
 	return '' . $ret . $the_key;
 }
+/**
+ * @param $string - Input string to convert to array
+ * @param string $separator - Separator to separate by (default: ,)
+ *
+ * @return array
+ */
+function comma_separated_to_array($string, $separator = ',')
+{
+    //Explode on comma
+    $vals = explode($separator, $string);
+
+    //Trim whitespace
+    foreach($vals as $key => $val) {
+        $vals[$key] = trim($val);
+    }
+    //Return empty array if no items found
+    //http://php.net/manual/en/function.explode.php#114273
+    return array_diff($vals, array(""));
+}
+
+function vrpResultsSearchForm() {
+    ob_start(); ?>
+    <?php include STYLESHEETPATH . "/vrp/vrpResultsSearchForm.php"; ?>
+    <?php return ob_get_clean();
+}
+
+add_shortcode("vrpResultsSearchForm","vrpResultsSearchForm");
