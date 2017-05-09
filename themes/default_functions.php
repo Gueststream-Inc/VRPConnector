@@ -7,11 +7,13 @@
  */
 
 /**
- * Class mountainsunset
+ * Class desertsunrise
  *
  * Default theme class
  */
-class mountainsunset {
+
+
+class desertsunrise {
 
 	/**
 	 * Theme actions - Enqueue scripts and styles.
@@ -25,26 +27,20 @@ class mountainsunset {
 	 * Enqueuing Scripts.
 	 */
 	function my_scripts_method() {
-		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js' ) ) {
+
 			wp_register_script(
 				'VRPjQueryUI',
-				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.js',
+				plugins_url( '/themes/desertsunrise/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname( __FILE__ ) ),
 				[ 'jquery' ]
 			);
-		} else {
-			wp_register_script(
-				'VRPjQueryUI',
-				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.js', dirname( __FILE__ ) ),
-				[ 'jquery' ]
-			);
-		}
+
 		wp_enqueue_script( 'VRPjQueryUI' );
 
 		$this->enqueue_theme_script('vrpNamespace','vrp.namespace.js',['jquery']);
 		$this->enqueue_theme_script( 'vrpMRespondModule', 'vrp.mRespond.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpUIModule', 'vrp.ui.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpQueryStringModule', 'vrp.queryString.js', [ 'jquery' ] );
-        //Google Map Key must be replaced with generated key
+//Google Map Key must be replaced with generated key
 		wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp' );
 
 		$this->enqueue_theme_script( 'VRPthemeJS', 'js.js', [ 'jquery' ] );
@@ -75,47 +71,32 @@ class mountainsunset {
 	 * @param $deps
 	 */
 	private function enqueue_theme_script( $handle, $script, $deps ) {
-		if ( file_exists( get_stylesheet_directory() . '/vrp/js/' . $script ) ) {
+
 			wp_enqueue_script(
 				$handle,
-				get_stylesheet_directory_uri() . '/vrp/js/' . $script,
+				plugins_url( '/themes/desertsunrise/js/' . $script, dirname( __FILE__ ) ),
 				$deps
 			);
-		} else {
-			wp_enqueue_script(
-				$handle,
-				plugins_url( '/mountainsunset/js/' . $script, dirname( __FILE__ ) ),
-				$deps
-			);
-		}
+
 	}
 
 	/**
 	 * Enqueuing Stylesheets.
 	 */
 	public function add_my_stylesheet() {
-		if ( file_exists( get_stylesheet_directory() . '/vrp/css/font-awesome.css' ) ) {
-			wp_enqueue_style( 'FontAwesome', get_stylesheet_directory_uri() . '/vrp/css/font-awesome.css' );
-		} else {
+
 			wp_enqueue_style( 'FontAwesome',
-				plugins_url( '/mountainsunset/css/font-awesome.css', dirname( __FILE__ ) ) );
-		}
+				plugins_url( '/themes/desertsunrise/css/font-awesome.css', dirname( __FILE__ ) ) );
 
-		if ( file_exists( get_stylesheet_directory() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' ) ) {
 			wp_enqueue_style( 'VRPjQueryUISmoothness',
-				get_stylesheet_directory_uri() . '/vrp/css/jquery-ui-1.11.2.custom/jquery-ui.css' );
-		} else {
-			wp_enqueue_style( 'VRPjQueryUISmoothness',
-				plugins_url( '/mountainsunset/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname( __FILE__ ) ) );
-		}
+				plugins_url( '/themes/desertsunrise/css/jquery-ui-1.11.2.custom/jquery-ui.css', dirname( __FILE__ ) ) );
 
-		if ( ! file_exists( get_stylesheet_directory() . '/vrp/css/css.css' ) ) {
+
+
 			$myStyleUrl = plugins_url(
-				'/mountainsunset/css/css.css', dirname( __FILE__ )
+				'/themes/desertsunrise/css/css.css', dirname( __FILE__ )
 			);
-		} else {
-			$myStyleUrl = get_stylesheet_directory_uri() . '/vrp/css/css.css';
-		}
+
 
 		wp_register_style( 'themeCSS', $myStyleUrl );
 		wp_enqueue_style( 'themeCSS' );
@@ -165,7 +146,7 @@ function generateList( $list, $options = [] ) {
 		return $html . '</ul>';
 	};
 
-	return $recursive( $list, false, $options );
+	//return $recursive( $list, false, $options );
 
 }
 

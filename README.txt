@@ -17,12 +17,16 @@ allowing potential guests to search, sort, compare and book your rental properti
 Learn more about the VRPConnector plugin: http://www.gueststream.com/our-software/vrpconnector/
 
 = Example Sites =
-* http://www.grandcaymanvillas.net
-* http://www.mauihawaiivacations.com
-* http://www.tellurideluxury.com
-* http://www.columbiatelluride.com
-* http://www.rangeprop.com
-* http://www.vailinternational.com
+ * http://www.suite-paradise.com
+ * http://www.aliiresorts.com
+ * http://beachrentals.mobi
+ * http://lifestylevillas.com
+ * https://www.savannahdreamvacations.com/
+ * http://www.grandcaymanvillas.net
+ * http://www.tellurideluxury.com
+ * http://www.columbiatelluride.com
+ * http://www.rangeprop.com
+ * http://www.vailinternational.com
 
 == Installation ==
 1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
@@ -50,6 +54,14 @@ you to seamlessly connect your website to your property management software data
 
 == Screenshots ==
 1. Out of the box unit page.
+
+== Changelog ==
+= 2.0 =
+* Reformated default theme
+* Added WP option to add google map key (required by google for maps to function)
+* Updated default JQuery Version
+* Bugfix VRP Results Map - check for lat/long values before address value
+* Bugfix VRP Booking selecting country
 
 == Changelog ==
 = 1.5.0 =
@@ -200,6 +212,8 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
+= 2.0 =
+* Added new VRP Theme Option! Cleaner VRP format out of the box.
 = 1.4.4 =
 * Added Yoast Support! Now VRPConnector plays well with Yoast and All-in-one SEO plugins.
 
