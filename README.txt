@@ -63,7 +63,6 @@ you to seamlessly connect your website to your property management software data
 * Bugfix VRP Results Map - check for lat/long values before address value
 * Bugfix VRP Booking selecting country
 
-== Changelog ==
 = 1.5.0 =
 * Barefoot Property Management Software support established.
 
@@ -212,8 +211,9 @@ you to seamlessly connect your website to your property management software data
 * Initial Release
 
 == Upgrade Notice ==
-= 2.0 =
+= 2.0.0 =
 * Added new VRP Theme Option! Cleaner VRP format out of the box.
+
 = 1.4.4 =
 * Added Yoast Support! Now VRPConnector plays well with Yoast and All-in-one SEO plugins.
 
