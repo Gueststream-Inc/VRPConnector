@@ -56,7 +56,7 @@ you to seamlessly connect your website to your property management software data
 1. Out of the box unit page.
 
 == Changelog ==
-= 2.0.0 =
+= 2.0.1 =
 * Reformated default theme
 * Added WP option to add google map key (required by google for maps to function)
 * Updated default JQuery Version
