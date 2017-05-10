@@ -444,7 +444,6 @@ class VRPConnector
 
     public function reset_theme($old, $new)
     {
-echo "TEST";
         $this->themeFunctions($old, $new);
           }
 
