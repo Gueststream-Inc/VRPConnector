@@ -29,7 +29,7 @@ $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
 ?>
 <div id="vrp">
     <div class="vrp-container-fluid unit vrp-col-md-12 vrp-col-sm-12">
-	<div class="vrp-col-md-9 vrp-unit-info">
+	<div class="vrp-col-md-8 vrp-unit-info">
 		<div class="vrp-row" id="unit-data"
 		     data-unit-id="<?php echo esc_attr( $data->id ); ?>"
 		     data-unit-slug="<?php echo esc_attr( $data->page_slug ); ?>"

@@ -43,6 +43,9 @@ To use them simply add them to the page/post content.
 More detailed instructions for using shortcodes, theming the VRP pages and using the plugin can be found
  at the VRPConnector's Wiki page here: https://github.com/Gueststream-Inc/VRPConnector/wiki
 
+ == Support ==
+ FREE 2 hours of support. Submit a ticket to support@gueststream.com
+
 == Frequently Asked Questions ==
 = What property management software(s) does the VRP Connector support? =
 
