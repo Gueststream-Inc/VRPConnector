@@ -11,13 +11,19 @@ An install guide can be found in the wiki attached to this repo.
 https://github.com/Gueststream-Inc/VRPConnector/wiki/Installation
 
 ## Example Sites ##
-* http://www.grandcaymanvillas.net
-* http://www.mauihawaiivacations.com
-* http://www.tellurideluxury.com
-* http://www.suite-paradise.com
-* http://www.columbiatelluride.com
+ * http://www.suite-paradise.com
+ * http://www.aliiresorts.com
+ * http://beachrentals.mobi
+ * http://lifestylevillas.com
+ * https://www.savannahdreamvacations.com/
+ * http://www.grandcaymanvillas.net
+ * http://www.tellurideluxury.com
+ * http://www.columbiatelluride.com
+ * http://www.rangeprop.com
+ * http://www.vailinternational.com
 
-## Frequently Asked Questions ##
+### Support ###
+ FREE 2 hours of support. Submit a ticket to support@gueststream.com
 
 ### What property management software(s) does the VRP Connector support? ###
 
