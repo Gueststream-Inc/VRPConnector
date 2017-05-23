@@ -23,7 +23,7 @@ https://github.com/Gueststream-Inc/VRPConnector/wiki/Installation
  * http://www.vailinternational.com
 
 ### Support ###
- FREE 2 hours of support. Submit a ticket to support@gueststream.com
+ FREE 2 hours of support. Submit a ticket to support@gueststream.com  with the 30 day trial
 
 ### What property management software(s) does the VRP Connector support? ###
 
