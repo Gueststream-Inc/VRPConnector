@@ -166,6 +166,7 @@ class VRPConnector
         add_shortcode('vrpAdvancedSearchForm', [$this, 'vrpAdvancedSearchForm']);
         add_shortcode('vrpComplexes', [$this, 'vrpComplexes']);
         add_shortcode('vrpComplexSearch', [$this, 'vrpComplexSearch']);
+        add_shortcode('vrpMultiCitySearch', [$this, 'vrpMultiCitySearch']);
         add_shortcode("vrpAreaList", [$this, "vrpAreaList"]);
         add_shortcode("vrpSpecials", [$this, "vrpSpecials"]);
         add_shortcode("vrpLinks", [$this, "vrpLinks"]);
@@ -1593,6 +1594,54 @@ class VRPConnector
             $content = $this->loadTheme($data->type, $data);
         } else {
             $content = $this->loadTheme('results', $data);
+        }
+
+        return $content;
+    }
+
+    /**
+     * [vrpMultiCitySearch] Shortcode
+     *
+     * @param array $arr
+     *
+     * @return string
+     */
+
+    function vrpMultiCitySearch($arr)
+    {
+        $cities = split(',', $arr['cities']);
+
+        // reset $_GET['search']['City'] to an array
+        if (!is_array($_GET['search']['City']))
+            $_GET['search']['City'] = [];
+
+        foreach ($cities as $city) {
+            $_GET['search']['City'][] = trim($city);
+        }
+
+        if (isset($arr['state'])) {
+            $_GET['search']['State'] = trim($arr['state']);
+        }
+
+        $_GET['search']['limit'] = isset($arr['limit']) ? $arr['limit'] : 10;
+        $_GET['show'] = 10000;
+
+        if(!isset($arr['sort'])) {
+            $_GET['search']['sort'] = "Name";
+            $_GET['search']['order'] = "low";
+        }
+
+        $searchdata = $this->search();
+        $data = json_decode($searchdata);
+
+        if ($data->count > 0) {
+            $data = $this->prepareSearchResults($data);
+        }
+
+        if (isset($data->type)) {
+            $content = $this->loadTheme($data->type, $data);
+        } else {
+            $content = $this->loadTheme("results", $data);
         }
 
         return $content;
