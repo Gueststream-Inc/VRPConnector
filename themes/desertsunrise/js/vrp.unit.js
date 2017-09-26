@@ -35,7 +35,7 @@ jQuery(document).ready(function () {
     }
 
     var unitSlug = unitDataSource.data('unit-slug');
-    jQuery.get("/?vrpjax=1&act=getUnitBookedDates&par=" + unitSlug, function (data) {
+    jQuery.get(url_paths.site_url + "/?vrpjax=1&act=getUnitBookedDates&par=" + unitSlug, function (data) {
         disabledDays = jQuery.parseJSON(data);
     });
 
@@ -107,7 +107,7 @@ function checkAvailability() {
     jQuery("#booklink").hide();
     jQuery("#loadingicons").show();
     jQuery("#ratebreakdown").empty();
-    jQuery.get("/?vrpjax=1&act=checkavailability&par=1", jQuery("#bookingform").serialize(), function (data) {
+    jQuery.get(url_paths.site_url + "/?vrpjax=1&act=checkavailability&par=1", jQuery("#bookingform").serialize(), function (data) {
         var obj = jQuery.parseJSON(data);
 
         if (!obj.Error) {
@@ -244,7 +244,7 @@ jQuery(document).ready(function () {
 
     jQuery("#vrpinquire").submit(function () {
         jQuery("#iqbtn").attr("disabled", "disabled");
-        jQuery.post("/?vrpjax=1&act=custompost&par=addinquiry", jQuery(this).serialize(), function (data) {
+        jQuery.post(url_paths.site_url + "/?vrpjax=1&act=custompost&par=addinquiry", jQuery(this).serialize(), function (data) {
             var obj = jQuery.parseJSON(data);
             if (obj.success) {
                 jQuery("#vrpinquire").replaceWith("Thank you for your inquiry!");

@@ -111,23 +111,23 @@ jQuery(document).ready(function(){
 
     if (jQuery("#unitsincomplex").length > 0){
         if (jQuery("#hassession").length > 0){
-            jQuery.get("/?vrpjax=1&act=searchjax",jQuery("#jaxform").serialize(),function(data){
+            jQuery.get(url_paths.site_url + "/?vrpjax=1&act=searchjax",jQuery("#jaxform").serialize(),function(data){
                 jQuery("#unitsincomplex").hide().html(data).fadeIn();
             });
         }else{
-            jQuery.get("/?vrpjax=1&act=searchjax",jQuery("#jaxform2").serialize(),function(data){
+            jQuery.get(url_paths.site_url + "/?vrpjax=1&act=searchjax",jQuery("#jaxform2").serialize(),function(data){
                 jQuery("#unitsincomplex").hide().html(data).fadeIn();
             });
         }
         jQuery("#jaxform").submit(function(){
-            jQuery.get("/?vrpjax=1&act=searchjax",jQuery("#jaxform").serialize(),function(data){
+            jQuery.get(url_paths.site_url + "/?vrpjax=1&act=searchjax",jQuery("#jaxform").serialize(),function(data){
                 jQuery("#unitsincomplex").hide().html(data).slideDown(1000);
             });
             return false;
         });
 
         jQuery("#showallofthem").click(function(){
-            jQuery.get("/?vrpjax=1&act=searchjax",jQuery("#jaxform2").serialize(),function(data){
+            jQuery.get(url_paths.site_url + "/?vrpjax=1&act=searchjax",jQuery("#jaxform2").serialize(),function(data){
                 jQuery("#unitsincomplex").hide().html(data).slideDown(1000);
             });
             return false;
