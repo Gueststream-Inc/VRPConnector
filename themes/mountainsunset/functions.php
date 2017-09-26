@@ -45,7 +45,10 @@ class mountainsunset {
 		$this->enqueue_theme_script( 'vrpUIModule', 'vrp.ui.js', [ 'jquery' ] );
 		$this->enqueue_theme_script( 'vrpQueryStringModule', 'vrp.queryString.js', [ 'jquery' ] );
         //Google Map Key must be replaced with generated key
-		wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?v=3.exp' );
+		$vrpMapKey_default='';
+        $vrpMapKey=get_option( 'vrpMapKey', $vrpMapKey_default );
+
+        wp_enqueue_script( 'googleMap', 'https://maps.googleapis.com/maps/api/js?key='.$vrpMapKey);
 
 		$this->enqueue_theme_script( 'VRPthemeJS', 'js.js', [ 'jquery' ] );
 
