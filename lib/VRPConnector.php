@@ -409,7 +409,7 @@ class VRPConnector
             $theme = new $theme;
             $func = $theme->otheractions;
             $func2 = $func[$_GET['otherslug']];
-            call_user_method($func2, $theme);
+            call_user_func($func2, $theme);
         }
     }
 
