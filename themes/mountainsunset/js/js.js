@@ -84,7 +84,7 @@
 jQuery(document).ready(function(){
     var arrivalDate, departureDate;
 
-    departureDate = jQuery("input[name='search[departure]").datepicker({
+    departureDate = jQuery("input[name='search[departure]']").datepicker({
 
     });
 
