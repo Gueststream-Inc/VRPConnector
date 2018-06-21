@@ -1723,40 +1723,53 @@ class VRPConnector
     /**
      * [vrpLinks] Shortcode
      *
-     * @param $items
+     * @param $param
      *
      * @return string
      */
-    public function vrpLinks($items)
+    public function vrpLinks($param)
     {
-        $items['showall'] = true;
+        $obj = new \stdClass();
 
-        switch ($items['type']) {
-            case 'Condo';
-                $call = '/allcomplexes/';
-                break;
-            case 'Villa';
-                $call = '/allunits/';
-                break;
+        if (!$param) {
+            $param = [];
         }
 
-        $obj = new \stdClass();
-        $obj->okay = 1;
-        if (count($items) != 0) {
-            foreach ($items as $k => $v) {
+        $param['showall'] = true;
+
+        if (!$param['limit']) {
+            $obj->limit = 1000;
+        }
+        
+        if (count($param) != 0) {
+            foreach ($param as $k => $v) {
                 $obj->$k = $v;
             }
         }
+        
+        switch ($param['get']) {
+            case 'Condo':
+                $call = '/allcomplexes/';
+                break;
+            case 'Villa':
+                $call = '/allunits/';
+                break;
+            default:
+                $call = '/search/';
+        }
 
         $search['search'] = json_encode($obj);
+
         $results = json_decode($this->call($call, $search));
 
         $ret = "<ul style='list-style:none'>";
-        if ($items['type'] == 'Villa') {
+        if (!$param['get'] || $param['get'] == 'Villa') {
             foreach ($results->results as $v) :
                 $ret .= "<li><a href='/vrp/unit/$v->page_slug'>$v->Name</a></li>";
             endforeach;
-        } else {
+        }
+
+        if ($param['get'] == 'Condo') {
             foreach ($results as $v) :
                 $ret .= "<li><a href='/vrp/complex/$v->page_slug'>$v->name</a></li>";
             endforeach;
