@@ -26,7 +26,7 @@ class VRPConnector
      *
      * @var string
      */
-    private $api_url = 'https://www.gueststream.net/api/v1/';
+    private $api_url = 'http://vrp.local/api/v1/';
     /**
      * VRPConnector Theme Folder
      *
@@ -172,6 +172,7 @@ class VRPConnector
         add_shortcode("vrpLinks", [$this, "vrpLinks"]);
         add_shortcode('vrpshort', [$this, 'vrpShort']);
         add_shortcode('vrpFeaturedUnit', [$this, 'vrpFeaturedUnit']);
+        add_shortcode('vrpFeaturedUnits', [$this, 'vrpFeaturedUnits']);
         add_shortcode('vrpCheckUnitAvailabilityForm', [$this, 'vrpCheckUnitAvailabilityForm']);
 
         // Widgets.
@@ -1818,6 +1819,31 @@ class VRPConnector
         }
 
         return $vrp->loadTheme('vrpCheckUnitAvailabilityForm', $unit_data);
+    }
+
+
+    /**
+     * [vrpFeaturedUnits] Shortcode
+     *
+     * @param array
+     *
+     * @return string
+     */
+    public function vrpFeaturedUnits($params = [])
+    {   
+        if (!is_array($params)) {
+            $params = [];
+        } else {
+            foreach ($params as $key => $value) {
+                $_GET['search'][$key] = $value;
+            }
+        }
+
+        $_GET['search']['Featured'] = 1;
+
+        $data = $this->search();
+        $data = json_decode($data);
+        return $this->loadTheme('vrpFeaturedUnits', $data);
     }
 
     public function vrpFeaturedUnit($params = [])
