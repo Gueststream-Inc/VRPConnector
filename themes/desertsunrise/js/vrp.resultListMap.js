@@ -7,7 +7,8 @@
  */
 (function ($, global, undefined) {
 
-    var map, marker;
+    var map;
+    var marker;
     var geocoder = new google.maps.Geocoder();
     var bounds = new google.maps.LatLngBounds();
     var infowindow = new google.maps.InfoWindow();
@@ -22,6 +23,8 @@
         map = new google.maps.Map(document.getElementById("vrp-result-list-map"), myOptions);
     }
 
+
+    // Geocoder used to determine lat / long coordinates
     function mapAddress(address,unitInfo) {
         geocoder.geocode({'address': address}, function (results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
@@ -43,39 +46,26 @@
             })(marker));
             } else {
                 console.log('Internal error: ' + status + address)
-
-
             }
         });
     }
-        function mapAddressL(Lat, Long, address, unitInfo) {
-         geocoder.geocode({'address': address}, function (results, status) {
-             if (status == google.maps.GeocoderStatus.OK) {
-                 bounds.extend(results[0].geometry.location);
-               //  var southWest = new google.maps.LatLng(36.90731625763393,-86.51778523864743);
-                // var northEast = new google.maps.LatLng(Lat,Long);
-              //   var bounds = new google.maps.LatLngBounds(southWest,northEast);
 
-
-            marker = new google.maps.Marker({
-                map: map,
-                position: new google.maps.LatLng(Lat, Long)
-            });
-
-            map.fitBounds(bounds);
-
-            google.maps.event.addListener(marker, 'click', (function (marker) {
-                return function () {
-                    infowindow.setContent(unitInfo);
-                    infowindow.open(map, marker);
-                }
-            })(marker));
-             } else {
-                 console.log('Internal error: ' + status + address)
-
-
-             }
+    function mapAddressL(Lat, Long, address, unitInfo) {
+        
+        marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng(Lat, Long)
         });
+
+        bounds.extend(marker.position);
+        map.fitBounds(bounds);
+
+        google.maps.event.addListener(marker, 'click', (function (marker) {
+            return function () {
+                infowindow.setContent(unitInfo);
+                infowindow.open(map, marker);
+            }
+        })(marker));
     }
 
     $(document).ready(function () {
