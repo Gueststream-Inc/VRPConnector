@@ -1575,6 +1575,11 @@ class VRPConnector
                     // the value of Featured -must- be 1.
                     $arr['Featured'] = 1;
                 }
+
+                // Supports random ordering
+                if ($key == 'sort' && $value == 'random') {
+                    $arr['order'] = rand(2, 20);
+                }
             }
         }
 
@@ -1763,6 +1768,11 @@ class VRPConnector
         $results = json_decode($this->call($call, $search));
 
         $ret = "<ul style='list-style:none'>";
+
+        if (!isset($results)) {
+            return "<p class='vrp-info'>No units available for this search critieria.</p>";
+        }
+
         if (!$param['get'] || $param['get'] == 'Villa') {
             foreach ($results->results as $v) :
                 $ret .= "<li><a href='/vrp/unit/$v->page_slug'>$v->Name</a></li>";
