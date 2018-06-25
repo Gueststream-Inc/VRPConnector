@@ -151,7 +151,7 @@ class VRPConnector
         add_action('update_option_vrpApiKey', [$this, 'flush_rewrites'], 10, 2);
         add_action('update_option_vrpAPI', [$this, 'flush_rewrites'], 10, 2);
         add_action('update_option_vrpTheme', [$this, 'reset_theme'], 10, 2);
-       add_action('wp', [$this, 'remove_filters']);
+        add_action('wp', [$this, 'remove_filters']);
         add_action('pre_get_posts', [$this, 'query_template']);
 
         // Filters.
@@ -1710,14 +1710,19 @@ class VRPConnector
      *
      * @todo support getOneSpecial
      */
-    public function vrpSpecials($items = [])
-    {
+    public function vrpSpecials($items)
+    {   
+        if (empty($items)) {
+            $items = [];
+        }
+
         if (!isset($items['cat'])) {
             $items['cat'] = 1;
         }
 
         if (isset($items['special_id'])) {
-            $data = json_decode($this->call('getspecialbyid/' . $items['special_id']));
+            $data = json_decode($this->call('getAllUnitsBySpecialId/' . $items['special_id']));
+            return $this->loadTheme('vrpSpecialsUnits', $data);
         } else {
             $data = json_decode($this->call('getspecialsbycat/' . $items['cat']));
         }
