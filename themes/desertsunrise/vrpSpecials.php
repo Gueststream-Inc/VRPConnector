@@ -4,19 +4,21 @@
  *
  * @package VRPConnector
  */
-
 ?>
 <h1>Specials</h1>
 <?php if ( 0 === count( $data ) ) : ?>
     <p>There are no current specials. Please check back soon.</p>
 <?php else : ?>
+
     <?php foreach ( $data as $special ) : ?>
         <div class="sbox">
             <div class="vrpcontainer_12">
                 <div class="vrpgrid_3">
+                    <a href="/vrp/special/<?php echo esc_attr( $special->slug ); ?>">
                     <?php if ( ! empty( $special->image ) ) : ?>
                         <img src="<?php echo esc_url( $special->image ); ?>" width="185px" class="simg">
                     <?php endif; ?>
+                    </a>
                 </div>
             </div>
             <div class="vrpcontainer_12">
@@ -31,4 +33,5 @@
         </div>
         <div class="clear"></div>
     <?php endforeach; ?>
+    
 <?php endif; ?>

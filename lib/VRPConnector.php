@@ -554,6 +554,25 @@ class VRPConnector
 
                 break;
 
+            case 'special': // If Specials Page.
+
+                $data = json_decode($this->call('getspecial/' . $slug));
+
+                if (isset($data->Error)) {
+                    $content = $this->loadTheme('error', $data);
+                } else {
+                    $content = $this->loadTheme('specials', $data);
+                    $pagetitle = $data->name;
+
+                    if (!empty($data->page_title)) {
+                        $pagetitle = $data->page_title;
+                    }
+                    
+                    $pagedescription = $data->page_description;
+                }
+
+                break;
+
             case 'favorites':
                 $content = 'hi';
                 switch ($slug) {
