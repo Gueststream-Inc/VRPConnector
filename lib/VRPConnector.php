@@ -1000,7 +1000,7 @@ class VRPConnector
     public function addReview()
     {
 
-        $params = json_encode($_POST['review']);
+        $params['review'] = json_encode($_POST['review']);
         $results = $this->call('addReview', $params);
         echo $results;
         return;

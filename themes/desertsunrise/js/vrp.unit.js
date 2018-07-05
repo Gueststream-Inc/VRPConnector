@@ -219,25 +219,70 @@ function initializeGoogleMap() {
 }
 
 jQuery(document).ready(function () {
+
+    // Review form
+    jQuery("#reviewSub").click(function () {
+        jQuery("#vrp-btn-add-review").attr("disabled", "disabled");
+
+        jQuery.post(url_paths.site_url + "/?vrpjax=1&act=addReview", jQuery("#vrpSubmitReviewForm").serialize(), function(responseData){
+            var review=jQuery.parseJSON(responseData);
+
+            if (review.success == true) {
+             jQuery("#vrp-add-review-success").show();
+                jQuery("#vrpSubmitReviewForm").hide();
+            }
+
+            if (review.success == false) {
+                review.errors.forEach(function (element, index, array) {
+                    alert(element);
+                });
+                jQuery("#vrp-btn-add-review").attr("disabled", false);
+            }
+        });
+        
+        return false;
+    });
+
+    jQuery("#revArrivalDate").click().datepicker();
+
+    // Star Rating
+    var logID = 'log',
+        log = jQuery('<div id="' + logID + '"></div>');
+    jQuery('body').append(log);
+    jQuery('[type*="radio"]').change(function () {
+        var me = jQuery(this);
+        log.html(me.attr('value'));
+    });
+
+    //  Check Radio-box
+    jQuery(".rating input:radio").attr("checked", false);
+    jQuery('.rating input').click(function () {
+        jQuery(".rating span").removeClass('checked');
+        jQuery(this).parent().addClass('checked');
+    });
+
+    jQuery('input:radio').change(
+    function(){
+        var userRating = this.value;
+    }); 
+    // End of Review form script
+
     // Unit Page Tabs
     unitTabs = jQuery("#vrp-tabs").tabs();
 
     //Unit Photo Gallery
+    jQuery('#vrp-slider').lightSlider({
+        gallery:true,
+        item:1,
+        thumbItem:9,
+        slideMargin: 0,
+        speed:300,
+        loop:true,
+        pager:true,
+        thumbItem: 9,
+        pause: 5000,
 
-
-
-        jQuery('#vrp-slider').lightSlider({
-            gallery:true,
-            item:1,
-            thumbItem:9,
-            slideMargin: 0,
-            speed:300,
-            loop:true,
-            pager:true,
-            thumbItem: 9,
-            pause: 5000,
-
-        });
+    });
 
 
 

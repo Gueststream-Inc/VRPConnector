@@ -5,80 +5,95 @@
  * @package VRPConnector
  * @since 1.3.0
  */
-
 global $vrp;
+
+// Check for arrival
 if (isset($_GET['search']['arrival'])) {
     $_SESSION['arrival'] = $_GET['search']['arrival'];
 }
 
+// Check for departure
 if (isset($_GET['search']['departure'])) {
     $_SESSION['depart'] = $_GET['search']['departure'];
 }
 
+// Set arrival
 $arrival="";
 if (!empty($_SESSION['arrival'])) {
     $arrival = date('m/d/Y', strtotime($_SESSION['arrival']));
 }
+
+// Set departure
 $depart="";
 if (!empty($_SESSION['depart'])) {
     $depart = date('m/d/Y', strtotime($_SESSION['depart']));
 }
 
+// Set nights
 $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
 
+// Set Specials promocode
+$promocode = "";
+if (!empty($data->special->promocode)) {
+    $promocode = $data->special->promocode;
+}
 ?>
 <div id="vrp">
     <div class="vrp-container-fluid unit vrp-col-md-12 vrp-col-sm-12">
-	<div class="vrp-col-md-8 vrp-unit-info">
-		<div class="vrp-row" id="unit-data"
-		     data-unit-id="<?php echo esc_attr( $data->id ); ?>"
-		     data-unit-slug="<?php echo esc_attr( $data->page_slug ); ?>"
-		     data-unit-address1="<?php echo esc_attr( $data->Address1 ); ?>"
-		     data-unit-address2="<?php echo esc_attr( $data->Address2 ); ?>"
-		     data-unit-city="<?php echo esc_attr( $data->City ); ?>"
-		     data-unit-state="<?php echo esc_attr( $data->State ); ?>"
-		     data-unit-zip="<?php echo esc_attr( $data->PostalCode ); ?>"
-		     data-unit-latitude="<?php echo esc_attr( $data->lat ); ?>"
-		     data-unit-longitude="<?php echo esc_attr( $data->long ); ?>"
-		     data-display-pageviews="<?php echo ( isset( $data->pageViews ) ) ? 'true' : 'false'; ?>"
-		>
+        <div class="vrp-col-md-8 vrp-unit-info">
+            <div class="vrp-row" id="unit-data"
+             data-unit-id="<?php echo esc_attr( $data->id ); ?>"
+             data-unit-slug="<?php echo esc_attr( $data->page_slug ); ?>"
+             data-unit-address1="<?php echo esc_attr( $data->Address1 ); ?>"
+             data-unit-address2="<?php echo esc_attr( $data->Address2 ); ?>"
+             data-unit-city="<?php echo esc_attr( $data->City ); ?>"
+             data-unit-state="<?php echo esc_attr( $data->State ); ?>"
+             data-unit-zip="<?php echo esc_attr( $data->PostalCode ); ?>"
+             data-unit-latitude="<?php echo esc_attr( $data->lat ); ?>"
+             data-unit-longitude="<?php echo esc_attr( $data->long ); ?>"
+             data-display-pageviews="<?php echo ( isset( $data->pageViews ) ) ? 'true' : 'false'; ?>"
+             >
+
             <div class="vrp-row">
-			<div class="vrp-col-md-9 vrp-col-sm-9">
-				<div class="vrp-row vrp-pad">
-                    <h2 class="unit-name"><?php echo esc_html( $data->Name ); ?></h2>
-				</div>
-				<div class="vrp-row vrp-pad">
-					<?php echo esc_html( $data->Bedrooms ); ?> Bedroom(s) | <?php echo esc_html( $data->Bathrooms ); ?>
-					Bathroom(s) | Sleeps <?php echo esc_html( $data->Sleeps ); ?>
-				</div>
-			</div>
-			<div class="vrp-col-md-3 vrp-col-sm-3">
-				<div id="vrp-favorite-button" class="vrp-favorite-button" data-unit="<?php echo esc_attr( $data->id ) ?>"></div>
-             </div>
+                <div class="vrp-col-md-9 vrp-col-sm-9">
+                    <div class="vrp-row vrp-pad">
+                        <h2 class="unit-name"><?php echo esc_html( $data->Name ); ?></h2>
+                    </div>
+                    <div class="vrp-row vrp-pad">
+                        <?php echo esc_html( $data->Bedrooms ); ?> Bedroom(s) | <?php echo esc_html( $data->Bathrooms ); ?>
+                        Bathroom(s) | Sleeps <?php echo esc_html( $data->Sleeps ); ?>
+                    </div>
+                </div>
+                <div class="vrp-col-md-3 vrp-col-sm-3">
+                    <div    id="vrp-favorite-button" 
+                            class="vrp-favorite-button" 
+                            data-unit="<?php echo esc_attr( $data->id ) ?>">
+                    </div>
+                </div>
             </div>
 
-	<div class="vrp-row">
-		<div id="vrp-tabs">
-			<ul>
-				<li><a href="#overview">Overview</a></li>
-				<li><a href="#amenities">Amenities</a></li>
-				<?php if ( isset( $data->reviews[0] ) ) { ?>
-					<li><a href="#reviews">Reviews</a></li>
-				<?php } ?>
-				<li><a href="#calendar">Calendar</a></li>
-				<li><a href="#rates">Rates</a></li>
-				<?php if ( isset( $data->lat ) && isset( $data->long ) ) { ?>
-					<li><a href="#gmap" id="gmaplink">Map</a></li>
-				<?php } ?>
+    <div class="vrp-row">
+        <div id="vrp-tabs">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#amenities">Amenities</a></li>
+                <?php if ( isset( $data->reviews[0] ) ) { ?>
+                    <li><a href="#reviews">Reviews</a></li>
+                <?php } ?>
+                <li><a href="#calendar">Calendar</a></li>
+                <li><a href="#rates">Rates</a></li>
+                <?php if ( isset( $data->lat ) && isset( $data->long ) ) { ?>
+                    <li><a href="#gmap" id="gmaplink">Map</a></li>
+                <?php } ?>
                 <li><a href="#inquire">Inquire</a></li>
                 <li class="book-now-tab"><a href="#checkavailbox">Book Now</a></li>
-			</ul>
+            </ul>
 
-			<!-- OVERVIEW TAB -->
-			<div id="overview">
-				<div class="vrp-row">
-					<div class="vrp-col-md-12">
-						<!-- Photo Gallery -->
+            <!-- OVERVIEW TAB -->
+            <div id="overview">
+                <div class="vrp-row">
+                    <div class="vrp-col-md-12">
+                        <!-- Photo Gallery -->
                         <ul id="vrp-slider">
 
                             <?php
@@ -101,52 +116,84 @@ $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
 
                         </ul>
                     </div>
-						<br style="clear:both;" class="clearfix">
+                        <br style="clear:both;" class="clearfix">
              <div class="vrp-details-wrap">
                 <?php if ($data->Area != '' ){ ?><div class="details"><i class="fa fa-map-marker"></i> <?php echo $data->Area ?></div><?php } ?>
                 <?php if ($data->Sleeps != '' ){ ?> <div class="details"><i class="fa fa-user picto"></i>Sleeps&nbsp;<?= $data->Sleeps; ?></div><?php } ?>
                 <?php if ($data->Bedrooms != '' ){ ?><div class="details"><i class="fa fa-bed picto"></i><?= $data->Bedrooms; ?><?php if ($data->Bedrooms == 1) { ?> Bed<span class="noroom">room</span> <?php } else { ?>&nbsp;Bed<span class="noroom">room</span>s <?php } ?></div><?php } ?>
             </div>
             <br>
-				</div>
-				<div class="vrp-row vrp-pad">
-					<div class="vrp-col-md-12">
-						<div id="description">
-							<p><?php echo wp_kses_post( nl2br( $data->Description ) ); ?></p>
-						</div>
-					</div>
-				</div>
                 </div>
-				<div class="clearfix"></div>
+                <div class="vrp-row vrp-pad">
+                    <div class="vrp-col-md-12">
+                        <div id="description">
+                            <p><?php echo wp_kses_post( nl2br( $data->Description ) ); ?></p>
+                        </div>
+                    </div>
+                </div>
+                </div>
+                <div class="clearfix"></div>
 
             <!-- AMENITIES TAB -->
-			<div id="amenities">
+            <div id="amenities">
                 <h3>Amenities</h3>
                 <div class="vrp-amen-wrapper">
 
-					<?php foreach ( $data->attributes as $amen ) { ?>
+                    <?php foreach ( $data->attributes as $amen ) { ?>
 
                     <div class="vrp-amen-name">
                             <?php echo esc_html( $amen->name ); ?>
                     </div>
 
-					<?php } ?>
+                    <?php } ?>
                     </div>
-			</div>
+            </div>
             <!-- REVIEWS TAB -->
-			<?php if ( isset( $data->reviews[0] ) ) { ?>
-				<div id="reviews">
-					<section id="reviews">
-						<h3>Guest Reviews of
-							<span class="fn">
-								<?php echo esc_html( strtolower( $data->Name ) ); ?>
-							</span>
-						</h3>
-						<span class="address serif">
-							<?php echo esc_html( $data->Address2 ); ?>
-							<?php echo esc_html( $data->City ); ?>
-							,&nbsp;<?php echo esc_html( $data->State ); ?>
-						</span>
+            <?php if ( isset( $data->reviews[0] ) ) { ?>
+                <div id="reviews">
+
+                    <!-- Reviews Input Form -->
+                    <div id="vrp-review">
+                        <div class="vrp-row">
+                            <div class="vrp-col-md-12">
+                                <p id="vrp-add-review-success" style="display:none;">Thank you for submitting your review. It will be processed shortly!</p>
+                                <form id="vrpSubmitReviewForm">
+                                    <div class="form-group">
+                                        <input type="hidden" name="review[source]" value="website">
+                                        <input type="hidden" name="review[status]" value="disabled">
+                                        <input type="hidden" name="review[prop_id]" id="unitIdreview" required value="<?php echo $data->id; ?>">
+                                        <input type="text" class="reviewDate" placeholder="Choose your arrival date" required name="review[checkin_date]" id="revArrivalDate">
+                                        <input type="text" class="reviewTitle" placeholder="Title" required name="review[title]" id="reviewName">
+                                        <div class="rating">
+                                            <span><input type="radio" name="review[rating]" id="str5" value="5"><label class="fa fa-star" for="str5"></label></span>
+                                            <span><input type="radio" name="review[rating]" id="str4" value="4"><label class="fa fa-star" for="str4"></label></span>
+                                            <span><input type="radio" name="review[rating]" id="str3" value="3"><label class="fa fa-star" for="str3"></label></span>
+                                            <span><input type="radio" name="review[rating]" id="str2" value="2"><label class="fa fa-star" for="str2"></label></span>
+                                            <span><input type="radio" name="review[rating]" id="str1" value="1"><label class="fa fa-star" for="str1"></label></span>
+                                        </div>
+                                        <textarea class="reviewReview" placeholder="Review" required name="review[review]" id="review-description" maxlength="2000" rows="50"></textarea>
+                                        <input type="email" class="reviewEmail" placeholder="E-mail" required name="review[email]">
+                                        <input type="text" class="reviewName" placeholder="Name" required name="review[name]">
+                                        <input type="text" class="reviewLocation" placeholder="Location" required name="review[location]">
+                                        <button type="submit" class="vrp-btn" id="reviewSub">Submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End of reviews input form -->
+
+                    <section id="reviews">
+                        <h3>Guest Reviews of
+                            <span class="fn">
+                                <?php echo esc_html( strtolower( $data->Name ) ); ?>
+                            </span>
+                        </h3>
+                        <span class="address serif">
+                            <?php echo esc_html( $data->Address2 ); ?>
+                            <?php echo esc_html( $data->City ); ?>
+                            ,&nbsp;<?php echo esc_html( $data->State ); ?>
+                        </span>
 
                 <?php
                 $total = 0;
@@ -237,74 +284,74 @@ $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
             </div>
        
          </div>
-         	<?php } ?>
+            <?php } ?>
 
-			<!-- CALENDAR TAB -->
-			<div id="calendar">
-				<div class="vrp-row">
-					<div class="vrp-col-md-12">
-						<div id="availability" style="">
-							<?php echo wp_kses_post( vrp_calendar( $data->avail ) ); ?>
-						</div>
-					</div>
-				</div>
-			</div>
+            <!-- CALENDAR TAB -->
+            <div id="calendar">
+                <div class="vrp-row">
+                    <div class="vrp-col-md-12">
+                        <div id="availability" style="">
+                            <?php echo wp_kses_post( vrp_calendar( $data->avail ) ); ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- RATES TAB -->
-			<div id="rates">
-				<div class="row">
-					<h3> Seasonal Rates </h3>
+            <div id="rates">
+                <div class="row">
+                    <h3> Seasonal Rates </h3>
 
-					<div id="rates">
-						<?php
+                    <div id="rates">
+                        <?php
 
-						$rate_seasons = [];
-						foreach ( $data->rates as $rate ) {
-							$start = date( 'm/d/Y', strtotime( $rate->start_date ) );
-							$end   = date( 'm/d/Y', strtotime( $rate->end_date ) );
+                        $rate_seasons = [];
+                        foreach ( $data->rates as $rate ) {
+                            $start = date( 'm/d/Y', strtotime( $rate->start_date ) );
+                            $end   = date( 'm/d/Y', strtotime( $rate->end_date ) );
 
-							if ( empty( $rate_seasons[ $start . ' - ' . $end ] ) ) {
-								$rate_seasons[ $start . ' - ' . $end ] = new \stdClass();
-							}
+                            if ( empty( $rate_seasons[ $start . ' - ' . $end ] ) ) {
+                                $rate_seasons[ $start . ' - ' . $end ] = new \stdClass();
+                            }
 
-							if ( 'Monthly' === $rate->chargebasis ) {
-								$rate_seasons[ $start . ' - ' . $end ]->monthly
-									= '$' . number_format( $rate->amount, 2 );
-							}
-							if ( 'Daily' === $rate->chargebasis ) {
-								$rate_seasons[ $start . ' - ' . $end ]->daily
-									= '$' . number_format( $rate->amount, 2 );
-							}
-							if ( 'Weekly' === $rate->chargebasis ) {
-								$rate_seasons[ $start . ' - ' . $end ]->weekly
-									= '$' . number_format( $rate->amount, 2 );
-							}
-						}
-						?>
+                            if ( 'Monthly' === $rate->chargebasis ) {
+                                $rate_seasons[ $start . ' - ' . $end ]->monthly
+                                    = '$' . number_format( $rate->amount, 2 );
+                            }
+                            if ( 'Daily' === $rate->chargebasis ) {
+                                $rate_seasons[ $start . ' - ' . $end ]->daily
+                                    = '$' . number_format( $rate->amount, 2 );
+                            }
+                            if ( 'Weekly' === $rate->chargebasis ) {
+                                $rate_seasons[ $start . ' - ' . $end ]->weekly
+                                    = '$' . number_format( $rate->amount, 2 );
+                            }
+                        }
+                        ?>
 
-						<table class="rate">
-							<tr class="rate-header">
-								<th>Date Range</th>
-								<th>Daily</th>
-								<th>Weekly</th>
-								<th>Monthly</th>
-							</tr>
-							<?php foreach ( $rate_seasons as $date_range => $rates ) { ?>
-								<tr>
-									<td><?php echo esc_html( $date_range ); ?></td>
-									<td><?php echo ( ! empty( $rates->daily ) ) ? esc_html( $rates->daily ) : 'N/A'; ?></td>
-									<td><?php echo ( ! empty( $rates->weekly ) ) ? esc_html( $rates->weekly ) : 'N/A'; ?></td>
-									<td><?php echo ( ! empty( $rates->monthly ) ) ? esc_html( $rates->monthly ) : 'N/A'; ?></td>
-								</tr>
-							<?php } ?>
-						</table>
-						* Seasonal rates are only estimates and do not reflect taxes or additional fees.
-					</div>
-				</div>
-			</div>
+                        <table class="rate">
+                            <tr class="rate-header">
+                                <th>Date Range</th>
+                                <th>Daily</th>
+                                <th>Weekly</th>
+                                <th>Monthly</th>
+                            </tr>
+                            <?php foreach ( $rate_seasons as $date_range => $rates ) { ?>
+                                <tr>
+                                    <td><?php echo esc_html( $date_range ); ?></td>
+                                    <td><?php echo ( ! empty( $rates->daily ) ) ? esc_html( $rates->daily ) : 'N/A'; ?></td>
+                                    <td><?php echo ( ! empty( $rates->weekly ) ) ? esc_html( $rates->weekly ) : 'N/A'; ?></td>
+                                    <td><?php echo ( ! empty( $rates->monthly ) ) ? esc_html( $rates->monthly ) : 'N/A'; ?></td>
+                                </tr>
+                            <?php } ?>
+                        </table>
+                        * Seasonal rates are only estimates and do not reflect taxes or additional fees.
+                    </div>
+                </div>
+            </div>
             <!-- MAP TAB -->
-			<div id="gmap">
-				<div id="map" style="width:100%;height:500px;"></div>
-			</div>
+            <div id="gmap">
+                <div id="map" style="width:100%;height:500px;"></div>
+            </div>
             <!-- INQUIRY TAB -->
             <!--Must be set up in the VRP Admin to receive inquiries - see settings tab in VRP ADMIN-->
             <div id="inquire">
@@ -341,9 +388,9 @@ $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
 
                 </form>
             </div>
-		</div>
-	</div>
-	
+        </div>
+    </div>
+    
 
 
 </div>
@@ -439,7 +486,8 @@ $nights = (strtotime($depart) - strtotime($arrival)) / 86400;
                                 <div class="select--borderless">
                                     <span class="input-group">
                                         <input type="text" id="packagecode" name="obj[strPromotionCode]"
-                                               class="input unitsearch" value="<?php echo esc_attr($_SESSION['packagecode']); ?>">
+                                               class="input unitsearch" 
+                                               value="<?php echo $code = ($promocode) ? $promocode : esc_attr($_SESSION['packagecode']); ?>">
                                     </span>
                                 </div>
                             </div>

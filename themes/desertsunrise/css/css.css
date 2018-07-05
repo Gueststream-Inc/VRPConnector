@@ -2658,3 +2658,72 @@ Install Specfic Colors
 
 }
 
+/* Review Form styling */
+.reviewDate, .reviewRating, .reviewTitle {
+    padding: 5px !important;
+    border-radius: 5px !important;
+    width: 40% !important;
+    margin: 0px 2% 20px 2% !important;
+}
+
+.reviewReview {
+    padding: 5px !important;
+    border-radius: 5px !important;
+    width: 100% !important;
+    margin: 0px 2% 20px 2% !important;
+    height: 200px;
+}
+
+.reviewEmail, .reviewName, .reviewLocation {
+    padding: 5px !important;
+    border-radius: 5px !important;
+    width: 30% !important;
+    margin: 0px 2% 20px 2% !important;
+}
+
+#reviewSub{
+    padding: 5px !important;
+    border-radius: 5px !important;
+    width: 30% !important;
+    margin: 0px 2% 20px 2% !important;
+    height: 50px;
+}
+
+.rating {
+    width:25%;
+    display: inline-block;
+    height: 50px;
+    padding: 5px;
+    margin: 0px 0px 0px 2%;
+}
+.rating span { float:right; position:relative; }
+.rating span input {
+    position:absolute;
+    top:0px;
+    left:0px;
+    opacity:0;
+}
+.rating span label {
+    display:inline-block;
+    width:30px;
+    height:30px;
+    text-align:center;
+    color:#FFF;
+    background:#F8F8F8;
+    font-size:30px;
+    margin-right:2px;
+    line-height:30px;
+    border-radius:50%;
+    -webkit-border-radius:50%;
+}
+.rating span:hover ~ span label,
+.rating span:hover label,
+.rating span.checked label,
+.rating span.checked ~ span label {
+    color:#F90;
+}
+
+.checked{
+    color: F90;
+}
+/* End of Review Form styling */
