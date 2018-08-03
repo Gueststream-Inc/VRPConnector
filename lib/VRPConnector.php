@@ -170,6 +170,7 @@ class VRPConnector
         add_shortcode("vrpAreaList", [$this, "vrpAreaList"]);
         add_shortcode("vrpSpecials", [$this, "vrpSpecials"]);
         add_shortcode("vrpLinks", [$this, "vrpLinks"]);
+        add_shortcode('vrpUnitLinks', [$this, 'vrpUnitLinks']);
         add_shortcode('vrpshort', [$this, 'vrpShort']);
         add_shortcode('vrpFeaturedUnit', [$this, 'vrpFeaturedUnit']);
         add_shortcode('vrpFeaturedUnits', [$this, 'vrpFeaturedUnits']);
@@ -1892,6 +1893,34 @@ class VRPConnector
         $data = $this->search();
         $data = json_decode($data);
         return $this->loadTheme('vrpFeaturedUnits', $data);
+    }
+
+    /**
+     * [vrpUnitLinks] Shortcode
+     *
+     * @param $items
+     *
+     * @return string
+     */
+    public function vrpUnitLinks()
+    {
+        $obj = new \stdClass;
+
+        $obj->showall = true;
+
+        $search['search'] = json_encode($obj);
+        $results = json_decode($this->call('/allunits/', $search));
+
+        $ret = "<select id='vrp-unit-links'>";
+            $ret .= "<option>Select Property</option>";
+
+            foreach ($results->results as $v) :
+                $ret .= "<option value='/vrp/unit/$v->page_slug'>$v->Name</option>";
+            endforeach;
+        
+        $ret .= '</select>';
+
+        return $ret;
     }
 
 

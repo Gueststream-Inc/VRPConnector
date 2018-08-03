@@ -82,6 +82,12 @@
 }(jQuery, window));
  var fav_count='';
 jQuery(document).ready(function(){
+
+// vrpUnitLInks
+jQuery("#vrp-unit-links").on('change', function(){
+    window.location.href = jQuery(this).val();
+});
+
 if(jQuery( 'input[name="search[arrival]"]' ).length>0) {
     var dates = jQuery('input[name="search[arrival]"]' ).datepicker({
         beforeShow: customRange,
