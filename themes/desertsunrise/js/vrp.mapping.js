@@ -8,7 +8,7 @@ jQuery(document).ready(function(){
 	var typesToShow = ['Villa'];
 	var markers = [];
 
-	jQuery.getJSON('/properties/?vrpjax=1&act=customcall&par=loadmap', function(locations){
+	jQuery.getJSON('/?vrpjax=1&act=customcall&par=loadmap', function(locations){
 
 		if (typesToShow != undefined) {
 
