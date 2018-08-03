@@ -2748,3 +2748,9 @@ Install Specfic Colors
 .freview hr{
     background-color: #e4e4e4;
 }
+
+/* vrpMap */
+.island-map {
+    height: 500px;
+    width: 100%;
+}
