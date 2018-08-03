@@ -2726,4 +2726,25 @@ Install Specfic Colors
 .checked{
     color: F90;
 }
-/* End of Review Form styling */
+
+/* Featured Reviews */
+.vrp-review-title{
+    font-size: 18px;
+}
+
+.vrp-review-stars,
+.vrp-review-details{
+    font-size: 12px;
+}
+
+.vrp-review-stars i{
+    color: #ffc107;
+}
+
+.freview{
+    padding: 5px;
+}
+
+.freview hr{
+    background-color: #e4e4e4;
+}

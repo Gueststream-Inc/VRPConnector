@@ -174,6 +174,7 @@ class VRPConnector
         add_shortcode('vrpFeaturedUnit', [$this, 'vrpFeaturedUnit']);
         add_shortcode('vrpFeaturedUnits', [$this, 'vrpFeaturedUnits']);
         add_shortcode('vrpCheckUnitAvailabilityForm', [$this, 'vrpCheckUnitAvailabilityForm']);
+        add_shortcode('vrpFeaturedReviews', [$this, 'vrpFeaturedReviews']);
 
         // Widgets.
         add_filter('widget_text', 'do_shortcode');
@@ -1891,6 +1892,18 @@ class VRPConnector
         $data = $this->search();
         $data = json_decode($data);
         return $this->loadTheme('vrpFeaturedUnits', $data);
+    }
+
+
+    /**
+     * [vrpFeatuedReviews] Shortcode
+     *
+     * @return string
+     */
+    public function vrpFeaturedReviews()
+    {
+        $reviews = json_decode($this->call('getFeaturedReviews'));
+        return $this->loadTheme('vrpFeaturedReviews', $reviews);
     }
 
     public function vrpFeaturedUnit($params = [])
