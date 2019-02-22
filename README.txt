@@ -19,7 +19,6 @@ Learn more about the VRPConnector plugin: http://www.gueststream.com/our-softwar
 = Example Sites =
  * https://www.grandcaymanvillas.net
  * https://www.plantanacayman.com
- * https://www.suite-paradise.com
  * https://www.epicmauirealty.com
  * https://www.crestedbuttelodging.com
  * https://www.bhhsvail.com
@@ -27,6 +26,17 @@ Learn more about the VRPConnector plugin: http://www.gueststream.com/our-softwar
  * https://www.aliiresorts.com
  * https://www.beachrentals.mobi
  * https://www.lifestylevillas.net
+ * https://www.alpineskiproperties.com
+ * https://www.caymanvacation.com
+ * https://www.gearhartresort.com
+ * https://www.escapelux.com
+ * https://www.mauihawaiivacations.com
+ * https://www.summitresortgroup.com
+ * https://www.waikoloavacationrentals.com
+ * https://www.mauiwestside.com
+ * https://www.whistlerlodging.com
+ * https://scmountainretreats.com
+ * http://www.caydirect.com
 
 == Installation ==
 1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
