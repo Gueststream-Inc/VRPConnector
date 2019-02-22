@@ -19,7 +19,6 @@ Learn more about the VRPConnector plugin: http://www.gueststream.com/our-softwar
 = Example Sites =
  * https://www.grandcaymanvillas.net
  * https://www.plantanacayman.com
- * https://www.suite-paradise.com
  * https://www.epicmauirealty.com
  * https://www.crestedbuttelodging.com
  * https://www.bhhsvail.com
