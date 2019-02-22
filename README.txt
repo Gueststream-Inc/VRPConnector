@@ -2,7 +2,7 @@
 Contributors: Houghtelin
 Tags: Vacation Rental Platform, Gueststream, VRP Connector, ISILink, HomeAway, Escapia, Barefoot, VRMGR
 Requires at least: 3.0.1
-Tested up to: 4.7.1
+Tested up to: 5.0
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -17,16 +17,16 @@ allowing potential guests to search, sort, compare and book your rental properti
 Learn more about the VRPConnector plugin: http://www.gueststream.com/our-software/vrpconnector/
 
 = Example Sites =
- * http://www.suite-paradise.com
- * http://www.aliiresorts.com
- * http://beachrentals.mobi
- * http://lifestylevillas.com
- * https://www.savannahdreamvacations.com/
- * http://www.grandcaymanvillas.net
- * http://www.tellurideluxury.com
- * http://www.columbiatelluride.com
- * http://www.rangeprop.com
- * http://www.vailinternational.com
+ * https://www.grandcaymanvillas.net
+ * https://www.plantanacayman.com
+ * https://www.suite-paradise.com
+ * https://www.epicmauirealty.com
+ * https://www.crestedbuttelodging.com
+ * https://www.bhhsvail.com
+ * https://www.vacationrentalsparkcity.com
+ * https://www.aliiresorts.com
+ * https://www.beachrentals.mobi
+ * https://www.lifestylevillas.net
 
 == Installation ==
 1. Install the plugin from the WordPress.org Plugin Directory here https://wordpress.org/plugins/vrpconnector/
