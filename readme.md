@@ -11,16 +11,16 @@ An install guide can be found in the wiki attached to this repo.
 https://github.com/Gueststream-Inc/VRPConnector/wiki/Installation
 
 ## Example Sites ##
- * http://www.suite-paradise.com
- * http://www.aliiresorts.com
- * http://beachrentals.mobi
- * http://lifestylevillas.com
- * https://www.savannahdreamvacations.com/
- * http://www.grandcaymanvillas.net
- * http://www.tellurideluxury.com
- * http://www.columbiatelluride.com
- * http://www.rangeprop.com
- * http://www.vailinternational.com
+* https://www.grandcaymanvillas.net
+* https://www.plantanacayman.com
+* https://www.suite-paradise.com
+* https://www.epicmauirealty.com
+* https://www.crestedbuttelodging.com
+* https://www.bhhsvail.com
+* https://www.vacationrentalsparkcity.com
+* https://www.aliiresorts.com
+* https://www.beachrentals.mobi
+* https://www.lifestylevillas.net
 
 ### Support ###
  FREE 2 hours of support. Submit a ticket to support@gueststream.com  with the 30 day trial
