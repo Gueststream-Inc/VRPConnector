@@ -37,4 +37,3 @@ that allows you to seamlessly connect your website to your property management s
 ## Shortcodes, Theming and more... ##
 can be found in the wiki attached to this repo.
 https://github.com/Gueststream-Inc/VRPConnector/wiki/
-
